@@ -33,6 +33,7 @@ import {
   toCheckboxList,
   removeUnicodeFormatting,
   copyStyledText,
+  convertPreservingEmphasis,
   availableStyles,
   UnicodeStyle,
 } from '@/utils/unicodeTextFormatter';
@@ -144,22 +145,17 @@ export const LinkedInTextFormatter = ({
       
       switch (variant.id) {
         case 'normal':
-          // Normal shows plain text without any unicode styling
           styledText = removeUnicodeFormatting(textToUse);
           break;
         case 'bullet':
-          // Preserve styling but add bullet points
           styledText = textToUse.split('\n').filter(line => line.trim()).map(line => `• ${line.trim()}`).join('\n');
           break;
         case 'numbered':
-          // Preserve styling but add numbers
           styledText = textToUse.split('\n').filter(line => line.trim()).map((line, i) => `${i + 1}. ${line.trim()}`).join('\n');
           break;
         default:
-          // For style variants, first get plain text then apply the variant style
-          // This creates clean styled versions
-          const plainText = removeUnicodeFormatting(textToUse);
-          styledText = toUnicodeStyle(plainText, variant.id);
+          // Convert preserving per-character emphasis (bold/italic applied by user)
+          styledText = convertPreservingEmphasis(textToUse, variant.id);
       }
       
       return {

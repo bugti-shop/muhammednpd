@@ -302,6 +302,101 @@ export const removeUnicodeFormatting = (text: string): string => {
 };
 
 /**
+ * Detect which unicode style a character belongs to.
+ * Returns the style name and the plain ASCII character.
+ */
+type CharEmphasis = 'none' | 'bold' | 'italic' | 'boldItalic';
+
+const detectCharEmphasis = (char: string): { plain: string; emphasis: CharEmphasis } => {
+  // Build reverse maps grouped by style
+  for (const [styleName, styleMap] of Object.entries(charMaps)) {
+    for (const caseMap of [styleMap.upper, styleMap.lower, 'digits' in styleMap ? styleMap.digits : undefined]) {
+      if (!caseMap) continue;
+      for (const [plain, unicode] of Object.entries(caseMap)) {
+        if (char === unicode) {
+          // Determine emphasis from style name
+          let emphasis: CharEmphasis = 'none';
+          if (styleName === 'bold' || styleName === 'boldSans') emphasis = 'bold';
+          else if (styleName === 'italic' || styleName === 'italicSans') emphasis = 'italic';
+          else if (styleName === 'boldItalic' || styleName === 'boldItalicSans') emphasis = 'boldItalic';
+          return { plain, emphasis };
+        }
+      }
+    }
+  }
+  // Plain ASCII or non-mappable character
+  return { plain: char, emphasis: 'none' };
+};
+
+/**
+ * Mapping: for each variant, what style should each emphasis level use
+ */
+const variantEmphasisMap: Record<string, Record<CharEmphasis, UnicodeStyle | 'plain'>> = {
+  normal:         { none: 'plain',       bold: 'bold',          italic: 'italic',       boldItalic: 'boldItalic' },
+  bold:           { none: 'bold',        bold: 'bold',          italic: 'boldItalic',   boldItalic: 'boldItalic' },
+  italic:         { none: 'italic',      bold: 'boldItalic',    italic: 'italic',       boldItalic: 'boldItalic' },
+  boldItalic:     { none: 'boldItalic',  bold: 'boldItalic',    italic: 'boldItalic',   boldItalic: 'boldItalic' },
+  sansNormal:     { none: 'sansNormal',  bold: 'boldSans',      italic: 'italicSans',   boldItalic: 'boldItalicSans' },
+  boldSans:       { none: 'boldSans',    bold: 'boldSans',      italic: 'boldItalicSans',boldItalic: 'boldItalicSans' },
+  italicSans:     { none: 'italicSans',  bold: 'boldItalicSans',italic: 'italicSans',   boldItalic: 'boldItalicSans' },
+  boldItalicSans: { none: 'boldItalicSans', bold: 'boldItalicSans', italic: 'boldItalicSans', boldItalic: 'boldItalicSans' },
+  script:         { none: 'script',      bold: 'script',        italic: 'script',       boldItalic: 'script' },
+  monospace:      { none: 'monospace',   bold: 'monospace',     italic: 'monospace',    boldItalic: 'monospace' },
+  doublestruck:   { none: 'doublestruck',bold: 'doublestruck',  italic: 'doublestruck', boldItalic: 'doublestruck' },
+};
+
+/**
+ * Convert styled text to a target variant while preserving per-character emphasis.
+ * E.g., if user made "Hello" bold and "World" plain, in the Sans variant
+ * "Hello" becomes boldSans and "World" becomes sansNormal.
+ */
+export const convertPreservingEmphasis = (text: string, targetVariant: string): string => {
+  const emphasisMapping = variantEmphasisMap[targetVariant];
+  if (!emphasisMapping) return text;
+
+  // Remove combining characters first, preserve them separately
+  const combiningChars: Record<number, string[]> = {};
+  const chars = Array.from(text);
+  const cleanChars: string[] = [];
+  
+  for (let i = 0; i < chars.length; i++) {
+    const cp = chars[i].codePointAt(0) || 0;
+    // Check if combining character
+    if (chars[i] === COMBINING_UNDERLINE || chars[i] === COMBINING_STRIKETHROUGH) {
+      const lastIdx = cleanChars.length - 1;
+      if (!combiningChars[lastIdx]) combiningChars[lastIdx] = [];
+      combiningChars[lastIdx].push(chars[i]);
+    } else {
+      cleanChars.push(chars[i]);
+    }
+  }
+
+  const result = cleanChars.map((char, idx) => {
+    // Detect what emphasis this character has
+    const { plain, emphasis } = detectCharEmphasis(char);
+    
+    // Get target style for this emphasis level
+    const targetStyle = emphasisMapping[emphasis];
+    
+    let converted: string;
+    if (targetStyle === 'plain') {
+      converted = plain;
+    } else {
+      converted = toUnicodeStyle(plain, targetStyle);
+    }
+    
+    // Re-add combining characters
+    if (combiningChars[idx]) {
+      converted += combiningChars[idx].join('');
+    }
+    
+    return converted;
+  }).join('');
+
+  return result;
+};
+
+/**
  * Copy styled text to clipboard
  */
 export const copyStyledText = async (text: string): Promise<boolean> => {
