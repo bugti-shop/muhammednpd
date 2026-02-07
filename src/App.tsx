@@ -14,6 +14,7 @@ import { NotesProvider } from "@/contexts/NotesContext";
 import { GoogleAuthProvider } from "@/contexts/GoogleAuthContext";
 import OnboardingFlow from "@/components/OnboardingFlow";
 import { NavigationLoader } from "@/components/NavigationLoader";
+import { SyncConflictSheet } from "@/components/SyncConflictSheet";
 import { PersistentNotificationHandler } from "@/components/PersistentNotificationHandler";
 import { NotificationActionsHandler } from "@/components/NotificationActionsHandler";
 import { NavigationBackProvider } from "@/components/NavigationBackProvider";
@@ -201,6 +202,7 @@ const AppContent = () => {
     <>
       <Toaster />
       <Sonner />
+      <SyncConflictSheet />
       <AppRoutes />
     </>
   );
