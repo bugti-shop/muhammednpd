@@ -79,86 +79,124 @@ And place your `google-services.json` in `android/app/`.
 
 ## TypeScript Usage
 
-### Initialize Social Login
+The app uses a unified `googleAuth.ts` that auto-detects the platform:
 
-Call this once at app startup (e.g., in `App.tsx` or a context provider):
+### How It Works
 
 ```typescript
-import { SocialLogin } from '@capgo/capacitor-social-login';
+// src/utils/googleAuth.ts (simplified overview)
 import { Capacitor } from '@capacitor/core';
 
-const initializeNativeAuth = async () => {
-  if (Capacitor.isNativePlatform()) {
-    await SocialLogin.initialize({
-      google: {
-        webClientId: '52777395492-vnlk2hkr3pv15dtpgp2m51p7418vll90.apps.googleusercontent.com',
-      },
-    });
-  }
+const isNative = () => Capacitor.isNativePlatform();
+
+// All exports auto-switch between native and web:
+export const signInWithGoogle = (): Promise<GoogleUser> =>
+  isNative() ? nativeSignIn() : webSignIn();
+
+export const signOutGoogle = async (): Promise<void> => {
+  if (isNative()) await nativeSignOut();
+  else await webSignOut(user);
+  await removeSetting('googleUser');
+};
+
+export const refreshGoogleToken = (): Promise<GoogleUser> =>
+  isNative() ? nativeRefresh() : webRefresh();
+
+export const getValidAccessToken = async (): Promise<string | null> => {
+  const user = await getStoredGoogleUser();
+  if (!user) return null;
+  if (isTokenValid(user)) return user.accessToken;
+  try {
+    const refreshed = await refreshGoogleToken();
+    return refreshed.accessToken;
+  } catch { return null; }
 };
 ```
 
-### Sign In (Native)
+### Native Sign-In (Android/iOS)
+
+Capgo Social Login is initialized lazily on first use:
 
 ```typescript
 import { SocialLogin } from '@capgo/capacitor-social-login';
 
-const nativeGoogleSignIn = async () => {
+let nativeInitialized = false;
+
+const ensureNativeInit = async () => {
+  if (nativeInitialized) return;
+  await SocialLogin.initialize({
+    google: { webClientId: CLIENT_ID },
+  });
+  nativeInitialized = true;
+};
+
+const nativeSignIn = async (): Promise<GoogleUser> => {
+  await ensureNativeInit();
   const result = await SocialLogin.login({
     provider: 'google',
     options: {
       scopes: [
-        'openid',
-        'email',
-        'profile',
+        'openid', 'email', 'profile',
         'https://www.googleapis.com/auth/drive.appdata',
         'https://www.googleapis.com/auth/drive.file',
       ],
     },
   });
 
-  // result.result contains:
-  // - accessToken.token (the OAuth access token)
-  // - idToken (JWT with user info)
-  // - profile (email, name, picture, etc.)
+  const r = result.result as any;
+  const accessToken = r.accessToken?.token || r.accessToken || '';
+  let email = r.profile?.email || '';
+  let name = r.profile?.name || '';
+  let picture = r.profile?.imageUrl || '';
 
-  return result;
+  // Fallback: fetch from Google userinfo API if profile is incomplete
+  if (!email && accessToken) {
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (res.ok) {
+      const info = await res.json();
+      email = info.email; name = info.name; picture = info.picture;
+    }
+  }
+
+  return { email, name: name || email, picture, accessToken, expiresAt: Date.now() + 3600000 };
 };
 ```
 
-### Platform-Aware Sign In
+### Web Sign-In (GIS)
 
-The app uses a unified approach — native on Android/iOS, GIS (Google Identity Services) on web:
+Google Identity Services is used on web with retry logic for user info fetching:
 
 ```typescript
-import { Capacitor } from '@capacitor/core';
-import { SocialLogin } from '@capgo/capacitor-social-login';
-
-export const signIn = async () => {
-  if (Capacitor.isNativePlatform()) {
-    // Use Capgo Social Login for native
-    const result = await SocialLogin.login({
-      provider: 'google',
-      options: {
-        scopes: [
-          'openid', 'email', 'profile',
-          'https://www.googleapis.com/auth/drive.appdata',
-          'https://www.googleapis.com/auth/drive.file',
-        ],
+const webSignIn = (): Promise<GoogleUser> => {
+  return new Promise(async (resolve, reject) => {
+    await loadGoogleIdentityServices();
+    initTokenClient(
+      async (accessToken) => {
+        // fetchUserInfo retries up to 3 times with backoff
+        const info = await fetchUserInfo(accessToken);
+        const user = { ...info, accessToken, expiresAt: Date.now() + 3600000 };
+        await setSetting('googleUser', user);
+        resolve(user);
       },
-    });
-    return {
-      email: result.result.profile?.email,
-      name: result.result.profile?.name,
-      picture: result.result.profile?.imageUrl,
-      accessToken: result.result.accessToken?.token,
-      expiresAt: Date.now() + 3600 * 1000,
-    };
-  } else {
-    // Use GIS for web (existing implementation)
-    const { signInWithGoogle } = await import('./googleAuth');
-    return signInWithGoogle();
-  }
+      (err) => reject(err)
+    );
+    tokenClient.requestAccessToken({ prompt: 'consent' });
+  });
+};
+```
+
+### Consuming Components
+
+No platform checks needed in UI code — just use the unified API:
+
+```typescript
+import { useGoogleAuth } from '@/contexts/GoogleAuthContext';
+
+const MyComponent = () => {
+  const { user, signIn, signOut } = useGoogleAuth();
+  // Works on both native and web automatically
 };
 ```
 
