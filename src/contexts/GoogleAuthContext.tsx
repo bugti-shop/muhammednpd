@@ -28,7 +28,7 @@ export function GoogleAuthProvider({ children }: { children: ReactNode }) {
       try {
         const stored = await getStoredGoogleUser();
         if (stored) setUser(stored);
-        // Pre-load GIS script
+        // Pre-load GIS script (no-op on native)
         loadGoogleIdentityServices().catch(() => {});
       } catch (err) {
         console.error('Failed to load Google user:', err);
