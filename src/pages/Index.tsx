@@ -5,6 +5,7 @@ import { Note, NoteType, Folder } from '@/types/note';
 import { NoteCard } from '@/components/NoteCard';
 import { NoteEditor } from '@/components/NoteEditor';
 import { BottomNavigation } from '@/components/BottomNavigation';
+import { SyncStatusButton } from '@/components/SyncStatusButton';
 import { PersonalizedTips } from '@/components/PersonalizedTips';
 import { FolderManager } from '@/components/FolderManager';
 import { MoveToFolderSheet } from '@/components/MoveToFolderSheet';
@@ -706,6 +707,7 @@ const Index = () => {
               <h1 className="text-base xs:text-lg sm:text-xl font-bold">Npd</h1>
             </div>
             <div className="flex items-center gap-0.5 xs:gap-1 sm:gap-2 flex-shrink-0">
+              <SyncStatusButton size="sm" />
               <Button
                 size="icon"
                 variant="ghost"
