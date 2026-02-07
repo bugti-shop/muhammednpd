@@ -167,6 +167,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         await saveNotesToDB(notes);
         lastSavedRef.current = currentHash;
         console.log('[NotesContext] Notes saved to IndexedDB');
+        window.dispatchEvent(new Event('notesUpdated'));
       } catch (error) {
         console.error('[NotesContext] Error saving notes:', error);
       }
