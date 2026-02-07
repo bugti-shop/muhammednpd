@@ -3,6 +3,7 @@ import { BottomNavigation } from '@/components/BottomNavigation';
 import { Note } from '@/types/note';
 import { NoteEditor } from '@/components/NoteEditor';
 import { Layers, Settings, Pin, Download, ListTodo, FileText, Archive, ArchiveRestore, Trash2, RotateCcw, Sun, Moon, Search, X } from 'lucide-react';
+import { SyncStatusButton } from '@/components/SyncStatusButton';
 import { debouncedSaveNotes, saveNoteToDBSingle, saveNotesToDB, deleteNoteFromDB } from '@/utils/noteStorage';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -305,6 +306,7 @@ const Notes = () => {
               <h1 className="text-base xs:text-lg sm:text-xl font-bold">{t('notes.title')}</h1>
             </div>
             <div className="flex gap-0.5 xs:gap-1 sm:gap-2 flex-shrink-0">
+              <SyncStatusButton size="sm" />
               <Button
                 size="icon"
                 variant="ghost"
