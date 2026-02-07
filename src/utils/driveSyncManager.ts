@@ -3,6 +3,7 @@
 // Uses aggregate JSON files: notes.json, tasks.json, settings.json, sync-meta.json
 
 import { getValidAccessToken, getStoredGoogleUser } from './googleAuth';
+import { SyncConflict, addConflicts } from './syncConflicts';
 import {
   getOrCreateAppFolder,
   listDriveFiles,
@@ -121,9 +122,9 @@ const hydrateTasks = (raw: any[]): TodoItem[] =>
 
 // ── Merge Logic (last-write-wins with conflict copies) ─────────────────────
 
-const mergeNotes = (local: Note[], remote: Note[]): { merged: Note[]; conflicts: number } => {
+const mergeNotes = (local: Note[], remote: Note[]): { merged: Note[]; conflictItems: SyncConflict[] } => {
   const map = new Map<string, Note>();
-  let conflicts = 0;
+  const conflictItems: SyncConflict[] = [];
 
   // Start with local
   local.forEach(n => map.set(n.id, n));
@@ -132,36 +133,39 @@ const mergeNotes = (local: Note[], remote: Note[]): { merged: Note[]; conflicts:
   remote.forEach(remoteNote => {
     const localNote = map.get(remoteNote.id);
     if (!localNote) {
-      // New from remote
       map.set(remoteNote.id, remoteNote);
     } else {
       const localTime = localNote.updatedAt?.getTime() || 0;
       const remoteTime = remoteNote.updatedAt?.getTime() || 0;
 
       if (remoteTime > localTime) {
-        // Remote is newer — use it
         map.set(remoteNote.id, remoteNote);
       } else if (localTime > remoteTime) {
-        // Local is newer — keep it (already in map)
-      } else {
-        // Same timestamp but possibly different content
-        if (localNote.syncVersion !== remoteNote.syncVersion) {
-          conflicts++;
-          // Keep local, mark conflict
-          map.set(remoteNote.id, { ...localNote, hasConflict: true });
-        }
+        // Local is newer — keep it
+      } else if (localNote.syncVersion !== remoteNote.syncVersion) {
+        // Same timestamp, different versions — real conflict
+        conflictItems.push({
+          id: remoteNote.id,
+          type: 'note',
+          localItem: localNote,
+          remoteItem: remoteNote,
+          localUpdatedAt: localNote.updatedAt,
+          remoteUpdatedAt: remoteNote.updatedAt,
+          detectedAt: new Date(),
+        });
+        // Keep local for now; user will resolve
+        map.set(remoteNote.id, { ...localNote, hasConflict: true });
       }
     }
   });
 
-  // Handle tombstones: notes deleted locally should remain deleted
-  // Notes with isDeleted flag propagate across devices
   const merged = Array.from(map.values());
-  return { merged, conflicts };
+  return { merged, conflictItems };
 };
 
-const mergeTasks = (local: TodoItem[], remote: TodoItem[]): TodoItem[] => {
+const mergeTasks = (local: TodoItem[], remote: TodoItem[]): { merged: TodoItem[]; conflictItems: SyncConflict[] } => {
   const map = new Map<string, TodoItem>();
+  const conflictItems: SyncConflict[] = [];
 
   local.forEach(t => map.set(t.id, t));
 
@@ -175,12 +179,24 @@ const mergeTasks = (local: TodoItem[], remote: TodoItem[]): TodoItem[] => {
 
       if (remoteTime > localTime) {
         map.set(remoteTask.id, remoteTask);
+      } else if (localTime === remoteTime && JSON.stringify(localTask) !== JSON.stringify(remoteTask)) {
+        // Same timestamp but different content — conflict
+        conflictItems.push({
+          id: remoteTask.id,
+          type: 'task',
+          localItem: localTask,
+          remoteItem: remoteTask,
+          localUpdatedAt: localTask.modifiedAt || localTask.createdAt || new Date(),
+          remoteUpdatedAt: remoteTask.modifiedAt || remoteTask.createdAt || new Date(),
+          detectedAt: new Date(),
+        });
+        // Keep local for now
       }
       // Otherwise keep local
     }
   });
 
-  return Array.from(map.values());
+  return { merged: Array.from(map.values()), conflictItems };
 };
 
 const mergeSettings = (local: Record<string, any>, remote: Record<string, any>): Record<string, any> => {
@@ -286,6 +302,7 @@ export const performSync = async (): Promise<SyncResult> => {
     let notesDownloaded = 0;
     let tasksDownloaded = 0;
     let totalConflicts = 0;
+    let allConflictItems: import('./syncConflicts').SyncConflict[] = [];
 
     // ── Sync Notes ───────────────────────────────────────────────────────
     const notesFile = findDriveFile(files, FILES.NOTES);
@@ -295,9 +312,10 @@ export const performSync = async (): Promise<SyncResult> => {
       // Download remote notes and merge
       const remoteData = await downloadFileContent<SyncDataFile<any[]>>(notesFile.id);
       const remoteNotes = hydrateNotes(remoteData.data || []);
-      const { merged, conflicts } = mergeNotes(localNotes, remoteNotes);
+      const { merged, conflictItems } = mergeNotes(localNotes, remoteNotes);
       finalNotes = merged;
-      totalConflicts += conflicts;
+      totalConflicts += conflictItems.length;
+      allConflictItems.push(...conflictItems);
       notesDownloaded = remoteNotes.length;
 
       // Save merged notes locally
@@ -323,7 +341,10 @@ export const performSync = async (): Promise<SyncResult> => {
     if (tasksFile) {
       const remoteData = await downloadFileContent<SyncDataFile<any[]>>(tasksFile.id);
       const remoteTasks = hydrateTasks(remoteData.data || []);
-      finalTasks = mergeTasks(localTasks, remoteTasks);
+      const taskMerge = mergeTasks(localTasks, remoteTasks);
+      finalTasks = taskMerge.merged;
+      totalConflicts += taskMerge.conflictItems.length;
+      allConflictItems.push(...taskMerge.conflictItems);
       tasksDownloaded = remoteTasks.length;
 
       await saveTodoItems(finalTasks);
@@ -384,6 +405,11 @@ export const performSync = async (): Promise<SyncResult> => {
     const metaFile = findDriveFile(files, FILES.META);
     await uploadJsonFile(folderId, FILES.META, meta, metaFile?.id);
     await setSetting('npd_last_sync', meta);
+
+    // Surface conflicts to UI
+    if (allConflictItems.length > 0) {
+      addConflicts(allConflictItems);
+    }
 
     isSyncing = false;
     notifyListeners('success');
