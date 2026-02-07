@@ -145,7 +145,8 @@ export const LinkedInTextFormatter = ({
       
       switch (variant.id) {
         case 'normal':
-          styledText = removeUnicodeFormatting(textToUse);
+          // Strip bold/italic but keep underline/strikethrough
+          styledText = removeUnicodeFormatting(textToUse, true);
           break;
         case 'bullet':
           styledText = textToUse.split('\n').filter(line => line.trim()).map(line => `• ${line.trim()}`).join('\n');
