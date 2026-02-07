@@ -9,6 +9,7 @@ import {
   uploadJsonFile,
   downloadFileContent,
   getStartPageToken,
+  getChanges,
   DriveFile,
 } from './googleDriveSync';
 import { loadNotesFromDB, saveNotesToDB } from './noteStorage';
@@ -420,4 +421,81 @@ export const getLastSyncInfo = async (): Promise<SyncMeta | null> => {
 export const isSyncAvailable = async (): Promise<boolean> => {
   const user = await getStoredGoogleUser();
   return !!user;
+};
+
+// ── Incremental Sync (change-token based) ──────────────────────────────────
+
+export const performIncrementalSync = async (): Promise<SyncResult> => {
+  // Check if we have a stored change token
+  const lastSync = await getLastSyncInfo();
+  const storedToken = lastSync?.changeToken;
+
+  if (!storedToken) {
+    // No token yet — do a full sync
+    return performSync();
+  }
+
+  const user = await getStoredGoogleUser();
+  if (!user) return { success: false, error: 'Not signed in' };
+
+  const token = await getValidAccessToken();
+  if (!token) return { success: false, error: 'Token expired' };
+
+  try {
+    // Check for remote changes since last token
+    const { changes, newStartPageToken } = await getChanges(storedToken);
+
+    if (!changes || changes.length === 0) {
+      // No remote changes — check if local data is dirty
+      const hasDirty = await hasLocalChanges();
+      if (!hasDirty) {
+        // Nothing changed anywhere — skip sync
+        return { success: true, stats: { notesUploaded: 0, notesDownloaded: 0, tasksUploaded: 0, tasksDownloaded: 0, conflicts: 0 } };
+      }
+    }
+
+    // There are changes (remote or local) — do a full sync
+    const result = await performSync();
+
+    // Update the change token if we got a new one
+    if (result.success && newStartPageToken) {
+      const meta = await getLastSyncInfo();
+      if (meta) {
+        meta.changeToken = newStartPageToken;
+        await setSetting('npd_last_sync', meta);
+      }
+    }
+
+    return result;
+  } catch (error: any) {
+    // If change detection fails, fall back to full sync
+    console.warn('Incremental check failed, falling back to full sync:', error);
+    return performSync();
+  }
+};
+
+// Check if local data has been modified since last sync
+const hasLocalChanges = async (): Promise<boolean> => {
+  const lastSync = await getLastSyncInfo();
+  if (!lastSync) return true;
+
+  const lastSyncTime = new Date(lastSync.lastSyncAt).getTime();
+  const notes = await loadNotesFromDB();
+  const tasks = await loadTodoItems();
+
+  const notesDirty = notes.some(n => {
+    const t = n.updatedAt instanceof Date ? n.updatedAt.getTime() : new Date(n.updatedAt).getTime();
+    return t > lastSyncTime;
+  });
+
+  if (notesDirty) return true;
+
+  const tasksDirty = tasks.some(t => {
+    const mod = t.modifiedAt || t.createdAt;
+    if (!mod) return false;
+    const time = mod instanceof Date ? mod.getTime() : new Date(mod as any).getTime();
+    return time > lastSyncTime;
+  });
+
+  return tasksDirty;
 };
