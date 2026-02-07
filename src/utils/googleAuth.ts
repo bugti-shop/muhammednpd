@@ -73,12 +73,22 @@ export const signInWithGoogle = (): Promise<GoogleUser> => {
       initTokenClient(
         async (accessToken: string) => {
           try {
-            // Fetch user info
-            const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-              headers: { Authorization: `Bearer ${accessToken}` },
-            });
+            // Fetch user info with retry
+            let res: Response | null = null;
+            for (let attempt = 0; attempt < 3; attempt++) {
+              try {
+                if (attempt > 0) await new Promise(r => setTimeout(r, 1000 * attempt));
+                res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${accessToken}` },
+                });
+                if (res.ok) break;
+              } catch (fetchErr) {
+                console.warn(`Userinfo fetch attempt ${attempt + 1} failed:`, fetchErr);
+                if (attempt === 2) throw new Error('Network error fetching user info. Please check your connection and try again.');
+              }
+            }
 
-            if (!res.ok) throw new Error('Failed to fetch user info');
+            if (!res || !res.ok) throw new Error('Failed to fetch user info. Please try again.');
 
             const userInfo = await res.json();
             const user: GoogleUser = {
