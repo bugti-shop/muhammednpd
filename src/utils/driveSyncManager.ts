@@ -85,18 +85,28 @@ const serializeNotes = (notes: Note[]): any[] =>
     })) || [],
   }));
 
+/** Safely parse any value into a Date or return fallback */
+const safeDate = (v: any, fallback?: Date): Date | undefined => {
+  if (!v) return fallback;
+  if (v instanceof Date) return isNaN(v.getTime()) ? fallback : v;
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? fallback : d;
+};
+
+const safeDateRequired = (v: any): Date => safeDate(v, new Date()) as Date;
+
 const hydrateNotes = (raw: any[]): Note[] =>
   raw.map(n => ({
     ...n,
-    createdAt: new Date(n.createdAt),
-    updatedAt: new Date(n.updatedAt),
-    archivedAt: n.archivedAt ? new Date(n.archivedAt) : undefined,
-    deletedAt: n.deletedAt ? new Date(n.deletedAt) : undefined,
-    reminderTime: n.reminderTime ? new Date(n.reminderTime) : undefined,
-    lastSyncedAt: n.lastSyncedAt ? new Date(n.lastSyncedAt) : undefined,
+    createdAt: safeDateRequired(n.createdAt),
+    updatedAt: safeDateRequired(n.updatedAt),
+    archivedAt: safeDate(n.archivedAt),
+    deletedAt: safeDate(n.deletedAt),
+    reminderTime: safeDate(n.reminderTime),
+    lastSyncedAt: safeDate(n.lastSyncedAt),
     voiceRecordings: n.voiceRecordings?.map((r: any) => ({
       ...r,
-      timestamp: new Date(r.timestamp),
+      timestamp: safeDateRequired(r.timestamp),
     })) || [],
     syncVersion: n.syncVersion ?? 1,
     syncStatus: n.syncStatus ?? 'synced',
@@ -108,13 +118,13 @@ const hydrateTasks = (raw: any[]): TodoItem[] =>
   raw.map(function hydrateTask(t: any): TodoItem {
     return {
       ...t,
-      dueDate: t.dueDate ? new Date(t.dueDate) : undefined,
-      reminderTime: t.reminderTime ? new Date(t.reminderTime) : undefined,
-      createdAt: t.createdAt ? new Date(t.createdAt) : undefined,
-      modifiedAt: t.modifiedAt ? new Date(t.modifiedAt) : undefined,
-      completedAt: t.completedAt ? new Date(t.completedAt) : undefined,
+      dueDate: safeDate(t.dueDate),
+      reminderTime: safeDate(t.reminderTime),
+      createdAt: safeDate(t.createdAt),
+      modifiedAt: safeDate(t.modifiedAt),
+      completedAt: safeDate(t.completedAt),
       voiceRecording: t.voiceRecording
-        ? { ...t.voiceRecording, timestamp: new Date(t.voiceRecording.timestamp) }
+        ? { ...t.voiceRecording, timestamp: safeDateRequired(t.voiceRecording.timestamp) }
         : undefined,
       subtasks: Array.isArray(t.subtasks) ? t.subtasks.map(hydrateTask) : undefined,
     };
