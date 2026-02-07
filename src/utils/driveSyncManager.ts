@@ -122,6 +122,13 @@ const hydrateTasks = (raw: any[]): TodoItem[] =>
 
 // ── Merge Logic (last-write-wins with conflict copies) ─────────────────────
 
+const toTime = (d: any): number => {
+  if (!d) return 0;
+  if (d instanceof Date) return d.getTime();
+  const parsed = new Date(d);
+  return isNaN(parsed.getTime()) ? 0 : parsed.getTime();
+};
+
 const mergeNotes = (local: Note[], remote: Note[]): { merged: Note[]; conflictItems: SyncConflict[] } => {
   const map = new Map<string, Note>();
   const conflictItems: SyncConflict[] = [];
@@ -135,8 +142,8 @@ const mergeNotes = (local: Note[], remote: Note[]): { merged: Note[]; conflictIt
     if (!localNote) {
       map.set(remoteNote.id, remoteNote);
     } else {
-      const localTime = localNote.updatedAt?.getTime() || 0;
-      const remoteTime = remoteNote.updatedAt?.getTime() || 0;
+      const localTime = toTime(localNote.updatedAt);
+      const remoteTime = toTime(remoteNote.updatedAt);
 
       if (remoteTime > localTime) {
         map.set(remoteNote.id, remoteNote);
@@ -174,8 +181,8 @@ const mergeTasks = (local: TodoItem[], remote: TodoItem[]): { merged: TodoItem[]
     if (!localTask) {
       map.set(remoteTask.id, remoteTask);
     } else {
-      const localTime = (localTask.modifiedAt || localTask.createdAt)?.getTime() || 0;
-      const remoteTime = (remoteTask.modifiedAt || remoteTask.createdAt)?.getTime() || 0;
+      const localTime = toTime(localTask.modifiedAt || localTask.createdAt);
+      const remoteTime = toTime(remoteTask.modifiedAt || remoteTask.createdAt);
 
       if (remoteTime > localTime) {
         map.set(remoteTask.id, remoteTask);
