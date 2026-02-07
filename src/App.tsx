@@ -1,4 +1,5 @@
 import { useEffect, useState, lazy, Suspense, startTransition } from "react";
+import { useAutoSync } from "@/hooks/useAutoSync";
 import { useKeyboardHeight } from "@/hooks/useKeyboardHeight";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -151,6 +152,9 @@ const AppContent = () => {
   
   // Initialize keyboard height detection for mobile toolbar positioning
   useKeyboardHeight();
+
+  // Auto-sync with Google Drive on app focus
+  useAutoSync();
 
   useEffect(() => {
     notificationManager.initialize().catch(console.error);
