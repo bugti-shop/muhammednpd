@@ -19,7 +19,8 @@ import {
   Copy,
   Check,
   Type,
-  ChevronDown
+  ChevronDown,
+  TextSelect
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -479,6 +480,21 @@ export const LinkedInTextFormatter = ({
           title="Clear formatting"
         >
           <Eraser className="h-4 w-4" />
+        </Button>
+
+        {/* Select All */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 p-0"
+          onClick={() => {
+            textareaRef.current?.focus();
+            textareaRef.current?.setSelectionRange(0, content.length);
+          }}
+          title="Select all"
+          disabled={!content}
+        >
+          <TextSelect className="h-4 w-4" />
         </Button>
 
         <div className="w-px h-6 bg-border mx-1" />
