@@ -272,9 +272,14 @@ export const toDescendingList = (text: string): string => {
 /**
  * Remove all Unicode styling (convert back to plain text)
  */
-export const removeUnicodeFormatting = (text: string): string => {
-  // Remove combining characters
-  let result = text.replace(new RegExp(`[${COMBINING_UNDERLINE}${COMBINING_STRIKETHROUGH}]`, 'g'), '');
+export const removeUnicodeFormatting = (text: string, preserveCombining = false): string => {
+  // Optionally preserve combining characters (underline, strikethrough)
+  let result: string;
+  if (preserveCombining) {
+    result = text;
+  } else {
+    result = text.replace(new RegExp(`[${COMBINING_UNDERLINE}${COMBINING_STRIKETHROUGH}]`, 'g'), '');
+  }
   
   // Create reverse mappings
   const reverseMap: Record<string, string> = {};
