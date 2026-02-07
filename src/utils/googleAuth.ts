@@ -2,7 +2,7 @@
 import { getSetting, setSetting, removeSetting } from './settingsStorage';
 
 const CLIENT_ID = '52777395492-vnlk2hkr3pv15dtpgp2m51p7418vll90.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file';
+const SCOPES = 'openid email profile https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file';
 
 export interface GoogleUser {
   email: string;
