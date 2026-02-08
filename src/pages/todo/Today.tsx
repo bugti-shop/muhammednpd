@@ -59,7 +59,8 @@ import { HideDetailsOptions } from '@/components/TaskOptionsSheet';
 import { logActivity } from '@/utils/activityLogger';
 import { useTasksSettings } from '@/components/TasksSettingsSheet';
 import { usePriorities } from '@/hooks/usePriorities';
-
+import { CustomSmartView, loadCustomSmartViews } from '@/utils/customSmartViews';
+import { SaveSmartViewSheet } from '@/components/SaveSmartViewSheet';
 
 type ViewMode = 'flat' | 'kanban' | 'kanban-status' | 'timeline' | 'progress' | 'priority' | 'history';
 type SortBy = 'date' | 'priority' | 'name' | 'created';
@@ -128,6 +129,9 @@ const Today = () => {
   // Flag to prevent saving settings before they're loaded from IndexedDB
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [deleteConfirmItem, setDeleteConfirmItem] = useState<TodoItem | null>(null);
+  const [customSmartViews, setCustomSmartViews] = useState<CustomSmartView[]>([]);
+  const [activeCustomViewId, setActiveCustomViewId] = useState<string | null>(null);
+  const [isSaveSmartViewOpen, setIsSaveSmartViewOpen] = useState(false);
   
   // Single task swipe action states
   const [swipeMoveTaskId, setSwipeMoveTaskId] = useState<string | null>(null);
@@ -223,6 +227,9 @@ const Today = () => {
       setSettingsLoaded(true);
     };
     loadSettings();
+
+    // Load custom smart views
+    loadCustomSmartViews().then(setCustomSmartViews);
 
     // Listen for tasks restored from cloud sync
     const handleTasksRestored = async () => {
@@ -1895,8 +1902,11 @@ const Today = () => {
                           {smartListData.smartLists.map((list) => (
                             <DropdownMenuItem
                               key={list.id}
-                              onClick={() => setSmartList(list.id)}
-                              className={cn("cursor-pointer", smartList === list.id && "bg-accent")}
+                              onClick={() => {
+                                setSmartList(list.id);
+                                setActiveCustomViewId(null);
+                              }}
+                              className={cn("cursor-pointer", smartList === list.id && !activeCustomViewId && "bg-accent")}
                             >
                               {list.icon}
                               <span className={cn("ml-2", list.color)}>{list.label}</span>
@@ -1910,6 +1920,50 @@ const Today = () => {
                               )}
                             </DropdownMenuItem>
                           ))}
+                          {/* Custom Smart Views */}
+                          {customSmartViews.length > 0 && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <div className="px-2 py-1.5">
+                                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                                  Saved Views
+                                </span>
+                              </div>
+                              {customSmartViews.map((view) => (
+                                <DropdownMenuItem
+                                  key={view.id}
+                                  onClick={() => {
+                                    // Apply the saved filters
+                                    setDateFilter(view.filters.dateFilter);
+                                    setPriorityFilter(view.filters.priorityFilter);
+                                    setStatusFilter(view.filters.statusFilter);
+                                    setTagFilter(view.filters.tags);
+                                    setSelectedFolderId(view.filters.folderId);
+                                    setSmartList('all');
+                                    setActiveCustomViewId(view.id);
+                                    toast.success(`Applied "${view.name}" view`);
+                                  }}
+                                  className={cn("cursor-pointer group", activeCustomViewId === view.id && "bg-accent")}
+                                >
+                                  <span className="mr-2">{view.icon}</span>
+                                  <span className="truncate" style={{ color: view.color }}>{view.name}</span>
+                                  <button
+                                    onClick={async (e) => {
+                                      e.stopPropagation();
+                                      const { deleteCustomSmartView } = await import('@/utils/customSmartViews');
+                                      await deleteCustomSmartView(view.id);
+                                      loadCustomSmartViews().then(setCustomSmartViews);
+                                      if (activeCustomViewId === view.id) setActiveCustomViewId(null);
+                                      toast.success('Smart View deleted');
+                                    }}
+                                    className="opacity-0 group-hover:opacity-100 ml-auto p-1 hover:bg-destructive/10 rounded transition-opacity"
+                                  >
+                                    <Trash2 className="h-3 w-3 text-destructive" />
+                                  </button>
+                                </DropdownMenuItem>
+                              ))}
+                            </>
+                          )}
                         </>
                       )}
                     </div>
@@ -3113,7 +3167,19 @@ const Today = () => {
         onConvertToNote={handleConvertSingleTask}
         onMoveToFolder={handleMoveTaskToFolder}
       />
-      <TaskFilterSheet isOpen={isFilterSheetOpen} onClose={() => setIsFilterSheetOpen(false)} folders={folders} selectedFolderId={selectedFolderId} onFolderChange={setSelectedFolderId} dateFilter={dateFilter} onDateFilterChange={setDateFilter} priorityFilter={priorityFilter} onPriorityFilterChange={setPriorityFilter} statusFilter={statusFilter} onStatusFilterChange={setStatusFilter} selectedTags={tagFilter} onTagsChange={setTagFilter} onClearAll={handleClearFilters} />
+      <TaskFilterSheet isOpen={isFilterSheetOpen} onClose={() => setIsFilterSheetOpen(false)} folders={folders} selectedFolderId={selectedFolderId} onFolderChange={setSelectedFolderId} dateFilter={dateFilter} onDateFilterChange={setDateFilter} priorityFilter={priorityFilter} onPriorityFilterChange={setPriorityFilter} statusFilter={statusFilter} onStatusFilterChange={setStatusFilter} selectedTags={tagFilter} onTagsChange={setTagFilter} onClearAll={handleClearFilters} onSaveAsSmartView={() => setIsSaveSmartViewOpen(true)} />
+      <SaveSmartViewSheet
+        isOpen={isSaveSmartViewOpen}
+        onClose={() => setIsSaveSmartViewOpen(false)}
+        currentFilters={{
+          dateFilter,
+          priorityFilter,
+          statusFilter,
+          tags: tagFilter,
+          folderId: selectedFolderId,
+        }}
+        onSaved={() => loadCustomSmartViews().then(setCustomSmartViews)}
+      />
       <DuplicateOptionsSheet isOpen={isDuplicateSheetOpen} onClose={() => setIsDuplicateSheetOpen(false)} onSelect={handleDuplicate} />
       <FolderManageSheet isOpen={isFolderManageOpen} onClose={() => setIsFolderManageOpen(false)} folders={folders} onCreateFolder={handleCreateFolder} onEditFolder={handleEditFolder} onDeleteFolder={handleDeleteFolder} onReorderFolders={handleReorderFolders} />
       <MoveToFolderSheet isOpen={isMoveToFolderOpen} onClose={() => setIsMoveToFolderOpen(false)} folders={folders} onSelect={handleMoveToFolder} />
