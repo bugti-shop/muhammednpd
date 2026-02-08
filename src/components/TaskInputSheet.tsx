@@ -881,7 +881,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
           </div>
 
           {/* Natural Language Parsing Preview */}
-          {hasNLPPatterns && parsedTask && (parsedTask.dueDate || parsedTask.priority || parsedTask.repeatType || parsedTask.location) && (
+          {hasNLPPatterns && parsedTask && (parsedTask.dueDate || parsedTask.priority || parsedTask.repeatType || parsedTask.location || (parsedTask.tags && parsedTask.tags.length > 0) || parsedTask.folderName) && (
             <div className="flex items-center gap-2 mb-3 px-1 flex-wrap">
               <Sparkles className="h-3.5 w-3.5 text-primary flex-shrink-0" />
               <span className="text-xs text-muted-foreground">{t('tasks.detected')}:</span>
@@ -914,6 +914,18 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
                 )}>
                   <Flag className="h-3 w-3" />
                   {parsedTask.priority}
+                </span>
+              )}
+              {parsedTask.tags && parsedTask.tags.length > 0 && parsedTask.tags.map(tag => (
+                <span key={tag} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-teal-500/10 text-teal-500">
+                  <Tag className="h-3 w-3" />
+                  {tag}
+                </span>
+              ))}
+              {parsedTask.folderName && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-orange-500/10 text-orange-500">
+                  <FolderIcon className="h-3 w-3" />
+                  {parsedTask.folderName}
                 </span>
               )}
             </div>
