@@ -9,6 +9,8 @@ import { SyncStatusButton } from '@/components/SyncStatusButton';
 import { PersonalizedTips } from '@/components/PersonalizedTips';
 import { FolderManager } from '@/components/FolderManager';
 import { MoveToFolderSheet } from '@/components/MoveToFolderSheet';
+import { NoteTemplateSheet } from '@/components/NoteTemplateSheet';
+import { createNote } from '@/utils/noteDefaults';
 
 import { MasonryNotesGrid } from '@/components/MasonryNotesGrid';
 import { VirtualizedNotesGrid, VirtualizedNotesList, shouldVirtualizeNotes } from '@/components/VirtualizedNotesGrid';
@@ -18,7 +20,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, StickyNote, FileText, FileEdit, Pen, ListTodo, Bell, Clock, Repeat, FileCode, GitBranch, Sun, Moon, Receipt, Star, ArrowUpDown, MoreVertical, FolderPlus, CheckSquare, Trash2, Archive, X, RotateCcw, Copy, Folder as FolderIcon, Eye, EyeOff, Mic, Type } from 'lucide-react';
+import { Search, Plus, StickyNote, FileText, FileEdit, Pen, ListTodo, Bell, Clock, Repeat, FileCode, GitBranch, Sun, Moon, Receipt, Star, ArrowUpDown, MoreVertical, FolderPlus, CheckSquare, Trash2, Archive, X, RotateCcw, Copy, Folder as FolderIcon, Eye, EyeOff, Mic, Type, LayoutTemplate } from 'lucide-react';
 import { getAllUpcomingReminders } from '@/utils/noteNotifications';
 import { format, isToday, isTomorrow, differenceInDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
@@ -70,6 +72,7 @@ const Index = () => {
   const [showBulkFolderSheet, setShowBulkFolderSheet] = useState(false);
   const [fullSearchResults, setFullSearchResults] = useState<string[]>([]);
   const [movingNoteId, setMovingNoteId] = useState<string | null>(null);
+  const [isNoteTemplateOpen, setIsNoteTemplateOpen] = useState(false);
   
   
   // Note type selector dropdown state (for persistent notification integration)
@@ -410,6 +413,42 @@ const Index = () => {
       color,
     };
     setFolders(prev => [...prev, newFolder]);
+  };
+
+  const handleApplyNoteTemplate = (data: {
+    folder: Omit<Folder, 'id' | 'createdAt'>;
+    notes: Omit<Note, 'id' | 'createdAt' | 'updatedAt' | 'syncVersion' | 'syncStatus' | 'isDirty'>[];
+  }) => {
+    // Create the folder
+    const folderId = `folder-${Date.now()}`;
+    const newFolder: Folder = {
+      ...data.folder,
+      id: folderId,
+      createdAt: new Date(),
+    };
+    setFolders(prev => [...prev, newFolder]);
+
+    // Create all notes in that folder
+    const now = new Date();
+    const newNotes: Note[] = data.notes.map((noteDef, i) => 
+      createNote({
+        ...noteDef,
+        id: `note-${Date.now()}-${i}`,
+        folderId,
+        voiceRecordings: noteDef.voiceRecordings || [],
+        createdAt: new Date(now.getTime() + i), // Ensure unique timestamps for ordering
+        updatedAt: new Date(now.getTime() + i),
+      } as any)
+    );
+
+    setNotes(prev => [...newNotes, ...prev]);
+    // Persist
+    import('@/utils/noteStorage').then(({ saveNotesToDB }) => {
+      saveNotesToDB([...newNotes, ...notes]);
+    });
+    
+    // Select the new folder
+    setSelectedFolderId(folderId);
   };
 
   const handleDeleteFolder = (folderId: string) => {
@@ -1340,6 +1379,11 @@ const Index = () => {
                   {t('notes.noteTypes.linkedin', 'LinkedIn Formatter')}
                 </DropdownMenuItem>
               )}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => { triggerHaptic('medium'); setNoteTypeSelectorOpen(false); setIsNoteTemplateOpen(true); }} className="gap-2">
+                <LayoutTemplate className="h-4 w-4 text-primary" />
+                Note Templates
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )
@@ -1351,6 +1395,13 @@ const Index = () => {
       <NoteTypeVisibilitySheet
         isOpen={showNoteTypeVisibilitySheet}
         onClose={() => setShowNoteTypeVisibilitySheet(false)}
+      />
+      
+      {/* Note Templates Sheet */}
+      <NoteTemplateSheet
+        isOpen={isNoteTemplateOpen}
+        onClose={() => setIsNoteTemplateOpen(false)}
+        onApplyTemplate={handleApplyNoteTemplate}
       />
       
       {/* Single Note Move to Folder Sheet */}
