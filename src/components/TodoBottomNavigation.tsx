@@ -1,5 +1,5 @@
 import { startTransition, useCallback, useState, useEffect } from 'react';
-import { Home, Calendar, Settings, BarChart3, User, Dumbbell, LayoutDashboard } from 'lucide-react';
+import { Home, Calendar, Settings, BarChart3, User, Dumbbell, LayoutDashboard, ClipboardList, History, CalendarDays, CalendarRange } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { triggerHaptic } from '@/utils/haptics';
@@ -28,6 +28,10 @@ const ICON_COMPONENTS: Record<string, React.ComponentType<{ className?: string }
   Settings,
   Dumbbell,
   LayoutDashboard,
+  ClipboardList,
+  History,
+  CalendarDays,
+  CalendarRange,
 };
 
 export const DEFAULT_TODO_NAV_ITEMS: TodoNavItem[] = [
@@ -38,6 +42,10 @@ export const DEFAULT_TODO_NAV_ITEMS: TodoNavItem[] = [
   { id: 'settings', label: 'Settings', icon: 'Settings', path: '/todo/settings', visible: true },
   { id: 'habits', label: 'Habits', icon: 'Dumbbell', path: '/todo/habits', visible: false },
   { id: 'widgets', label: 'Widgets', icon: 'LayoutDashboard', path: '/todo/widgets-dashboard', visible: false },
+  { id: 'weeklyReview', label: 'Weekly Review', icon: 'ClipboardList', path: '/todo/weekly-review', visible: false },
+  { id: 'taskHistory', label: 'History', icon: 'History', path: '/todo/task-history', visible: false },
+  { id: 'today', label: 'Today', icon: 'CalendarDays', path: '/todo/today-view', visible: false },
+  { id: 'upcoming', label: 'Upcoming', icon: 'CalendarRange', path: '/todo/upcoming', visible: false },
 ];
 
 // Preload route modules on hover for instant navigation
@@ -48,6 +56,10 @@ const preloadRoutes: Record<string, () => Promise<any>> = {
   '/todo/habits': () => import('@/pages/todo/Habits'),
   '/todo/settings': () => import('@/pages/todo/TodoSettings'),
   '/todo/widgets-dashboard': () => import('@/pages/todo/WidgetsDashboard'),
+  '/todo/weekly-review': () => import('@/pages/todo/WeeklyReview'),
+  '/todo/task-history': () => import('@/pages/todo/TaskHistory'),
+  '/todo/today-view': () => import('@/pages/todo/Today'),
+  '/todo/upcoming': () => import('@/pages/todo/Upcoming'),
   '/profile': () => import('@/pages/Profile'),
 };
 
