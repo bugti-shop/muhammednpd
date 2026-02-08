@@ -62,6 +62,7 @@ import { usePriorities } from '@/hooks/usePriorities';
 import { CustomSmartView, loadCustomSmartViews } from '@/utils/customSmartViews';
 import { SaveSmartViewSheet } from '@/components/SaveSmartViewSheet';
 import { ProjectTemplateSheet } from '@/components/ProjectTemplateSheet';
+import { AutoScheduleSheet } from '@/components/AutoScheduleSheet';
 
 type ViewMode = 'flat' | 'kanban' | 'kanban-status' | 'timeline' | 'progress' | 'priority' | 'history';
 type SortBy = 'date' | 'priority' | 'name' | 'created';
@@ -134,6 +135,7 @@ const Today = () => {
   const [activeCustomViewId, setActiveCustomViewId] = useState<string | null>(null);
   const [isSaveSmartViewOpen, setIsSaveSmartViewOpen] = useState(false);
   const [isProjectTemplateOpen, setIsProjectTemplateOpen] = useState(false);
+  const [isAutoScheduleOpen, setIsAutoScheduleOpen] = useState(false);
   
   // Single task swipe action states
   const [swipeMoveTaskId, setSwipeMoveTaskId] = useState<string | null>(null);
@@ -1894,6 +1896,9 @@ const Today = () => {
                           <DropdownMenuItem onClick={() => setIsProjectTemplateOpen(true)} className="cursor-pointer">
                             <LayoutTemplate className="h-4 w-4 mr-2" />Project Templates
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setIsAutoScheduleOpen(true)} className="cursor-pointer">
+                            <Sparkles className="h-4 w-4 mr-2" />Auto-Schedule
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem onClick={() => { setIsSelectionMode(true); setIsSelectActionsOpen(true); }} className="cursor-pointer">
                             <MousePointer2 className="h-4 w-4 mr-2" />{t('menu.select')}
@@ -3247,6 +3252,7 @@ const Today = () => {
       <DuplicateOptionsSheet isOpen={isDuplicateSheetOpen} onClose={() => setIsDuplicateSheetOpen(false)} onSelect={handleDuplicate} />
       <FolderManageSheet isOpen={isFolderManageOpen} onClose={() => setIsFolderManageOpen(false)} folders={folders} onCreateFolder={handleCreateFolder} onEditFolder={handleEditFolder} onDeleteFolder={handleDeleteFolder} onReorderFolders={handleReorderFolders} onToggleFavorite={handleToggleFolderFavorite} />
       <ProjectTemplateSheet isOpen={isProjectTemplateOpen} onClose={() => setIsProjectTemplateOpen(false)} onApplyTemplate={handleApplyProjectTemplate} />
+      <AutoScheduleSheet isOpen={isAutoScheduleOpen} onClose={() => setIsAutoScheduleOpen(false)} tasks={items} onApply={(updated) => { setItems(updated); toast.success('Schedule applied!', { icon: '📅' }); }} />
       <MoveToFolderSheet isOpen={isMoveToFolderOpen} onClose={() => setIsMoveToFolderOpen(false)} folders={folders} onSelect={handleMoveToFolder} />
       <SelectActionsSheet isOpen={isSelectActionsOpen} onClose={() => setIsSelectActionsOpen(false)} selectedCount={selectedTaskIds.size} onAction={handleSelectAction} totalCount={uncompletedItems.length} />
       <PrioritySelectSheet isOpen={isPrioritySheetOpen} onClose={() => setIsPrioritySheetOpen(false)} onSelect={handleSetPriority} />
