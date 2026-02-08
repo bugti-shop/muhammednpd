@@ -180,15 +180,13 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.getcapacitor.BridgeActivity;
-import com.getcapacitor.PluginHandle;
 
-import ee.forgr.capacitor.social.login.GoogleProvider;
-import ee.forgr.capacitor.social.login.SocialLoginPlugin;
 import ee.forgr.capacitor.social.login.ModifiedMainActivityForSocialLoginPlugin;
 
 import nota.npd.com.widgets.SpecificNoteWidget;
 import nota.npd.com.widgets.SectionTasksWidget;
 
+// Plugin v8+ uses Credential Manager internally — no onActivityResult override needed
 public class MainActivity extends BridgeActivity implements ModifiedMainActivityForSocialLoginPlugin {
     
     private static final String TAG = "MainActivity";
@@ -197,101 +195,38 @@ public class MainActivity extends BridgeActivity implements ModifiedMainActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: App started");
-        
-        // Handle intent if app was opened from widget
         handleWidgetIntent(getIntent());
     }
     
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(TAG, "onNewIntent: Received new intent");
         handleWidgetIntent(intent);
     }
     
-    /**
-     * Handle intents from widgets
-     */
     private void handleWidgetIntent(Intent intent) {
         if (intent == null) return;
-        
         String action = intent.getStringExtra("action");
         String route = intent.getStringExtra("route");
-        String noteId = intent.getStringExtra("noteId");
-        String sectionId = intent.getStringExtra("sectionId");
-        String taskId = intent.getStringExtra("taskId");
-        
-        Log.d(TAG, "handleWidgetIntent: action=" + action + ", route=" + route);
-        
-        // You can use JavaScript bridge to navigate to specific routes
-        // This will be handled by Capacitor WebView
         if (action != null || route != null) {
-            // Store intent data for WebView to read
             getIntent().putExtras(intent);
         }
     }
     
     /**
-     * CRITICAL: Handle Google Sign-In result
-     * This ensures the SocialLogin plugin receives the result in release builds
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
-        
-        boolean handled = false;
-        
-        // Handle Google Sign-In result BEFORE calling super
-        if (requestCode >= GoogleProvider.REQUEST_AUTHORIZE_GOOGLE_MIN && 
-            requestCode < GoogleProvider.REQUEST_AUTHORIZE_GOOGLE_MAX) {
-            Log.d(TAG, "Handling Google Sign-In result");
-            
-            PluginHandle pluginHandle = getBridge().getPlugin("SocialLogin");
-            if (pluginHandle != null) {
-                SocialLoginPlugin plugin = (SocialLoginPlugin) pluginHandle.getInstance();
-                if (plugin != null) {
-                    plugin.handleGoogleLoginIntent(requestCode, data);
-                    handled = true;
-                    Log.d(TAG, "Google Sign-In result forwarded to plugin");
-                } else {
-                    Log.e(TAG, "SocialLoginPlugin instance is null");
-                }
-            } else {
-                Log.e(TAG, "SocialLogin plugin handle not found");
-            }
-        }
-        
-        // Always call super to ensure Capacitor processes other results
-        super.onActivityResult(requestCode, resultCode, data);
-        
-        if (!handled) {
-            Log.d(TAG, "Result not handled by SocialLogin, passed to Capacitor");
-        }
-    }
-    
-    /**
      * Required by ModifiedMainActivityForSocialLoginPlugin interface
-     * Confirms that MainActivity has been properly modified for Social Login plugin
      */
     @Override
     public void IHaveModifiedTheMainActivityForTheUseWithSocialLoginPlugin() {
-        // This method confirms modification for Social Login plugin
+        // Confirms MainActivity is set up for Social Login plugin
     }
     
     /**
      * Refresh all home screen widgets
-     * Call this from JavaScript when data changes
      */
     public void refreshWidgets() {
-        Log.d(TAG, "Refreshing all widgets");
-        
-        Intent updateIntent = new Intent("nota.npd.com.WIDGET_UPDATE");
-        sendBroadcast(updateIntent);
-        
-        // Also trigger AppWidgetManager update
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         
-        // Update Notes Widget
         ComponentName noteWidgetProvider = new ComponentName(this, SpecificNoteWidget.class);
         int[] noteWidgetIds = appWidgetManager.getAppWidgetIds(noteWidgetProvider);
         if (noteWidgetIds.length > 0) {
@@ -301,7 +236,6 @@ public class MainActivity extends BridgeActivity implements ModifiedMainActivity
             sendBroadcast(intent);
         }
         
-        // Update Section Tasks Widget
         ComponentName sectionWidgetProvider = new ComponentName(this, SectionTasksWidget.class);
         int[] sectionWidgetIds = appWidgetManager.getAppWidgetIds(sectionWidgetProvider);
         if (sectionWidgetIds.length > 0) {
@@ -313,16 +247,8 @@ public class MainActivity extends BridgeActivity implements ModifiedMainActivity
     }
     
     @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: App resumed");
-    }
-    
-    @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause: App paused, refreshing widgets");
-        // Refresh widgets when app goes to background
         refreshWidgets();
     }
 }
