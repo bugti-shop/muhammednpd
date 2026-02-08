@@ -534,6 +534,310 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
       },
     ],
   },
+  {
+    id: 'finance-toolkit',
+    name: 'Finance Toolkit',
+    icon: 'Receipt',
+    description: 'Budget tracker, invoice template, and expense report for personal & business finance',
+    category: 'Finance',
+    folderColor: '#10b981',
+    notes: [
+      {
+        title: 'Monthly Budget Tracker',
+        type: 'regular',
+        content: `<h2>💰 Monthly Budget Tracker</h2>
+<p><strong>Month:</strong> [Month Year] | <strong>Total Budget:</strong> $[Amount]</p>
+<hr/>
+<h3>📊 Income</h3>
+<table><thead><tr><th>Source</th><th>Expected</th><th>Actual</th><th>Difference</th></tr></thead><tbody>
+<tr><td>Salary</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>Freelance</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>Other</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>$[Total]</strong></td><td><strong>$[Total]</strong></td><td><strong>$0</strong></td></tr>
+</tbody></table>
+<h3>💸 Expenses</h3>
+<table><thead><tr><th>Category</th><th>Budgeted</th><th>Spent</th><th>Remaining</th></tr></thead><tbody>
+<tr><td>🏠 Rent/Mortgage</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>🛒 Groceries</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>🚗 Transportation</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>💡 Utilities</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>📱 Subscriptions</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>🍽️ Dining Out</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>🎉 Entertainment</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>💊 Health</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td>📦 Other</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>$[Total]</strong></td><td><strong>$[Total]</strong></td><td><strong>$0</strong></td></tr>
+</tbody></table>
+<h3>🏦 Savings Goals</h3>
+<table><thead><tr><th>Goal</th><th>Target</th><th>Saved This Month</th><th>Total Progress</th></tr></thead><tbody>
+<tr><td>Emergency Fund</td><td>$[Target]</td><td>$[Amount]</td><td>$[Total] / $[Target]</td></tr>
+<tr><td>Vacation</td><td>$[Target]</td><td>$[Amount]</td><td>$[Total] / $[Target]</td></tr>
+</tbody></table>
+<h3>📝 Notes</h3>
+<p>[Any observations, adjustments needed, or financial goals for next month]</p>`,
+      },
+      {
+        title: 'Invoice Template',
+        type: 'regular',
+        content: `<h2>🧾 Invoice</h2>
+<p><strong>Invoice #:</strong> INV-[Number] | <strong>Date:</strong> [Date] | <strong>Due Date:</strong> [Date]</p>
+<hr/>
+<h3>From</h3>
+<p><strong>[Your Name / Business Name]</strong><br/>[Address Line 1]<br/>[City, State ZIP]<br/>Email: [email] | Phone: [phone]</p>
+<h3>Bill To</h3>
+<p><strong>[Client Name / Company]</strong><br/>[Address Line 1]<br/>[City, State ZIP]<br/>Email: [client email]</p>
+<hr/>
+<h3>📋 Services / Items</h3>
+<table><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>
+<tr><td>[Service/Item 1]</td><td>1</td><td>$[Rate]</td><td>$[Amount]</td></tr>
+<tr><td>[Service/Item 2]</td><td>2</td><td>$[Rate]</td><td>$[Amount]</td></tr>
+<tr><td>[Service/Item 3]</td><td>1</td><td>$[Rate]</td><td>$[Amount]</td></tr>
+</tbody></table>
+<table><tbody>
+<tr><td style="text-align:right"><strong>Subtotal</strong></td><td style="width:120px">$[Subtotal]</td></tr>
+<tr><td style="text-align:right"><strong>Tax (X%)</strong></td><td>$[Tax]</td></tr>
+<tr><td style="text-align:right"><strong>Discount</strong></td><td>-$[Discount]</td></tr>
+<tr><td style="text-align:right"><strong>Total Due</strong></td><td><strong>$[Total]</strong></td></tr>
+</tbody></table>
+<h3>💳 Payment Methods</h3>
+<ul><li>Bank Transfer: [Account details]</li><li>PayPal: [email]</li><li>Other: [details]</li></ul>
+<h3>📌 Terms & Notes</h3>
+<p>Payment due within [X] days. Late payments may incur a [X]% fee.<br/>[Additional notes or thank you message]</p>`,
+      },
+      {
+        title: 'Expense Report',
+        type: 'regular',
+        content: `<h2>📊 Expense Report</h2>
+<p><strong>Employee:</strong> [Name] | <strong>Department:</strong> [Dept] | <strong>Period:</strong> [Date Range]</p>
+<hr/>
+<h3>💳 Expenses</h3>
+<table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Payment Method</th><th>Amount</th><th>Receipt</th></tr></thead><tbody>
+<tr><td>[Date]</td><td>Travel</td><td>[Description]</td><td>Card</td><td>$[Amount]</td><td>✅</td></tr>
+<tr><td>[Date]</td><td>Meals</td><td>[Description]</td><td>Cash</td><td>$[Amount]</td><td>✅</td></tr>
+<tr><td>[Date]</td><td>Supplies</td><td>[Description]</td><td>Card</td><td>$[Amount]</td><td>☐</td></tr>
+<tr><td>[Date]</td><td>Software</td><td>[Description]</td><td>Card</td><td>$[Amount]</td><td>✅</td></tr>
+<tr><td>[Date]</td><td>Other</td><td>[Description]</td><td>[Method]</td><td>$[Amount]</td><td>☐</td></tr>
+</tbody></table>
+<h3>📈 Summary by Category</h3>
+<table><thead><tr><th>Category</th><th>Total</th></tr></thead><tbody>
+<tr><td>Travel</td><td>$[Amount]</td></tr>
+<tr><td>Meals</td><td>$[Amount]</td></tr>
+<tr><td>Supplies</td><td>$[Amount]</td></tr>
+<tr><td>Software</td><td>$[Amount]</td></tr>
+<tr><td><strong>Grand Total</strong></td><td><strong>$[Total]</strong></td></tr>
+</tbody></table>
+<h3>✍️ Approval</h3>
+<p>Submitted by: [Name] — Date: [Date]<br/>Approved by: _________________ — Date: _________</p>`,
+      },
+    ],
+  },
+  {
+    id: 'daily-journaling',
+    name: 'Daily Journaling',
+    icon: 'Notebook',
+    description: 'Morning pages, gratitude journal, and weekly reflection templates for mindful living',
+    category: 'Journaling',
+    folderColor: '#f59e0b',
+    notes: [
+      {
+        title: 'Morning Pages',
+        type: 'regular',
+        content: `<h2>🌅 Morning Pages</h2>
+<p><strong>Date:</strong> [Date] | <strong>Woke up at:</strong> [Time] | <strong>Sleep quality:</strong> [⭐⭐⭐⭐⭐]</p>
+<hr/>
+<h3>🧘 Morning Check-In</h3>
+<table><thead><tr><th>Question</th><th>Answer</th></tr></thead><tbody>
+<tr><td>How do I feel right now?</td><td>[Physically, mentally, emotionally]</td></tr>
+<tr><td>What did I dream about?</td><td>[Dream notes or "none recalled"]</td></tr>
+<tr><td>What am I looking forward to?</td><td>[Today's highlight]</td></tr>
+<tr><td>What might be challenging?</td><td>[Anticipated challenge]</td></tr>
+</tbody></table>
+<h3>🎯 Today's Intentions</h3>
+<ol><li><strong>Top Priority:</strong> [The ONE thing I must do today]</li><li>[Second priority]</li><li>[Third priority]</li></ol>
+<h3>✍️ Free Writing</h3>
+<p>[Stream of consciousness — write whatever comes to mind for 10 minutes without stopping or editing. Let your thoughts flow freely...]</p>
+<h3>💡 Ideas That Came Up</h3>
+<ul><li>[Capture any ideas, insights, or creative sparks from your writing]</li></ul>
+<h3>🙏 Affirmation</h3>
+<blockquote><p>"[Write a positive affirmation for today]"</p></blockquote>`,
+      },
+      {
+        title: 'Gratitude Journal',
+        type: 'regular',
+        content: `<h2>🙏 Gratitude Journal</h2>
+<p><strong>Date:</strong> [Date] | <strong>Overall Mood:</strong> [😊 Great / 🙂 Good / 😐 Okay / 😢 Low]</p>
+<hr/>
+<h3>✨ Three Things I'm Grateful For</h3>
+<table><thead><tr><th>#</th><th>I'm Grateful For...</th><th>Why It Matters</th></tr></thead><tbody>
+<tr><td>1</td><td>[Something big or small]</td><td>[How it made you feel / why it's important]</td></tr>
+<tr><td>2</td><td>[A person, experience, or thing]</td><td>[The impact it had on your day]</td></tr>
+<tr><td>3</td><td>[An often overlooked blessing]</td><td>[Why you're noticing it today]</td></tr>
+</tbody></table>
+<h3>🌟 Today's Wins</h3>
+<ul><li><strong>Big win:</strong> [Something you accomplished or experienced]</li><li><strong>Small win:</strong> [A tiny moment of joy or progress]</li></ul>
+<h3>❤️ Acts of Kindness</h3>
+<p><strong>Kindness I received:</strong> [Someone's gesture toward you]</p>
+<p><strong>Kindness I gave:</strong> [How you helped or brightened someone's day]</p>
+<h3>📸 Moment I Want to Remember</h3>
+<p>[Describe a specific moment from today in vivid detail — sights, sounds, feelings]</p>
+<h3>🌙 Evening Reflection</h3>
+<p>If I could relive one moment from today, it would be: [Moment]</p>
+<p>Tomorrow, I'm looking forward to: [Something positive]</p>`,
+      },
+      {
+        title: 'Weekly Reflection',
+        type: 'regular',
+        content: `<h2>📝 Weekly Reflection</h2>
+<p><strong>Week of:</strong> [Start Date] — [End Date]</p>
+<hr/>
+<h3>🏆 This Week's Highlights</h3>
+<table><thead><tr><th>Day</th><th>Highlight</th><th>How I Felt</th></tr></thead><tbody>
+<tr><td>Monday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
+<tr><td>Tuesday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
+<tr><td>Wednesday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
+<tr><td>Thursday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
+<tr><td>Friday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
+<tr><td>Saturday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
+<tr><td>Sunday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
+</tbody></table>
+<h3>✅ Goals Review</h3>
+<table><thead><tr><th>Goal</th><th>Progress</th><th>Status</th></tr></thead><tbody>
+<tr><td>[Goal 1]</td><td>[What I did]</td><td>[✅ Done / 🔄 In Progress / ❌ Missed]</td></tr>
+<tr><td>[Goal 2]</td><td>[What I did]</td><td>[✅ / 🔄 / ❌]</td></tr>
+<tr><td>[Goal 3]</td><td>[What I did]</td><td>[✅ / 🔄 / ❌]</td></tr>
+</tbody></table>
+<h3>💡 Lessons Learned</h3>
+<ol><li>[Key insight from this week]</li><li>[Something I'd do differently]</li><li>[A pattern I noticed about myself]</li></ol>
+<h3>🎯 Next Week's Focus</h3>
+<ul><li><strong>Priority 1:</strong> [Most important goal]</li><li><strong>Priority 2:</strong> [Secondary goal]</li><li><strong>Habit to build:</strong> [One habit to focus on]</li></ul>
+<h3>💭 One Word to Describe This Week</h3>
+<p style="font-size:1.5em;text-align:center"><strong>[Word]</strong></p>`,
+      },
+    ],
+  },
+  {
+    id: 'interview-prep',
+    name: 'Interview Prep',
+    icon: 'Briefcase',
+    description: 'STAR method responses, company research notes, and question bank for job interviews',
+    category: 'Career',
+    folderColor: '#6366f1',
+    notes: [
+      {
+        title: 'STAR Method Responses',
+        type: 'regular',
+        content: `<h2>⭐ STAR Method Interview Responses</h2>
+<p><strong>Position:</strong> [Job Title] | <strong>Company:</strong> [Company Name]</p>
+<hr/>
+<h3>📋 How to Use STAR</h3>
+<p><strong>S</strong>ituation → <strong>T</strong>ask → <strong>A</strong>ction → <strong>R</strong>esult</p>
+<hr/>
+<h3>Story 1: [Theme — e.g., Leadership]</h3>
+<table><thead><tr><th>Component</th><th>Your Response</th></tr></thead><tbody>
+<tr><td><strong>Situation</strong></td><td>[Set the scene. Where were you working? What was happening?]</td></tr>
+<tr><td><strong>Task</strong></td><td>[What was your responsibility? What needed to be done?]</td></tr>
+<tr><td><strong>Action</strong></td><td>[What specific steps did YOU take? Use "I" not "we"]</td></tr>
+<tr><td><strong>Result</strong></td><td>[What was the outcome? Use numbers/metrics if possible]</td></tr>
+</tbody></table>
+<p><strong>Best for questions like:</strong> "Tell me about a time you led a team..." / "Describe a leadership challenge..."</p>
+<hr/>
+<h3>Story 2: [Theme — e.g., Problem Solving]</h3>
+<table><thead><tr><th>Component</th><th>Your Response</th></tr></thead><tbody>
+<tr><td><strong>Situation</strong></td><td>[Context]</td></tr>
+<tr><td><strong>Task</strong></td><td>[Your role]</td></tr>
+<tr><td><strong>Action</strong></td><td>[Your steps]</td></tr>
+<tr><td><strong>Result</strong></td><td>[Outcome with metrics]</td></tr>
+</tbody></table>
+<p><strong>Best for questions like:</strong> "Describe a difficult problem you solved..." / "When did you think outside the box?"</p>
+<hr/>
+<h3>Story 3: [Theme — e.g., Conflict Resolution]</h3>
+<table><thead><tr><th>Component</th><th>Your Response</th></tr></thead><tbody>
+<tr><td><strong>Situation</strong></td><td>[Context]</td></tr>
+<tr><td><strong>Task</strong></td><td>[Your role]</td></tr>
+<tr><td><strong>Action</strong></td><td>[Your steps]</td></tr>
+<tr><td><strong>Result</strong></td><td>[Outcome]</td></tr>
+</tbody></table>
+<p><strong>Best for questions like:</strong> "Tell me about a disagreement with a colleague..." / "How do you handle conflict?"</p>
+<hr/>
+<h3>Story 4: [Theme — e.g., Failure & Learning]</h3>
+<table><thead><tr><th>Component</th><th>Your Response</th></tr></thead><tbody>
+<tr><td><strong>Situation</strong></td><td>[Context]</td></tr>
+<tr><td><strong>Task</strong></td><td>[Your role]</td></tr>
+<tr><td><strong>Action</strong></td><td>[Your steps]</td></tr>
+<tr><td><strong>Result</strong></td><td>[What you learned]</td></tr>
+</tbody></table>
+<p><strong>Best for questions like:</strong> "Tell me about a time you failed..." / "What's your biggest mistake?"</p>`,
+      },
+      {
+        title: 'Company Research Notes',
+        type: 'regular',
+        content: `<h2>🏢 Company Research</h2>
+<p><strong>Company:</strong> [Company Name] | <strong>Position:</strong> [Job Title] | <strong>Interview Date:</strong> [Date]</p>
+<hr/>
+<h3>📊 Company Overview</h3>
+<table><thead><tr><th>Detail</th><th>Info</th></tr></thead><tbody>
+<tr><td>Founded</td><td>[Year]</td></tr>
+<tr><td>Headquarters</td><td>[Location]</td></tr>
+<tr><td>Industry</td><td>[Industry]</td></tr>
+<tr><td>Size</td><td>[# employees]</td></tr>
+<tr><td>Revenue</td><td>[If public]</td></tr>
+<tr><td>CEO/Founder</td><td>[Name]</td></tr>
+<tr><td>Mission</td><td>[Company mission statement]</td></tr>
+</tbody></table>
+<h3>🎯 What They Do</h3>
+<p>[Describe their main products/services in your own words]</p>
+<h3>📰 Recent News</h3>
+<ul><li>[Recent announcement, launch, or milestone]</li><li>[Press coverage or industry mentions]</li><li>[Any challenges or pivots]</li></ul>
+<h3>🏆 Why I Want to Work Here</h3>
+<ol><li>[Genuine reason #1 — culture, mission, product]</li><li>[Genuine reason #2 — growth, technology, impact]</li><li>[Genuine reason #3 — personal connection to their work]</li></ol>
+<h3>👥 Interviewers</h3>
+<table><thead><tr><th>Name</th><th>Title</th><th>LinkedIn Notes</th></tr></thead><tbody>
+<tr><td>[Interviewer 1]</td><td>[Title]</td><td>[Background, shared interests]</td></tr>
+<tr><td>[Interviewer 2]</td><td>[Title]</td><td>[Background, shared interests]</td></tr>
+</tbody></table>
+<h3>❓ My Questions for Them</h3>
+<ol><li>[Thoughtful question about the role]</li><li>[Question about team culture]</li><li>[Question about growth/direction]</li><li>[Question about day-to-day work]</li></ol>`,
+      },
+      {
+        title: 'Interview Question Bank',
+        type: 'regular',
+        content: `<h2>❓ Interview Question Bank</h2>
+<p><strong>Role:</strong> [Job Title] | <strong>Company:</strong> [Company Name]</p>
+<hr/>
+<h3>🔵 Common Behavioral Questions</h3>
+<table><thead><tr><th>Question</th><th>My Key Points</th><th>STAR Story #</th></tr></thead><tbody>
+<tr><td>Tell me about yourself</td><td>[2-min pitch: past → present → future]</td><td>-</td></tr>
+<tr><td>Why do you want this role?</td><td>[Connect skills + passion + company]</td><td>-</td></tr>
+<tr><td>What's your greatest strength?</td><td>[Strength + example]</td><td>Story #[X]</td></tr>
+<tr><td>What's your biggest weakness?</td><td>[Real weakness + improvement steps]</td><td>-</td></tr>
+<tr><td>Where do you see yourself in 5 years?</td><td>[Growth aligned with company]</td><td>-</td></tr>
+<tr><td>Why are you leaving your current role?</td><td>[Positive framing — seeking growth]</td><td>-</td></tr>
+</tbody></table>
+<h3>🟡 Situational Questions</h3>
+<table><thead><tr><th>Question</th><th>My Approach</th></tr></thead><tbody>
+<tr><td>How do you handle tight deadlines?</td><td>[Prioritization strategy + example]</td></tr>
+<tr><td>Describe a time you disagreed with your manager</td><td>[Respectful approach + outcome]</td></tr>
+<tr><td>How do you handle multiple priorities?</td><td>[Framework you use]</td></tr>
+<tr><td>Tell me about a time you failed</td><td>[Failure + lesson + improvement]</td></tr>
+</tbody></table>
+<h3>🟢 Role-Specific Questions</h3>
+<table><thead><tr><th>Question</th><th>My Answer Notes</th></tr></thead><tbody>
+<tr><td>[Technical/role-specific Q1]</td><td>[Key points]</td></tr>
+<tr><td>[Technical/role-specific Q2]</td><td>[Key points]</td></tr>
+<tr><td>[Technical/role-specific Q3]</td><td>[Key points]</td></tr>
+</tbody></table>
+<h3>🔴 Salary & Logistics</h3>
+<table><thead><tr><th>Topic</th><th>My Position</th></tr></thead><tbody>
+<tr><td>Salary expectation</td><td>$[Range] based on [research source]</td></tr>
+<tr><td>Start date</td><td>[Earliest available date]</td></tr>
+<tr><td>Remote/hybrid preference</td><td>[Your preference]</td></tr>
+<tr><td>Notice period</td><td>[Current notice period]</td></tr>
+</tbody></table>
+<h3>✅ Pre-Interview Checklist</h3>
+<ul><li>☐ Researched the company thoroughly</li><li>☐ Practiced STAR stories out loud</li><li>☐ Prepared questions to ask them</li><li>☐ Tested tech setup (if virtual)</li><li>☐ Outfit ready</li><li>☐ Copies of resume printed/accessible</li><li>☐ Know the interviewer names & roles</li></ul>`,
+      },
+    ],
+  },
 ];
 
 const CATEGORIES = [...new Set(DEFAULT_NOTE_TEMPLATES.map(t => t.category))];
