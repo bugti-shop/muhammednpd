@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { TodoLayout } from './TodoLayout';
 import { useStreak } from '@/hooks/useStreak';
 import { cn } from '@/lib/utils';
-import { Flame, Check, Snowflake, Trophy, Zap, TrendingUp, Calendar, Gift, Clock, Target, ListChecks } from 'lucide-react';
+import { Flame, Check, Snowflake, Trophy, Zap, TrendingUp, Calendar, Gift, Clock, Target, ListChecks, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { loadTodoItems } from '@/utils/todoItemsStorage';
 import { startOfWeek, endOfWeek, startOfDay, endOfDay } from 'date-fns';
@@ -12,6 +13,7 @@ import Confetti from 'react-confetti';
 
 const Progress = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { data, isLoading, completedToday, atRisk, status, weekData, gracePeriodRemaining } = useStreak();
   const [showConfetti, setShowConfetti] = useState(false);
   const [celebratingMilestone, setCelebratingMilestone] = useState<number | null>(null);
@@ -220,6 +222,24 @@ const Progress = () => {
             )}
           </div>
         </motion.div>
+
+        {/* Habits Quick Link */}
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          onClick={() => navigate('/todo/habits')}
+          className="w-full bg-card rounded-2xl p-4 border shadow-sm flex items-center gap-3 text-left hover:bg-accent/50 transition-colors"
+        >
+          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <Heart className="h-5 w-5 text-primary" />
+          </div>
+          <div className="flex-1">
+            <p className="font-semibold text-sm text-foreground">Habit Tracker</p>
+            <p className="text-xs text-muted-foreground">Build daily & weekly habits with streak tracking</p>
+          </div>
+          <span className="text-muted-foreground text-lg">→</span>
+        </motion.button>
 
         {/* Streak Card */}
         <div className="bg-card rounded-2xl p-6 border shadow-sm">

@@ -42,6 +42,7 @@ const WeeklyReview = lazy(() => import("./pages/todo/WeeklyReview"));
 const WidgetsDashboard = lazy(() => import("./pages/todo/WidgetsDashboard"));
 const TaskHistory = lazy(() => import("./pages/todo/TaskHistory"));
 const Progress = lazy(() => import("./pages/todo/Progress"));
+const Habits = lazy(() => import("./pages/todo/Habits"));
 const Profile = lazy(() => import("./pages/Profile"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -139,6 +140,7 @@ const AppRoutes = () => {
             <Route path="/todo/dashboard" element={<WidgetsDashboard />} />
             <Route path="/todo/history" element={<TaskHistory />} />
             <Route path="/todo/progress" element={<Progress />} />
+            <Route path="/todo/habits" element={<Habits />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

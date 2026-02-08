@@ -14,6 +14,7 @@ const preloadRoutes: Record<string, () => Promise<any>> = {
   '/todo/today': () => import('@/pages/todo/Today'),
   '/todo/calendar': () => import('@/pages/todo/TodoCalendar'),
   '/todo/progress': () => import('@/pages/todo/Progress'),
+  '/todo/habits': () => import('@/pages/todo/Habits'),
   '/todo/settings': () => import('@/pages/todo/TodoSettings'),
   '/profile': () => import('@/pages/Profile'),
 };
