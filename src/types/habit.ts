@@ -1,5 +1,13 @@
 export type HabitFrequency = 'daily' | 'weekly';
 
+export interface HabitReminder {
+  enabled: boolean;
+  /** Time of day in HH:mm format */
+  time: string;
+  /** Notification IDs for cancellation */
+  notificationIds?: number[];
+}
+
 export interface HabitCompletionRecord {
   date: string; // YYYY-MM-DD
   completed: boolean;
@@ -15,6 +23,8 @@ export interface Habit {
   weeklyDays?: number[];
   /** Target streak to aim for */
   targetStreak?: number;
+  /** Daily reminder configuration */
+  reminder?: HabitReminder;
   /** Completion history keyed by date */
   completions: HabitCompletionRecord[];
   /** Current streak count */
