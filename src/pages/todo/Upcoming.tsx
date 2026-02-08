@@ -22,7 +22,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { notificationManager } from '@/utils/notifications';
 import { createNextRecurringTask } from '@/utils/recurringTasks';
-import { cleanupCompletedTasks } from '@/utils/taskCleanup';
+import { archiveCompletedTasks } from '@/utils/taskCleanup';
 import { getCategoryById } from '@/utils/categories';
 import { TodoLayout } from './TodoLayout';
 import { loadTodoItems, saveTodoItems } from '@/utils/todoItemsStorage';
@@ -65,12 +65,12 @@ const Upcoming = () => {
   const loadItems = useCallback(async () => {
     let loadedItems = await loadTodoItems();
     
-    // Auto-cleanup completed tasks older than 3 days
-    const { cleanedTasks, deletedCount } = cleanupCompletedTasks(loadedItems, 3);
-    if (deletedCount > 0) {
-      await saveTodoItems(cleanedTasks);
-      loadedItems = cleanedTasks;
-      toast.info(`Auto-deleted ${deletedCount} completed task(s) older than 3 days`, { icon: '🧹' });
+    // Auto-archive completed tasks older than 3 days
+    const { activeTasks, archivedCount } = await archiveCompletedTasks(loadedItems, 3);
+    if (archivedCount > 0) {
+      await saveTodoItems(activeTasks);
+      loadedItems = activeTasks;
+      toast.info(`Archived ${archivedCount} completed task(s)`, { icon: '📦' });
     }
     
     setAllItems(loadedItems);
