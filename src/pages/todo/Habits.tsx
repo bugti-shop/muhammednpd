@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, subDays } from 'date-fns';
-import { Plus, Flame, Trophy, Target, Trash2, BarChart3, Check, ChevronLeft } from 'lucide-react';
+import { Plus, Flame, Trophy, Target, Trash2, BarChart3, Check, ChevronLeft, Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { TodoBottomNavigation } from '@/components/TodoBottomNavigation';
 import { Habit, HabitFrequency } from '@/types/habit';
 import { loadHabits, saveHabit, deleteHabit, calculateStreak, getCompletionRate, getWeeklyChartData } from '@/utils/habitStorage';
+import { scheduleHabitReminder, cancelHabitReminder } from '@/utils/habitNotifications';
 import { triggerHaptic } from '@/utils/haptics';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
 
@@ -41,6 +42,8 @@ const Habits = () => {
   const [newFrequency, setNewFrequency] = useState<HabitFrequency>('daily');
   const [newWeeklyDays, setNewWeeklyDays] = useState<number[]>([1, 2, 3, 4, 5]);
   const [newTargetStreak, setNewTargetStreak] = useState(7);
+  const [newReminderEnabled, setNewReminderEnabled] = useState(false);
+  const [newReminderTime, setNewReminderTime] = useState('08:00');
 
   const loadData = useCallback(async () => {
     const loaded = await loadHabits();
@@ -86,6 +89,7 @@ const Habits = () => {
       frequency: newFrequency,
       weeklyDays: newFrequency === 'weekly' ? newWeeklyDays : undefined,
       targetStreak: newTargetStreak,
+      reminder: newReminderEnabled ? { enabled: true, time: newReminderTime } : undefined,
       completions: [],
       currentStreak: 0,
       bestStreak: 0,
@@ -95,6 +99,14 @@ const Habits = () => {
     };
 
     await saveHabit(habit);
+
+    // Schedule reminder notifications
+    if (habit.reminder?.enabled) {
+      const ids = await scheduleHabitReminder(habit);
+      habit.reminder.notificationIds = ids;
+      await saveHabit(habit);
+    }
+
     setShowAddSheet(false);
     resetForm();
     await loadData();
@@ -113,6 +125,8 @@ const Habits = () => {
     setNewFrequency('daily');
     setNewWeeklyDays([1, 2, 3, 4, 5]);
     setNewTargetStreak(7);
+    setNewReminderEnabled(false);
+    setNewReminderTime('08:00');
   };
 
   // Last 7 days for the mini heatmap
@@ -370,6 +384,31 @@ const Habits = () => {
               />
             </div>
 
+            {/* Daily Reminder */}
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Bell className="h-4 w-4 text-muted-foreground" />
+                  <Label>Daily Reminder</Label>
+                </div>
+                <Switch
+                  checked={newReminderEnabled}
+                  onCheckedChange={setNewReminderEnabled}
+                />
+              </div>
+              {newReminderEnabled && (
+                <div className="mt-2">
+                  <Label className="text-xs text-muted-foreground">Remind me at</Label>
+                  <Input
+                    type="time"
+                    value={newReminderTime}
+                    onChange={(e) => setNewReminderTime(e.target.value)}
+                    className="mt-1 w-32"
+                  />
+                </div>
+              )}
+            </div>
+
             <Button onClick={handleAdd} disabled={!newName.trim()} className="w-full">
               Create Habit
             </Button>
@@ -380,7 +419,29 @@ const Habits = () => {
       {/* Stats Sheet */}
       <Sheet open={!!showStatsSheet} onOpenChange={() => setShowStatsSheet(null)}>
         <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-2xl">
-          {showStatsSheet && <HabitStatsContent habit={showStatsSheet} onDelete={handleDelete} />}
+          {showStatsSheet && (
+            <HabitStatsContent 
+              habit={showStatsSheet} 
+              onDelete={handleDelete}
+              onUpdateReminder={async (habit, enabled, time) => {
+                const updated: Habit = {
+                  ...habit,
+                  reminder: { enabled, time: time || '08:00' },
+                  updatedAt: new Date().toISOString(),
+                };
+                if (enabled) {
+                  await cancelHabitReminder(habit);
+                  const ids = await scheduleHabitReminder(updated);
+                  updated.reminder!.notificationIds = ids;
+                } else {
+                  await cancelHabitReminder(habit);
+                }
+                await saveHabit(updated);
+                await loadData();
+                setShowStatsSheet(updated);
+              }}
+            />
+          )}
         </SheetContent>
       </Sheet>
 
@@ -389,7 +450,11 @@ const Habits = () => {
   );
 };
 
-const HabitStatsContent = ({ habit, onDelete }: { habit: Habit; onDelete: (id: string) => void }) => {
+const HabitStatsContent = ({ habit, onDelete, onUpdateReminder }: { 
+  habit: Habit; 
+  onDelete: (id: string) => void;
+  onUpdateReminder: (habit: Habit, enabled: boolean, time?: string) => void;
+}) => {
   const chartData = getWeeklyChartData(habit);
   const rate7 = getCompletionRate(habit, 7);
   const rate30 = getCompletionRate(habit, 30);
@@ -420,6 +485,30 @@ const HabitStatsContent = ({ habit, onDelete }: { habit: Habit; onDelete: (id: s
             <p className="text-xl font-bold text-foreground">{habit.targetStreak || '—'}</p>
             <p className="text-[10px] text-muted-foreground">Target</p>
           </div>
+        </div>
+
+        {/* Reminder setting */}
+        <div className="rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Bell className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium text-foreground">Daily Reminder</span>
+            </div>
+            <Switch
+              checked={habit.reminder?.enabled || false}
+              onCheckedChange={(checked) => onUpdateReminder(habit, checked, habit.reminder?.time)}
+            />
+          </div>
+          {habit.reminder?.enabled && (
+            <div className="mt-2">
+              <Input
+                type="time"
+                value={habit.reminder.time || '08:00'}
+                onChange={(e) => onUpdateReminder(habit, true, e.target.value)}
+                className="w-32"
+              />
+            </div>
+          )}
         </div>
 
         {/* Completion rates */}
