@@ -567,9 +567,23 @@ const Today = () => {
     }
     
     setItems(items.map((i) => (i.id === itemId ? { ...i, ...updatesWithTimestamp } : i)));
+
+    // Show undo toast when completing a task
+    if (updates.completed === true && currentItem && !currentItem.completed) {
+      toast.success('✅ Task completed', {
+        action: {
+          label: 'Undo',
+          onClick: () => {
+            setItems(prev => prev.map(i => i.id === itemId ? { ...i, completed: false, completedAt: undefined, modifiedAt: new Date() } : i));
+            toast.success('Task restored');
+          }
+        },
+        duration: 5000,
+      });
+    }
   };
 
-  const deleteItem = async (itemId: string, showUndo: boolean = false, skipConfirm: boolean = false) => {
+  const deleteItem = async (itemId: string, _showUndo: boolean = false, skipConfirm: boolean = false) => {
     const deletedItem = items.find(item => item.id === itemId);
     if (!deletedItem) return;
     
@@ -582,27 +596,36 @@ const Today = () => {
     try { await Haptics.impact({ style: ImpactStyle.Heavy }); } catch {}
     setItems(items.filter((item) => item.id !== itemId));
     
-    if (showUndo) {
-      toast.success('Task deleted', {
-        action: {
-          label: 'Undo',
-          onClick: () => {
-            setItems(prev => [deletedItem, ...prev]);
-            toast.success('Task restored');
-          }
-        },
-        duration: 5000,
-      });
-    }
+    toast.success('🗑️ Task deleted', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          setItems(prev => [deletedItem, ...prev]);
+          toast.success('Task restored');
+        }
+      },
+      duration: 5000,
+    });
   };
   
   // Confirm delete handler
   const confirmDelete = async () => {
     if (!deleteConfirmItem) return;
     try { await Haptics.impact({ style: ImpactStyle.Heavy }); } catch {}
-    setItems(items.filter((item) => item.id !== deleteConfirmItem.id));
-    toast.success('Task deleted');
+    const deletedItem = deleteConfirmItem;
+    setItems(items.filter((item) => item.id !== deletedItem.id));
     setDeleteConfirmItem(null);
+    
+    toast.success('🗑️ Task deleted', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          setItems(prev => [deletedItem, ...prev]);
+          toast.success('Task restored');
+        }
+      },
+      duration: 5000,
+    });
   };
 
   // Unified reorder handler for drag-and-drop

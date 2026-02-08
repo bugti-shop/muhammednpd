@@ -50,14 +50,16 @@ export const FocusMode = ({ isOpen, onClose }: FocusModeProps) => {
       await Haptics.impact({ style: ImpactStyle.Heavy });
     } catch {}
 
+    const completedTask = currentTask;
+
     // Update task in IndexedDB
-    await updateTaskInDB(currentTask.id, { completed: true });
+    await updateTaskInDB(completedTask.id, { completed: true });
     window.dispatchEvent(new Event('tasksUpdated'));
 
     setCompletedInSession(prev => prev + 1);
     
     // Remove from current list and move to next
-    const newTasks = tasks.filter(t => t.id !== currentTask.id);
+    const newTasks = tasks.filter(t => t.id !== completedTask.id);
     setTasks(newTasks);
     
     if (newTasks.length === 0) {
@@ -65,6 +67,20 @@ export const FocusMode = ({ isOpen, onClose }: FocusModeProps) => {
     } else if (currentIndex >= newTasks.length) {
       setCurrentIndex(newTasks.length - 1);
     }
+    
+    toast.success('✅ Task completed', {
+      action: {
+        label: 'Undo',
+        onClick: async () => {
+          await updateTaskInDB(completedTask.id, { completed: false });
+          window.dispatchEvent(new Event('tasksUpdated'));
+          setTasks(prev => [...prev, completedTask]);
+          setCompletedInSession(p => Math.max(0, p - 1));
+          toast.success('Task restored');
+        }
+      },
+      duration: 5000,
+    });
     
     setTimeout(() => setIsCompleting(false), 300);
   };
