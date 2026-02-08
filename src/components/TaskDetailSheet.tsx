@@ -1,12 +1,14 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TodoItem, Priority, LocationReminder, TaskAttachment } from '@/types/note';
+import { TodoItem, Priority, LocationReminder, TaskAttachment, EscalationTiming } from '@/types/note';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { useHardwareBackButton } from '@/hooks/useHardwareBackButton';
 import { usePriorities } from '@/hooks/usePriorities';
+import { escalationTimingLabel } from '@/utils/deadlineEscalation';
 import {
   X,
   Flag,
@@ -27,6 +29,7 @@ import {
   Download,
   ExternalLink,
   Hourglass,
+  AlertTriangle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -496,6 +499,76 @@ export const TaskDetailSheet = ({ isOpen, task, onClose, onUpdate, onDelete, onD
                 </div>
               )}
             </div>
+
+            {/* Deadline Escalation Rules */}
+            {task.dueDate && (
+              <div className="bg-muted/30 rounded-xl p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4 text-warning" />
+                    <h3 className="text-sm font-medium">Deadline Escalation</h3>
+                  </div>
+                  <Switch
+                    checked={task.escalationRule?.enabled || false}
+                    onCheckedChange={(checked) => {
+                      onUpdate({
+                        ...task,
+                        escalationRule: {
+                          ...task.escalationRule,
+                          enabled: checked,
+                          timing: task.escalationRule?.timing || '2hours',
+                        },
+                      });
+                    }}
+                  />
+                </div>
+                {task.escalationRule?.enabled && (
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-2">Alert if not done before deadline:</p>
+                      <div className="flex gap-1.5 flex-wrap">
+                        {(['30min', '1hour', '2hours', '4hours', '1day'] as EscalationTiming[]).map(t => (
+                          <button
+                            key={t}
+                            onClick={() => onUpdate({
+                              ...task,
+                              escalationRule: { ...task.escalationRule!, timing: t },
+                            })}
+                            className={cn(
+                              "px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all",
+                              task.escalationRule?.timing === t
+                                ? "bg-warning text-warning-foreground border-warning"
+                                : "border-border text-muted-foreground hover:bg-muted"
+                            )}
+                          >
+                            {escalationTimingLabel(t)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-medium">Repeat alert</p>
+                        <p className="text-xs text-muted-foreground">Keep alerting every 30min until done</p>
+                      </div>
+                      <Switch
+                        checked={task.escalationRule?.repeat || false}
+                        onCheckedChange={(checked) => {
+                          onUpdate({
+                            ...task,
+                            escalationRule: {
+                              ...task.escalationRule!,
+                              repeat: checked,
+                              repeatIntervalMinutes: 30,
+                            },
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Location Reminder Preview */}
             {task.locationReminder?.enabled && task.locationReminder.address && (

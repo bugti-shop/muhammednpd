@@ -86,6 +86,23 @@ export interface LocationReminder {
   triggerOnExit: boolean;
 }
 
+// Deadline escalation rule
+export type EscalationTiming = '30min' | '1hour' | '2hours' | '4hours' | '1day';
+
+export interface EscalationRule {
+  enabled: boolean;
+  /** How long before deadline to send escalation alert */
+  timing: EscalationTiming;
+  /** Custom minutes (if timing isn't a preset) */
+  customMinutes?: number;
+  /** Whether to repeat the escalation alert */
+  repeat?: boolean;
+  /** Repeat interval in minutes */
+  repeatIntervalMinutes?: number;
+  /** Last time an escalation was triggered (to avoid duplicates) */
+  lastTriggeredAt?: Date;
+}
+
 export interface TaskAttachment {
   id: string;
   name: string;
@@ -132,6 +149,7 @@ export interface TodoItem {
   dependsOn?: string[]; // IDs of tasks that must be completed first
   timeTracking?: TimeTracking;
   estimatedHours?: number; // Effort estimation in hours
+  escalationRule?: EscalationRule; // Deadline escalation alerts
   // Timestamp fields
   createdAt?: Date;
   modifiedAt?: Date;

@@ -1,16 +1,22 @@
 /**
  * Background Task Scheduler
- * Handles periodic checks for task rollovers and reminder scheduling
+ * Handles periodic checks for task rollovers, reminder scheduling, and deadline escalations
  */
 
 import { loadTodoItems, saveTodoItems } from './todoItemsStorage';
 import { processTaskRollovers } from './taskRollover';
 import { notificationManager } from './notifications';
+import { checkDeadlineEscalations } from './deadlineEscalation';
+import { LocalNotifications } from '@capacitor/local-notifications';
+import { Capacitor } from '@capacitor/core';
 
 // Rollover check interval (1 hour in milliseconds)
 const ROLLOVER_CHECK_INTERVAL = 60 * 60 * 1000;
+// Escalation check interval (15 minutes)
+const ESCALATION_CHECK_INTERVAL = 15 * 60 * 1000;
 
 let rolloverIntervalId: ReturnType<typeof setInterval> | null = null;
+let escalationIntervalId: ReturnType<typeof setInterval> | null = null;
 let isRunning = false;
 
 /**
@@ -26,7 +32,6 @@ export const checkAndRolloverTasks = async (): Promise<number> => {
     
     if (rolledOverCount > 0) {
       await saveTodoItems(updatedTasks);
-      // Reschedule notifications for updated tasks
       await notificationManager.rescheduleAllTasks(updatedTasks);
       console.log(`Auto-rolled over ${rolledOverCount} recurring task(s)`);
     }
@@ -41,7 +46,82 @@ export const checkAndRolloverTasks = async (): Promise<number> => {
 };
 
 /**
- * Start the background scheduler for periodic task rollovers
+ * Check for deadline escalation alerts
+ */
+export const checkDeadlineAlerts = async (): Promise<number> => {
+  try {
+    const items = await loadTodoItems();
+    const alerts = checkDeadlineEscalations(items);
+
+    if (alerts.length === 0) return 0;
+
+    let updated = false;
+    const updatedItems = [...items];
+
+    for (const alert of alerts) {
+      const idx = updatedItems.findIndex(t => t.id === alert.task.id);
+      if (idx === -1) continue;
+
+      const minutesLeft = Math.max(0, Math.round(alert.minutesUntilDeadline));
+      const timeLabel = alert.isOverdue
+        ? 'OVERDUE'
+        : minutesLeft < 60
+          ? `${minutesLeft}min left`
+          : `${Math.round(minutesLeft / 60)}h left`;
+
+      // Send notification
+      try {
+        if (Capacitor.isNativePlatform()) {
+          await LocalNotifications.schedule({
+            notifications: [{
+              id: Date.now() + idx,
+              title: `⚠️ Deadline Alert: ${timeLabel}`,
+              body: alert.task.text,
+              schedule: { at: new Date(), allowWhileIdle: true },
+              sound: 'default',
+              channelId: 'task_reminders',
+              extra: {
+                taskId: alert.task.id,
+                type: 'task',
+                category: 'escalation',
+              },
+            }],
+          });
+        } else {
+          // Web fallback: dispatch event for in-app toast
+          window.dispatchEvent(new CustomEvent('deadlineEscalation', {
+            detail: { taskId: alert.task.id, text: alert.task.text, timeLabel },
+          }));
+        }
+      } catch (e) {
+        console.error('Failed to send escalation notification:', e);
+      }
+
+      // Mark lastTriggeredAt to prevent duplicate alerts
+      updatedItems[idx] = {
+        ...updatedItems[idx],
+        escalationRule: {
+          ...updatedItems[idx].escalationRule!,
+          lastTriggeredAt: new Date(),
+        },
+      };
+      updated = true;
+    }
+
+    if (updated) {
+      await saveTodoItems(updatedItems);
+    }
+
+    console.log(`Triggered ${alerts.length} deadline escalation(s)`);
+    return alerts.length;
+  } catch (e) {
+    console.error('Deadline escalation check failed:', e);
+    return 0;
+  }
+};
+
+/**
+ * Start the background scheduler for periodic task rollovers and escalation checks
  */
 export const startBackgroundScheduler = (): void => {
   if (rolloverIntervalId) {
@@ -51,10 +131,12 @@ export const startBackgroundScheduler = (): void => {
   
   // Run immediately on start
   checkAndRolloverTasks();
+  checkDeadlineAlerts();
   
-  // Then run every hour
+  // Then run periodically
   rolloverIntervalId = setInterval(checkAndRolloverTasks, ROLLOVER_CHECK_INTERVAL);
-  console.log('Background task scheduler started (hourly checks)');
+  escalationIntervalId = setInterval(checkDeadlineAlerts, ESCALATION_CHECK_INTERVAL);
+  console.log('Background task scheduler started (hourly rollovers, 15min escalation checks)');
 };
 
 /**
@@ -64,8 +146,12 @@ export const stopBackgroundScheduler = (): void => {
   if (rolloverIntervalId) {
     clearInterval(rolloverIntervalId);
     rolloverIntervalId = null;
-    console.log('Background task scheduler stopped');
   }
+  if (escalationIntervalId) {
+    clearInterval(escalationIntervalId);
+    escalationIntervalId = null;
+  }
+  console.log('Background task scheduler stopped');
 };
 
 /**
