@@ -22,7 +22,8 @@ import {
   ListTodo,
   FileText,
   MapPin,
-  Paperclip
+  Paperclip,
+  Hourglass
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -48,6 +49,7 @@ export const defaultActions: ActionItem[] = [
   { id: 'location', name: 'Location', icon: MapPin, enabled: true, color: 'text-pink-500', group: 'organization' },
   { id: 'image', name: 'Image', icon: ImageIcon, enabled: true, color: 'text-emerald-500', group: 'media' },
   { id: 'attachment', name: 'Files', icon: Paperclip, enabled: true, color: 'text-sky-500', group: 'media' },
+  { id: 'effort', name: 'Estimate', icon: Hourglass, enabled: true, color: 'text-primary', group: 'scheduling' },
 ];
 
 const groupInfo = {
