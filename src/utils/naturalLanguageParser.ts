@@ -13,49 +13,35 @@ export interface ParsedTask {
   location?: string;
   tags?: string[]; // Parsed from #tag syntax
   folderName?: string; // Parsed from @folder syntax
+  description?: string; // Parsed from // or -- syntax
+  estimatedHours?: number; // Parsed from ~2h, ~30m syntax
 }
 
-// Time patterns
+// ─── Time patterns ───────────────────────────────────────────────
 const timePatterns = [
-  // "at 5pm", "at 5:30pm", "at 17:00"
   /\bat\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/i,
-  // "5pm", "5:30pm", "5:30 pm"
   /\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/i,
-  // "17:00", "9:30"
   /\b(\d{1,2}):(\d{2})\b/,
-  // "in the morning", "in the evening", etc.
   /\bin the (morning|afternoon|evening|night)\b/i,
 ];
 
-// Relative time patterns for reminders
+// ─── Relative time patterns ─────────────────────────────────────
 const relativeTimePatterns: { pattern: RegExp; getDate: (match: RegExpMatchArray) => Date }[] = [
-  // "in 5 minutes", "in 30 mins"
   { pattern: /\bin\s+(\d+)\s*(?:min(?:ute)?s?)\b/i, getDate: (m) => addMinutes(new Date(), parseInt(m[1])) },
-  // "in 2 hours", "in 1 hour"
   { pattern: /\bin\s+(\d+)\s*(?:hour?s?|hr?s?)\b/i, getDate: (m) => addHours(new Date(), parseInt(m[1])) },
-  // "in half an hour", "in 30 minutes"
   { pattern: /\bin\s+(?:half\s+an?\s+hour|30\s*min)/i, getDate: () => addMinutes(new Date(), 30) },
-  // "in an hour"
   { pattern: /\bin\s+an?\s+hour\b/i, getDate: () => addHours(new Date(), 1) },
 ];
 
-// Recurring patterns
+// ─── Recurring patterns ─────────────────────────────────────────
 const recurringPatterns: { pattern: RegExp; getRepeat: (match: RegExpMatchArray) => { type: RepeatType; days?: number[] } }[] = [
-  // "every hour", "hourly"
   { pattern: /\b(?:every\s*hour|hourly)\b/i, getRepeat: () => ({ type: 'hourly' }) },
-  // "every day", "daily"
   { pattern: /\b(?:every\s*day|daily)\b/i, getRepeat: () => ({ type: 'daily' }) },
-  // "every week", "weekly"
   { pattern: /\b(?:every\s*week|weekly)\b/i, getRepeat: () => ({ type: 'weekly' }) },
-  // "every month", "monthly"
   { pattern: /\b(?:every\s*month|monthly)\b/i, getRepeat: () => ({ type: 'monthly' }) },
-  // "every year", "yearly", "annually"
   { pattern: /\b(?:every\s*year|yearly|annually)\b/i, getRepeat: () => ({ type: 'yearly' }) },
-  // "every weekday", "weekdays"
   { pattern: /\b(?:every\s*weekday|weekdays|on\s*weekdays)\b/i, getRepeat: () => ({ type: 'weekdays' }) },
-  // "every weekend", "weekends"
   { pattern: /\b(?:every\s*weekend|weekends|on\s*weekends)\b/i, getRepeat: () => ({ type: 'weekends' }) },
-  // "every monday", "every tuesday", etc.
   { pattern: /\bevery\s*(monday|mon)\b/i, getRepeat: () => ({ type: 'custom', days: [1] }) },
   { pattern: /\bevery\s*(tuesday|tue|tues)\b/i, getRepeat: () => ({ type: 'custom', days: [2] }) },
   { pattern: /\bevery\s*(wednesday|wed)\b/i, getRepeat: () => ({ type: 'custom', days: [3] }) },
@@ -63,7 +49,6 @@ const recurringPatterns: { pattern: RegExp; getRepeat: (match: RegExpMatchArray)
   { pattern: /\bevery\s*(friday|fri)\b/i, getRepeat: () => ({ type: 'custom', days: [5] }) },
   { pattern: /\bevery\s*(saturday|sat)\b/i, getRepeat: () => ({ type: 'custom', days: [6] }) },
   { pattern: /\bevery\s*(sunday|sun)\b/i, getRepeat: () => ({ type: 'custom', days: [0] }) },
-  // "every mon and wed", "every monday, wednesday and friday"
   { pattern: /\bevery\s+((?:(?:mon(?:day)?|tue(?:s(?:day)?)?|wed(?:nesday)?|thu(?:r(?:s(?:day)?)?)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\s*(?:,|and|&)\s*)+(?:mon(?:day)?|tue(?:s(?:day)?)?|wed(?:nesday)?|thu(?:r(?:s(?:day)?)?)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?))\b/i, 
     getRepeat: (m) => {
       const dayMap: { [key: string]: number } = {
@@ -78,22 +63,35 @@ const recurringPatterns: { pattern: RegExp; getRepeat: (match: RegExpMatchArray)
   },
 ];
 
-// Location patterns
+// ─── Location patterns ──────────────────────────────────────────
 const locationPatterns = [
-  // "at the office", "at home", "at work"
   /\bat\s+(?:the\s+)?(office|home|work|gym|school|store|market|mall|hospital|clinic|bank|library|cafe|restaurant|airport|station)\b/i,
-  // "at [place name]" - captures location after "at"
   /\bat\s+([A-Z][a-zA-Z']+(?:\s+[A-Z][a-zA-Z']+)*)\b/,
-  // "@location"
-  /@([a-zA-Z][a-zA-Z0-9\s]+)/,
 ];
 
-// Date patterns
+// ─── Date patterns ──────────────────────────────────────────────
 const datePatterns: { pattern: RegExp; getDate: (match: RegExpMatchArray) => Date }[] = [
   { pattern: /\btoday\b/i, getDate: () => startOfDay(new Date()) },
+  { pattern: /\btonight\b/i, getDate: () => setHours(startOfDay(new Date()), 21) },
   { pattern: /\btomorrow\b/i, getDate: () => startOfDay(addDays(new Date(), 1)) },
+  { pattern: /\btmr\b/i, getDate: () => startOfDay(addDays(new Date(), 1)) },
+  { pattern: /\btmrw\b/i, getDate: () => startOfDay(addDays(new Date(), 1)) },
   { pattern: /\bday after tomorrow\b/i, getDate: () => startOfDay(addDays(new Date(), 2)) },
   { pattern: /\byesterday\b/i, getDate: () => startOfDay(addDays(new Date(), -1)) },
+  // End of day / end of week / end of month shortcuts
+  { pattern: /\b(?:eod|end of (?:the )?day)\b/i, getDate: () => setHours(startOfDay(new Date()), 23) },
+  { pattern: /\b(?:eow|end of (?:the )?week)\b/i, getDate: () => {
+    const today = new Date();
+    const daysUntilFriday = (5 - today.getDay() + 7) % 7 || 7;
+    return setHours(startOfDay(addDays(today, daysUntilFriday)), 17);
+  }},
+  { pattern: /\b(?:eom|end of (?:the )?month)\b/i, getDate: () => {
+    return setHours(lastDayOfMonth(new Date()), 17);
+  }},
+  // "this morning/afternoon/evening"
+  { pattern: /\bthis\s+morning\b/i, getDate: () => setHours(startOfDay(new Date()), 9) },
+  { pattern: /\bthis\s+afternoon\b/i, getDate: () => setHours(startOfDay(new Date()), 14) },
+  { pattern: /\bthis\s+evening\b/i, getDate: () => setHours(startOfDay(new Date()), 18) },
   { pattern: /\bthis weekend\b/i, getDate: () => {
     const today = new Date();
     const daysUntilSaturday = (6 - today.getDay() + 7) % 7 || 7;
@@ -140,7 +138,7 @@ const datePatterns: { pattern: RegExp; getDate: (match: RegExpMatchArray) => Dat
     if (m[1] || isSunday(today)) return nextSunday(addDays(today, 1));
     return nextSunday(today);
   }},
-  // Specific date formats: "Dec 25", "December 25", "25th December", "12/25"
+  // Specific date formats: "Dec 25", "December 25", "25th December"
   { pattern: /\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+(\d{1,2})(?:st|nd|rd|th)?\b/i, 
     getDate: (m) => {
       const monthMap: { [key: string]: number } = {
@@ -153,9 +151,7 @@ const datePatterns: { pattern: RegExp; getDate: (match: RegExpMatchArray) => Dat
       const date = new Date();
       date.setMonth(month, day);
       date.setHours(0, 0, 0, 0);
-      if (date < new Date()) {
-        date.setFullYear(date.getFullYear() + 1);
-      }
+      if (date < new Date()) date.setFullYear(date.getFullYear() + 1);
       return date;
     }
   },
@@ -171,27 +167,34 @@ const datePatterns: { pattern: RegExp; getDate: (match: RegExpMatchArray) => Dat
       const date = new Date();
       date.setMonth(month, day);
       date.setHours(0, 0, 0, 0);
-      if (date < new Date()) {
-        date.setFullYear(date.getFullYear() + 1);
-      }
+      if (date < new Date()) date.setFullYear(date.getFullYear() + 1);
       return date;
     }
   },
-  // MM/DD format
-  { pattern: /\b(\d{1,2})\/(\d{1,2})\b/, getDate: (m) => {
+  // MM/DD and DD/MM formats
+  { pattern: /\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/, getDate: (m) => {
     const month = parseInt(m[1]) - 1;
     const day = parseInt(m[2]);
     const date = new Date();
+    if (m[3]) {
+      let year = parseInt(m[3]);
+      if (year < 100) year += 2000;
+      date.setFullYear(year);
+    }
     date.setMonth(month, day);
     date.setHours(0, 0, 0, 0);
-    if (date < new Date()) {
-      date.setFullYear(date.getFullYear() + 1);
-    }
+    if (!m[3] && date < new Date()) date.setFullYear(date.getFullYear() + 1);
+    return date;
+  }},
+  // YYYY-MM-DD format
+  { pattern: /\b(\d{4})-(\d{2})-(\d{2})\b/, getDate: (m) => {
+    const date = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+    date.setHours(0, 0, 0, 0);
     return date;
   }},
 ];
 
-// Priority patterns
+// ─── Priority patterns ──────────────────────────────────────────
 const priorityPatterns: { pattern: RegExp; priority: 'high' | 'medium' | 'low' }[] = [
   { pattern: /\b(high priority|urgent|important|asap|critical|!{2,})\b/i, priority: 'high' },
   { pattern: /\b(medium priority|normal|moderate)\b/i, priority: 'medium' },
@@ -206,11 +209,13 @@ const priorityPatterns: { pattern: RegExp; priority: 'high' | 'medium' | 'low' }
   { pattern: /!high\b/i, priority: 'high' },
   { pattern: /!med(?:ium)?\b/i, priority: 'medium' },
   { pattern: /!low\b/i, priority: 'low' },
+  // Star/bang priority: *, **
+  { pattern: /\*{2,}/, priority: 'high' },
+  { pattern: /\*(?!\*)/, priority: 'medium' },
 ];
 
-// Advanced recurring patterns (e.g., "every 2nd Tuesday", "last Friday of month")
+// ─── Advanced recurring patterns ────────────────────────────────
 const advancedRecurringPatterns: { pattern: RegExp; getRepeat: (match: RegExpMatchArray) => { advancedRepeat: AdvancedRepeatPattern; firstOccurrence?: Date } }[] = [
-  // "every 2nd Tuesday", "every 1st Monday", "every 3rd Wednesday"
   { 
     pattern: /\bevery\s+(1st|2nd|3rd|4th|last|first|second|third|fourth)\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday|mon|tue|wed|thu|fri|sat|sun)\b/i,
     getRepeat: (m) => {
@@ -223,130 +228,44 @@ const advancedRecurringPatterns: { pattern: RegExp; getRepeat: (match: RegExpMat
       };
       const weekNum = weekMap[m[1].toLowerCase()];
       const dayNum = dayMap[m[2].toLowerCase()];
-      
-      // Calculate first occurrence
       const firstOccurrence = getNthWeekdayOfMonth(new Date(), weekNum, dayNum);
-      
       return {
-        advancedRepeat: {
-          frequency: 'monthly',
-          monthlyType: 'weekday',
-          monthlyWeek: weekNum,
-          monthlyDay: dayNum,
-        },
+        advancedRepeat: { frequency: 'monthly', monthlyType: 'weekday', monthlyWeek: weekNum, monthlyDay: dayNum },
         firstOccurrence,
       };
     }
   },
-  // "every 2 hours", "every 3 hours"
   {
     pattern: /\bevery\s+(\d+)\s*(?:hour?s?|hr?s?)\b/i,
-    getRepeat: (m) => {
-      const interval = parseInt(m[1]);
-      return {
-        advancedRepeat: {
-          frequency: 'hourly',
-          interval,
-        },
-      };
-    }
+    getRepeat: (m) => ({
+      advancedRepeat: { frequency: 'hourly', interval: parseInt(m[1]) },
+    })
   },
-  // "every 2 weeks", "every 3 days"
   {
     pattern: /\bevery\s+(\d+)\s+(day|week|month)s?\b/i,
     getRepeat: (m) => {
-      const interval = parseInt(m[1]);
-      const unit = m[2].toLowerCase();
       const freqMap: { [key: string]: RepeatType } = { day: 'daily', week: 'weekly', month: 'monthly' };
       return {
-        advancedRepeat: {
-          frequency: freqMap[unit],
-          interval,
-        },
+        advancedRepeat: { frequency: freqMap[m[2].toLowerCase()], interval: parseInt(m[1]) },
       };
     }
   },
-  // "last day of month"
   {
     pattern: /\b(?:every\s+)?last\s+day\s+(?:of\s+(?:the\s+)?)?month\b/i,
     getRepeat: () => {
       const today = new Date();
       const lastDay = lastDayOfMonth(today);
       return {
-        advancedRepeat: {
-          frequency: 'monthly',
-          monthlyType: 'date',
-          monthlyDay: getDate(lastDay),
-        },
+        advancedRepeat: { frequency: 'monthly', monthlyType: 'date', monthlyDay: getDate(lastDay) },
         firstOccurrence: lastDay,
       };
     }
   },
 ];
 
-// Helper function to get the nth weekday of a month
-function getNthWeekdayOfMonth(baseDate: Date, weekNum: 1 | 2 | 3 | 4 | -1, dayOfWeek: number): Date {
-  const year = baseDate.getFullYear();
-  const month = baseDate.getMonth();
-  
-  if (weekNum === -1) {
-    // Last occurrence of the day in the month
-    const lastDay = lastDayOfMonth(baseDate);
-    let date = new Date(year, month, getDate(lastDay));
-    while (getDay(date) !== dayOfWeek) {
-      date = addDays(date, -1);
-    }
-    // If the date is in the past, get next month's
-    if (date < baseDate) {
-      return getNthWeekdayOfMonth(addMonths(baseDate, 1), weekNum, dayOfWeek);
-    }
-    return startOfDay(date);
-  }
-  
-  // Find the first occurrence of the day
-  let date = new Date(year, month, 1);
-  while (getDay(date) !== dayOfWeek) {
-    date = addDays(date, 1);
-  }
-  // Add weeks for nth occurrence
-  date = addDays(date, (weekNum - 1) * 7);
-  
-  // If the date is in the past, get next month's
-  if (date < baseDate) {
-    return getNthWeekdayOfMonth(addMonths(baseDate, 1), weekNum, dayOfWeek);
-  }
-  return startOfDay(date);
-}
-
-// Quick add syntax parsers
-function parseTags(text: string): { tags: string[]; cleanedText: string } {
-  const tags: string[] = [];
-  const tagMatches = text.match(/#(\w+)/g);
-  
-  if (tagMatches) {
-    tagMatches.forEach(match => {
-      tags.push(match.substring(1)); // Remove the #
-    });
-  }
-  
-  const cleanedText = text.replace(/#\w+/g, '').trim();
-  return { tags, cleanedText };
-}
-
-function parseFolderName(text: string): { folderName?: string; cleanedText: string } {
-  const folderMatch = text.match(/@(\w+)/);
-  if (folderMatch) {
-    const cleanedText = text.replace(/@\w+/, '').trim();
-    return { folderName: folderMatch[1], cleanedText };
-  }
-  return { cleanedText: text };
-}
-
-// Reminder patterns - "remind me", "notify me" with offset options
+// ─── Reminder patterns ──────────────────────────────────────────
 const reminderPatterns: { pattern: RegExp; getOffset: (match: RegExpMatchArray) => { offset: string; matched: string } }[] = [
-  // "remind me at exact time", "notify me at exact time"
   { pattern: /\b(?:remind(?:\s+me)?|notify(?:\s+me)?)\s+(?:at\s+)?(?:the\s+)?exact\s+time\b/i, getOffset: (m) => ({ offset: 'exact', matched: m[0] }) },
-  // "remind me 5 minutes before", "notify me 5 min before"
   { pattern: /\b(?:remind(?:\s+me)?|notify(?:\s+me)?)\s+(\d+)\s*(?:min(?:ute)?s?)\s*(?:before|earlier)?\b/i, getOffset: (m) => {
     const mins = parseInt(m[1]);
     if (mins <= 5) return { offset: '5min', matched: m[0] };
@@ -355,53 +274,116 @@ const reminderPatterns: { pattern: RegExp; getOffset: (match: RegExpMatchArray) 
     if (mins <= 30) return { offset: '30min', matched: m[0] };
     return { offset: '1hour', matched: m[0] };
   }},
-  // "remind me 1 hour before", "notify me an hour before"
   { pattern: /\b(?:remind(?:\s+me)?|notify(?:\s+me)?)\s+(?:1|one|an?)\s*(?:hour?s?|hr?s?)\s*(?:before|earlier)?\b/i, getOffset: (m) => ({ offset: '1hour', matched: m[0] }) },
-  // "remind me 1 day before", "notify me a day before"
   { pattern: /\b(?:remind(?:\s+me)?|notify(?:\s+me)?)\s+(?:1|one|a)\s*(?:day)\s*(?:before|earlier)?\b/i, getOffset: (m) => ({ offset: '1day', matched: m[0] }) },
-  // Generic "remind me" or "notify me" - defaults to exact time
   { pattern: /\b(?:remind(?:\s+me)?|notify(?:\s+me)?)\b/i, getOffset: (m) => ({ offset: 'exact', matched: m[0] }) },
 ];
 
-// Parse reminder offset from text
+// ─── Estimated effort patterns ──────────────────────────────────
+function parseEstimatedEffort(text: string): { hours: number; matched: string } | null {
+  // ~2h, ~30m, ~1.5h, ~1h30m, est:2h, effort:30m
+  let match = text.match(/(?:~|est(?:imate)?:|effort:)\s*(\d+(?:\.\d+)?)\s*h(?:ours?|rs?)?\s*(?:(\d+)\s*m(?:in(?:ute)?s?)?)?/i);
+  if (match) {
+    const hours = parseFloat(match[1]) + (match[2] ? parseInt(match[2]) / 60 : 0);
+    return { hours, matched: match[0] };
+  }
+  match = text.match(/(?:~|est(?:imate)?:|effort:)\s*(\d+)\s*m(?:in(?:ute)?s?)?/i);
+  if (match) {
+    return { hours: parseInt(match[1]) / 60, matched: match[0] };
+  }
+  return null;
+}
+
+// ─── Inline description parsing ─────────────────────────────────
+function parseInlineDescription(text: string): { description: string; cleanedText: string } | null {
+  // Support "// description" or "-- description" or "| description" at end of text
+  const match = text.match(/\s+(?:\/\/|--|[|])\s+(.+)$/);
+  if (match) {
+    const cleanedText = text.replace(match[0], '').trim();
+    return { description: match[1].trim(), cleanedText };
+  }
+  return null;
+}
+
+// ─── Helper function for nth weekday ────────────────────────────
+function getNthWeekdayOfMonth(baseDate: Date, weekNum: 1 | 2 | 3 | 4 | -1, dayOfWeek: number): Date {
+  const year = baseDate.getFullYear();
+  const month = baseDate.getMonth();
+  
+  if (weekNum === -1) {
+    const lastDay = lastDayOfMonth(baseDate);
+    let date = new Date(year, month, getDate(lastDay));
+    while (getDay(date) !== dayOfWeek) date = addDays(date, -1);
+    if (date < baseDate) return getNthWeekdayOfMonth(addMonths(baseDate, 1), weekNum, dayOfWeek);
+    return startOfDay(date);
+  }
+  
+  let date = new Date(year, month, 1);
+  while (getDay(date) !== dayOfWeek) date = addDays(date, 1);
+  date = addDays(date, (weekNum - 1) * 7);
+  if (date < baseDate) return getNthWeekdayOfMonth(addMonths(baseDate, 1), weekNum, dayOfWeek);
+  return startOfDay(date);
+}
+
+// ─── Quick add syntax parsers ───────────────────────────────────
+function parseTags(text: string): { tags: string[]; cleanedText: string } {
+  const tags: string[] = [];
+  // Support #tag and #"multi word tag"
+  const quotedTagMatches = text.match(/#"([^"]+)"/g);
+  if (quotedTagMatches) {
+    quotedTagMatches.forEach(match => tags.push(match.slice(2, -1)));
+  }
+  const simpleTagMatches = text.replace(/#"[^"]+"/g, '').match(/#(\w[\w-]*)/g);
+  if (simpleTagMatches) {
+    simpleTagMatches.forEach(match => tags.push(match.substring(1)));
+  }
+  const cleanedText = text.replace(/#"[^"]+"/g, '').replace(/#\w[\w-]*/g, '').trim();
+  return { tags, cleanedText };
+}
+
+function parseFolderName(text: string): { folderName?: string; cleanedText: string } {
+  // Support @folder and @"multi word folder"
+  let match = text.match(/@"([^"]+)"/);
+  if (match) {
+    return { folderName: match[1], cleanedText: text.replace(match[0], '').trim() };
+  }
+  match = text.match(/@(\w[\w-]*)/);
+  if (match) {
+    return { folderName: match[1], cleanedText: text.replace(match[0], '').trim() };
+  }
+  return { cleanedText: text };
+}
+
+// ─── Core parse functions ───────────────────────────────────────
 function parseReminderOffset(text: string): { offset: string; matched: string } | null {
   for (const { pattern, getOffset } of reminderPatterns) {
     const match = text.match(pattern);
-    if (match) {
-      return getOffset(match);
-    }
+    if (match) return getOffset(match);
   }
   return null;
 }
 
 function parseTime(text: string): { hours: number; minutes: number; matched: string } | null {
-  // Check for "at X:XX am/pm" or "at Xam/pm"
   let match = text.match(/\bat\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/i);
   if (match) {
     let hours = parseInt(match[1]);
     const minutes = match[2] ? parseInt(match[2]) : 0;
     const period = match[3]?.toLowerCase();
-    
     if (period === 'pm' && hours < 12) hours += 12;
     if (period === 'am' && hours === 12) hours = 0;
-    
     return { hours, minutes, matched: match[0] };
   }
   
-  // Check for "Xpm" or "X:XXpm"
   match = text.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/i);
   if (match) {
     let hours = parseInt(match[1]);
     const minutes = match[2] ? parseInt(match[2]) : 0;
     const period = match[3].toLowerCase();
-    
     if (period === 'pm' && hours < 12) hours += 12;
     if (period === 'am' && hours === 12) hours = 0;
-    
     return { hours, minutes, matched: match[0] };
   }
   
-  // Check for 24-hour format "17:00"
   match = text.match(/\b(\d{1,2}):(\d{2})\b/);
   if (match) {
     const hours = parseInt(match[1]);
@@ -411,15 +393,13 @@ function parseTime(text: string): { hours: number; minutes: number; matched: str
     }
   }
   
-  // Check for "in the morning/afternoon/evening/night"
   match = text.match(/\bin the (morning|afternoon|evening|night)\b/i);
   if (match) {
     const timeOfDay = match[1].toLowerCase();
-    let hours = 9; // default morning
+    let hours = 9;
     if (timeOfDay === 'afternoon') hours = 14;
     else if (timeOfDay === 'evening') hours = 18;
     else if (timeOfDay === 'night') hours = 21;
-    
     return { hours, minutes: 0, matched: match[0] };
   }
   
@@ -429,9 +409,7 @@ function parseTime(text: string): { hours: number; minutes: number; matched: str
 function parseRelativeTime(text: string): { date: Date; matched: string } | null {
   for (const { pattern, getDate } of relativeTimePatterns) {
     const match = text.match(pattern);
-    if (match) {
-      return { date: getDate(match), matched: match[0] };
-    }
+    if (match) return { date: getDate(match), matched: match[0] };
   }
   return null;
 }
@@ -439,10 +417,7 @@ function parseRelativeTime(text: string): { date: Date; matched: string } | null
 function parseAdvancedRecurring(text: string): { advancedRepeat: AdvancedRepeatPattern; firstOccurrence?: Date; matched: string } | null {
   for (const { pattern, getRepeat } of advancedRecurringPatterns) {
     const match = text.match(pattern);
-    if (match) {
-      const result = getRepeat(match);
-      return { ...result, matched: match[0] };
-    }
+    if (match) return { ...getRepeat(match), matched: match[0] };
   }
   return null;
 }
@@ -450,10 +425,7 @@ function parseAdvancedRecurring(text: string): { advancedRepeat: AdvancedRepeatP
 function parseRecurring(text: string): { type: RepeatType; days?: number[]; matched: string } | null {
   for (const { pattern, getRepeat } of recurringPatterns) {
     const match = text.match(pattern);
-    if (match) {
-      const result = getRepeat(match);
-      return { ...result, matched: match[0] };
-    }
+    if (match) return { ...getRepeat(match), matched: match[0] };
   }
   return null;
 }
@@ -463,19 +435,28 @@ function parseLocation(text: string): { location: string; matched: string } | nu
     const match = text.match(pattern);
     if (match) {
       const location = match[1]?.trim();
-      if (location && location.length > 1) {
-        return { location, matched: match[0] };
-      }
+      if (location && location.length > 1) return { location, matched: match[0] };
     }
   }
   return null;
 }
 
 function parseDate(text: string): { date: Date; matched: string } | null {
+  // Also support "due" and "by" prefixes: "due tomorrow", "by friday"
+  const prefixed = text.match(/\b(?:due|by)\s+/i);
+  const searchText = prefixed ? text : text;
+  
   for (const { pattern, getDate } of datePatterns) {
-    const match = text.match(pattern);
+    const match = searchText.match(pattern);
     if (match) {
-      return { date: getDate(match), matched: match[0] };
+      // Check if there's a "due" or "by" prefix directly before this match
+      const matchIdx = searchText.indexOf(match[0]);
+      const beforeMatch = searchText.substring(0, matchIdx).trimEnd();
+      const hasDueBy = /\b(?:due|by)$/i.test(beforeMatch);
+      const fullMatched = hasDueBy 
+        ? searchText.substring(beforeMatch.lastIndexOf(beforeMatch.match(/\b(?:due|by)$/i)?.[0] || ''), matchIdx + match[0].length)
+        : match[0];
+      return { date: getDate(match), matched: fullMatched };
     }
   }
   return null;
@@ -484,13 +465,12 @@ function parseDate(text: string): { date: Date; matched: string } | null {
 function parsePriority(text: string): { priority: 'high' | 'medium' | 'low'; matched: string } | null {
   for (const { pattern, priority } of priorityPatterns) {
     const match = text.match(pattern);
-    if (match) {
-      return { priority, matched: match[0] };
-    }
+    if (match) return { priority, matched: match[0] };
   }
   return null;
 }
 
+// ─── Main parse function ────────────────────────────────────────
 export function parseNaturalLanguageTask(input: string): ParsedTask {
   let text = input.trim();
   let dueDate: Date | undefined;
@@ -503,8 +483,24 @@ export function parseNaturalLanguageTask(input: string): ParsedTask {
   let location: string | undefined;
   let tags: string[] | undefined;
   let folderName: string | undefined;
+  let description: string | undefined;
+  let estimatedHours: number | undefined;
   
-  // Parse quick add syntax first: #tags and @folder
+  // 1. Parse inline description first (// or -- at end)
+  const descResult = parseInlineDescription(text);
+  if (descResult) {
+    description = descResult.description;
+    text = descResult.cleanedText;
+  }
+  
+  // 2. Parse estimated effort (~2h, ~30m, est:1h)
+  const effortResult = parseEstimatedEffort(text);
+  if (effortResult) {
+    estimatedHours = effortResult.hours;
+    text = text.replace(effortResult.matched, '').trim();
+  }
+  
+  // 3. Parse quick add syntax: #tags and @folder
   const tagsResult = parseTags(text);
   if (tagsResult.tags.length > 0) {
     tags = tagsResult.tags;
@@ -517,25 +513,23 @@ export function parseNaturalLanguageTask(input: string): ParsedTask {
     text = folderResult.cleanedText;
   }
   
-  // Parse reminder offset (e.g., "remind me 5 min before", "notify me at exact time")
+  // 4. Parse reminder offset
   const reminderOffsetResult = parseReminderOffset(text);
   if (reminderOffsetResult) {
     reminderOffset = reminderOffsetResult.offset;
     text = text.replace(reminderOffsetResult.matched, '').trim();
   }
   
-  // Parse advanced recurring patterns first (e.g., "every 2nd Tuesday")
+  // 5. Parse advanced recurring patterns first (e.g., "every 2nd Tuesday")
   const advancedRecurringResult = parseAdvancedRecurring(text);
   if (advancedRecurringResult) {
     advancedRepeat = advancedRecurringResult.advancedRepeat;
-    if (advancedRecurringResult.firstOccurrence) {
-      dueDate = advancedRecurringResult.firstOccurrence;
-    }
+    if (advancedRecurringResult.firstOccurrence) dueDate = advancedRecurringResult.firstOccurrence;
     text = text.replace(advancedRecurringResult.matched, '').trim();
     repeatType = advancedRepeat.frequency;
   }
   
-  // Parse recurring pattern (before date, as "every monday" shouldn't be parsed as a date)
+  // 6. Parse recurring pattern
   if (!advancedRepeat) {
     const recurringResult = parseRecurring(text);
     if (recurringResult) {
@@ -543,7 +537,6 @@ export function parseNaturalLanguageTask(input: string): ParsedTask {
       repeatDays = recurringResult.days;
       text = text.replace(recurringResult.matched, '').trim();
       
-      // For recurring tasks, set the first occurrence date
       if (repeatDays && repeatDays.length > 0) {
         const today = new Date();
         const currentDay = today.getDay();
@@ -553,10 +546,9 @@ export function parseNaturalLanguageTask(input: string): ParsedTask {
       } else if (repeatType === 'weekdays') {
         const today = new Date();
         const currentDay = today.getDay();
-        // Find next weekday
         let daysUntil = 1;
-        if (currentDay === 5) daysUntil = 3; // Friday -> Monday
-        else if (currentDay === 6) daysUntil = 2; // Saturday -> Monday
+        if (currentDay === 5) daysUntil = 3;
+        else if (currentDay === 6) daysUntil = 2;
         dueDate = startOfDay(addDays(today, daysUntil));
       } else if (repeatType === 'weekends') {
         const today = new Date();
@@ -567,19 +559,16 @@ export function parseNaturalLanguageTask(input: string): ParsedTask {
     }
   }
   
-  // Parse relative time ("in 2 hours", "in 30 minutes")
+  // 7. Parse relative time
   const relativeTimeResult = parseRelativeTime(text);
   if (relativeTimeResult) {
     dueDate = relativeTimeResult.date;
     reminderTime = relativeTimeResult.date;
-    // Default to exact time reminder for relative time
-    if (!reminderOffset) {
-      reminderOffset = 'exact';
-    }
+    if (!reminderOffset) reminderOffset = 'exact';
     text = text.replace(relativeTimeResult.matched, '').trim();
   }
   
-  // Parse date (if not already set by recurring/relative)
+  // 8. Parse date
   if (!dueDate) {
     const dateResult = parseDate(text);
     if (dateResult) {
@@ -588,70 +577,59 @@ export function parseNaturalLanguageTask(input: string): ParsedTask {
     }
   }
   
-  // Parse time
-  const timeResult = parseTime(input); // Use original input for time parsing
+  // 9. Parse time
+  const timeResult = parseTime(input);
   if (timeResult) {
     if (dueDate) {
       dueDate = setHours(setMinutes(dueDate, timeResult.minutes), timeResult.hours);
-      // Set reminderTime to the same as dueDate when time is explicitly specified
       reminderTime = new Date(dueDate);
     } else {
-      // If no date specified but time is, assume today
       dueDate = setHours(setMinutes(startOfDay(new Date()), timeResult.minutes), timeResult.hours);
-      // Set reminderTime to the same as dueDate when time is explicitly specified
       reminderTime = new Date(dueDate);
     }
-    // Default to exact time reminder when time is specified
-    if (!reminderOffset) {
-      reminderOffset = 'exact';
-    }
+    if (!reminderOffset) reminderOffset = 'exact';
     text = text.replace(timeResult.matched, '').trim();
   }
   
-  // Apply reminder offset to calculate actual reminder time
+  // 10. Apply reminder offset
   if (reminderTime && reminderOffset && reminderOffset !== 'exact') {
     const offsetMinutes: { [key: string]: number } = {
-      '5min': 5,
-      '10min': 10,
-      '15min': 15,
-      '30min': 30,
-      '1hour': 60,
-      '1day': 1440,
+      '5min': 5, '10min': 10, '15min': 15, '30min': 30, '1hour': 60, '1day': 1440,
     };
     const mins = offsetMinutes[reminderOffset];
-    if (mins) {
-      reminderTime = addMinutes(reminderTime, -mins);
-    }
+    if (mins) reminderTime = addMinutes(reminderTime, -mins);
   }
   
-  // Parse priority
+  // 11. Parse priority
   const priorityResult = parsePriority(text);
   if (priorityResult) {
     priority = priorityResult.priority;
     text = text.replace(priorityResult.matched, '').trim();
   }
   
-  // Parse location
+  // 12. Parse location (only from known places, not @folder conflicts)
   const locationResult = parseLocation(text);
   if (locationResult) {
     location = locationResult.location;
     text = text.replace(locationResult.matched, '').trim();
   }
   
-  // Clean up the text
+  // 13. Clean up the text
   text = text
-    .replace(/\s+/g, ' ')  // Multiple spaces to single
-    .replace(/^\s*,\s*/, '') // Leading comma
-    .replace(/\s*,\s*$/, '') // Trailing comma
-    .replace(/\s+at\s*$/, '') // Trailing "at"
-    .replace(/\s+on\s*$/, '') // Trailing "on"
-    .replace(/\s+by\s*$/, '') // Trailing "by"
-    .replace(/\s+in\s*$/, '') // Trailing "in"
-    .replace(/\s+every\s*$/, '') // Trailing "every"
+    .replace(/\s+/g, ' ')
+    .replace(/^\s*,\s*/, '')
+    .replace(/\s*,\s*$/, '')
+    .replace(/\s+at\s*$/, '')
+    .replace(/\s+on\s*$/, '')
+    .replace(/\s+by\s*$/, '')
+    .replace(/\s+in\s*$/, '')
+    .replace(/\s+every\s*$/, '')
+    .replace(/\s+due\s*$/, '')
+    .replace(/\s+for\s*$/, '')
     .trim();
   
   return {
-    text: text || input.trim(), // Fallback to original if empty
+    text: text || input.trim(),
     dueDate,
     reminderTime,
     reminderOffset,
@@ -662,20 +640,30 @@ export function parseNaturalLanguageTask(input: string): ParsedTask {
     location,
     tags,
     folderName,
+    description,
+    estimatedHours,
   };
 }
 
-// Helper to detect if input contains natural language patterns
+// ─── Detection helper ───────────────────────────────────────────
 export function hasNaturalLanguagePatterns(input: string): boolean {
-  // Check for quick add syntax first
-  if (/#\w+/.test(input) || /@\w+/.test(input) || /!(?:high|med|low)\b/i.test(input)) {
-    return true;
-  }
+  // Quick add syntax
+  if (/#\w+/.test(input) || /#"[^"]+"/.test(input) || /@\w+/.test(input) || /!(?:high|med|low)\b/i.test(input)) return true;
   
-  // Check for remind me / notify me patterns
-  if (/\b(?:remind(?:\s+me)?|notify(?:\s+me)?)\b/i.test(input)) {
-    return true;
-  }
+  // Remind / notify
+  if (/\b(?:remind(?:\s+me)?|notify(?:\s+me)?)\b/i.test(input)) return true;
+  
+  // Effort estimation
+  if (/(?:~|est(?:imate)?:|effort:)\s*\d/i.test(input)) return true;
+  
+  // Inline description
+  if (/\s+(?:\/\/|--|[|])\s+/.test(input)) return true;
+  
+  // Priority shortcuts p1/p2/p3
+  if (/\bp[1-3]\b/i.test(input)) return true;
+  
+  // "due" or "by" + date word
+  if (/\b(?:due|by)\s+(?:today|tomorrow|tmr|monday|tuesday|wednesday|thursday|friday|saturday|sunday|eod|eow|eom|next)\b/i.test(input)) return true;
   
   const allPatterns = [
     ...datePatterns.map(p => p.pattern),
@@ -690,7 +678,7 @@ export function hasNaturalLanguagePatterns(input: string): boolean {
   return allPatterns.some(pattern => pattern.test(input));
 }
 
-// Format parsed result for display
+// ─── Format parsed result for display ───────────────────────────
 export function formatParsedResult(parsed: ParsedTask): string[] {
   const results: string[] = [];
   
@@ -729,13 +717,14 @@ export function formatParsedResult(parsed: ParsedTask): string[] {
     }
   }
   
-  if (parsed.location) {
-    results.push(`📍 ${parsed.location}`);
+  if (parsed.location) results.push(`📍 ${parsed.location}`);
+  if (parsed.priority) results.push(`⚡ ${parsed.priority} priority`);
+  if (parsed.estimatedHours) {
+    const h = Math.floor(parsed.estimatedHours);
+    const m = Math.round((parsed.estimatedHours - h) * 60);
+    results.push(`⏱ ${h > 0 ? `${h}h` : ''}${m > 0 ? `${m}m` : ''}`);
   }
-  
-  if (parsed.priority) {
-    results.push(`⚡ ${parsed.priority} priority`);
-  }
+  if (parsed.description) results.push(`📝 ${parsed.description}`);
   
   return results;
 }
