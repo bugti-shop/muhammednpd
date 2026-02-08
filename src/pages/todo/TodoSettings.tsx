@@ -11,7 +11,7 @@ import { languages } from '@/i18n';
 import { TasksSettingsSheet } from '@/components/TasksSettingsSheet';
 import { NotesSettingsSheet } from '@/components/NotesSettingsSheet';
 import { NoteTypeVisibilitySheet } from '@/components/NoteTypeVisibilitySheet';
-import { CustomizeNavigationSheet } from '@/components/CustomizeNavigationSheet';
+import { CustomizeTodoNavigationSheet } from '@/components/CustomizeTodoNavigationSheet';
 import { WidgetSettingsSheet } from '@/components/WidgetSettingsSheet';
 import { ToolbarOrderManager, useToolbarOrder } from '@/components/ToolbarOrderManager';
 import { AppLockSettingsSheet } from '@/components/AppLockSettingsSheet';
@@ -653,7 +653,7 @@ const TodoSettings = () => {
       <TasksSettingsSheet isOpen={showTasksSettingsSheet} onClose={() => setShowTasksSettingsSheet(false)} />
       <NotesSettingsSheet isOpen={showNotesSettingsSheet} onClose={() => setShowNotesSettingsSheet(false)} />
       <NoteTypeVisibilitySheet isOpen={showNoteTypeVisibilitySheet} onClose={() => setShowNoteTypeVisibilitySheet(false)} />
-      <CustomizeNavigationSheet isOpen={showCustomizeNavigationSheet} onClose={() => setShowCustomizeNavigationSheet(false)} />
+      <CustomizeTodoNavigationSheet isOpen={showCustomizeNavigationSheet} onClose={() => setShowCustomizeNavigationSheet(false)} />
       <WidgetSettingsSheet isOpen={showWidgetSettingsSheet} onClose={() => setShowWidgetSettingsSheet(false)} />
 
       <AppLockSettingsSheet
