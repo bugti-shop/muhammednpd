@@ -294,6 +294,8 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
     const finalDueDate = dueDate || parsed?.dueDate;
     const finalPriority = priority !== 'none' ? priority : parsed?.priority;
     const finalRepeatType = repeatType !== 'none' ? repeatType : parsed?.repeatType;
+    const finalDescription = description.trim() || parsed?.description;
+    const finalEstimatedHours = estimatedHours || parsed?.estimatedHours;
     const finalRepeatDays = repeatType === 'custom' && repeatDays.length > 0 ? repeatDays : parsed?.repeatDays;
     const finalLocation = location.trim() || parsed?.location;
     const finalReminderTime = reminderTime || deadlineReminderTime || parsed?.reminderTime;
@@ -339,12 +341,12 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
       imageUrl,
       coloredTags: finalTags.length > 0 ? finalTags : undefined,
       voiceRecording,
-      description: description.trim() || undefined,
+      description: finalDescription || undefined,
       location: finalLocation,
       locationReminder: locationReminder,
       subtasks: subtasks,
       attachments: attachments.length > 0 ? attachments : undefined,
-      estimatedHours: estimatedHours,
+      estimatedHours: finalEstimatedHours,
     };
 
     // If deadline is set, store it in dueDate
@@ -884,7 +886,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
           </div>
 
           {/* Natural Language Parsing Preview */}
-          {hasNLPPatterns && parsedTask && (parsedTask.dueDate || parsedTask.priority || parsedTask.repeatType || parsedTask.location || (parsedTask.tags && parsedTask.tags.length > 0) || parsedTask.folderName) && (
+          {hasNLPPatterns && parsedTask && (parsedTask.dueDate || parsedTask.priority || parsedTask.repeatType || parsedTask.location || (parsedTask.tags && parsedTask.tags.length > 0) || parsedTask.folderName || parsedTask.description || parsedTask.estimatedHours || parsedTask.reminderOffset) && (
             <div className="flex items-center gap-2 mb-3 px-1 flex-wrap">
               <Sparkles className="h-3.5 w-3.5 text-primary flex-shrink-0" />
               <span className="text-xs text-muted-foreground">{t('tasks.detected')}:</span>
@@ -892,6 +894,11 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-primary/10 text-primary">
                   <CalendarIcon className="h-3 w-3" />
                   {format(parsedTask.dueDate, 'MMM d, h:mm a')}
+                </span>
+              )}
+              {parsedTask.reminderOffset && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-amber-500/10 text-amber-600">
+                  🔔 {parsedTask.reminderOffset === 'exact' ? 'At time' : parsedTask.reminderOffset}
                 </span>
               )}
               {parsedTask.repeatType && (
@@ -929,6 +936,19 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-orange-500/10 text-orange-500">
                   <FolderIcon className="h-3 w-3" />
                   {parsedTask.folderName}
+                </span>
+              )}
+              {parsedTask.estimatedHours && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-indigo-500/10 text-indigo-500">
+                  ⏱ {parsedTask.estimatedHours >= 1 
+                    ? `${Math.floor(parsedTask.estimatedHours)}h${Math.round((parsedTask.estimatedHours % 1) * 60) > 0 ? `${Math.round((parsedTask.estimatedHours % 1) * 60)}m` : ''}`
+                    : `${Math.round(parsedTask.estimatedHours * 60)}m`}
+                </span>
+              )}
+              {parsedTask.description && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-muted text-muted-foreground max-w-[200px] truncate">
+                  <FileText className="h-3 w-3 flex-shrink-0" />
+                  {parsedTask.description}
                 </span>
               )}
             </div>
