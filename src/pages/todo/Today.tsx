@@ -42,7 +42,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Sparkles, AlertCircle, CalendarX, Flame, Clock, CheckCircle2, Calendar as CalendarIcon2, Timer } from 'lucide-react';
+import { Sparkles, AlertCircle, CalendarX, Flame, Clock, CheckCircle2, Calendar as CalendarIcon2, Timer, LayoutTemplate } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { TodoLayout } from './TodoLayout';
@@ -61,6 +61,7 @@ import { useTasksSettings } from '@/components/TasksSettingsSheet';
 import { usePriorities } from '@/hooks/usePriorities';
 import { CustomSmartView, loadCustomSmartViews } from '@/utils/customSmartViews';
 import { SaveSmartViewSheet } from '@/components/SaveSmartViewSheet';
+import { ProjectTemplateSheet } from '@/components/ProjectTemplateSheet';
 
 type ViewMode = 'flat' | 'kanban' | 'kanban-status' | 'timeline' | 'progress' | 'priority' | 'history';
 type SortBy = 'date' | 'priority' | 'name' | 'created';
@@ -132,6 +133,7 @@ const Today = () => {
   const [customSmartViews, setCustomSmartViews] = useState<CustomSmartView[]>([]);
   const [activeCustomViewId, setActiveCustomViewId] = useState<string | null>(null);
   const [isSaveSmartViewOpen, setIsSaveSmartViewOpen] = useState(false);
+  const [isProjectTemplateOpen, setIsProjectTemplateOpen] = useState(false);
   
   // Single task swipe action states
   const [swipeMoveTaskId, setSwipeMoveTaskId] = useState<string | null>(null);
@@ -328,6 +330,30 @@ const Today = () => {
     setFolders(folders.map(f => f.id === folderId ? { ...f, isFavorite: !f.isFavorite } : f));
     const folder = folders.find(f => f.id === folderId);
     toast.success(folder?.isFavorite ? 'Removed from favorites' : 'Added to favorites', { icon: '⭐' });
+  };
+
+  const handleApplyProjectTemplate = (data: {
+    folder: Omit<Folder, 'id' | 'createdAt'>;
+    sections: Omit<TaskSection, 'id'>[];
+    tasks: { sectionIndex: number; task: Omit<TodoItem, 'id' | 'completed'> }[];
+  }) => {
+    const folderId = Date.now().toString();
+    const newFolder: Folder = { ...data.folder, id: folderId, createdAt: new Date() };
+    const newSections: TaskSection[] = data.sections.map((s, i) => ({
+      ...s,
+      id: `proj-section-${folderId}-${i}`,
+    }));
+    const newTasks: TodoItem[] = data.tasks.map((t, i) => ({
+      ...t.task,
+      id: `proj-task-${folderId}-${i}-${Date.now()}`,
+      completed: false,
+      folderId,
+      sectionId: newSections[t.sectionIndex]?.id,
+    }));
+    setFolders(prev => [...prev, newFolder]);
+    setSections(prev => [...prev, ...newSections]);
+    setItems(prev => [...newTasks, ...prev]);
+    setSelectedFolderId(folderId);
   };
 
   const handleSectionDragEnd = async (result: DropResult) => {
@@ -1865,6 +1891,9 @@ const Today = () => {
                           <DropdownMenuItem onClick={() => setIsFolderManageOpen(true)} className="cursor-pointer">
                             <FolderIcon className="h-4 w-4 mr-2" />{t('menu.folders')}
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setIsProjectTemplateOpen(true)} className="cursor-pointer">
+                            <LayoutTemplate className="h-4 w-4 mr-2" />Project Templates
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem onClick={() => { setIsSelectionMode(true); setIsSelectActionsOpen(true); }} className="cursor-pointer">
                             <MousePointer2 className="h-4 w-4 mr-2" />{t('menu.select')}
@@ -3194,6 +3223,7 @@ const Today = () => {
       />
       <DuplicateOptionsSheet isOpen={isDuplicateSheetOpen} onClose={() => setIsDuplicateSheetOpen(false)} onSelect={handleDuplicate} />
       <FolderManageSheet isOpen={isFolderManageOpen} onClose={() => setIsFolderManageOpen(false)} folders={folders} onCreateFolder={handleCreateFolder} onEditFolder={handleEditFolder} onDeleteFolder={handleDeleteFolder} onReorderFolders={handleReorderFolders} onToggleFavorite={handleToggleFolderFavorite} />
+      <ProjectTemplateSheet isOpen={isProjectTemplateOpen} onClose={() => setIsProjectTemplateOpen(false)} onApplyTemplate={handleApplyProjectTemplate} />
       <MoveToFolderSheet isOpen={isMoveToFolderOpen} onClose={() => setIsMoveToFolderOpen(false)} folders={folders} onSelect={handleMoveToFolder} />
       <SelectActionsSheet isOpen={isSelectActionsOpen} onClose={() => setIsSelectActionsOpen(false)} selectedCount={selectedTaskIds.size} onAction={handleSelectAction} totalCount={uncompletedItems.length} />
       <PrioritySelectSheet isOpen={isPrioritySheetOpen} onClose={() => setIsPrioritySheetOpen(false)} onSelect={handleSetPriority} />
