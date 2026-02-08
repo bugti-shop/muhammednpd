@@ -48,7 +48,8 @@ import { ResolvedTaskImage } from './ResolvedTaskImage';
 import { resolveTaskMediaUrl } from '@/utils/todoItemsStorage';
 import { TaskInputSheet } from './TaskInputSheet';
 import { SubtaskDetailSheet } from './SubtaskDetailSheet';
-
+import { TaskCommentsSection } from './TaskCommentsSection';
+import { TaskComment } from '@/types/note';
 interface TaskDetailPageProps {
   isOpen: boolean;
   task: TodoItem | null;
@@ -989,6 +990,23 @@ export const TaskDetailPage = ({
               className="w-full min-h-[120px] p-3 rounded-xl bg-muted/30 border border-border/50 resize-none text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
+
+          {/* Comments & Activity Thread */}
+          <TaskCommentsSection
+            comments={task.comments || []}
+            onAddComment={(comment: TaskComment) => {
+              onUpdate({
+                ...task,
+                comments: [...(task.comments || []), comment],
+              });
+            }}
+            onDeleteComment={(commentId: string) => {
+              onUpdate({
+                ...task,
+                comments: (task.comments || []).filter(c => c.id !== commentId),
+              });
+            }}
+          />
 
           {/* Task Timestamps Section */}
           <div className="space-y-2 border-t border-border pt-4">
