@@ -2067,37 +2067,60 @@ const Today = () => {
               </div>
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2">
-              <button onClick={() => setSelectedFolderId(null)} className={cn("flex items-center gap-2 px-4 py-2 rounded-full transition-all whitespace-nowrap", !selectedFolderId ? "bg-primary text-primary-foreground" : "bg-card hover:bg-muted")}>
+              <button onClick={() => setSelectedFolderId(null)} className={cn("flex items-center gap-2 px-4 py-2 rounded-full transition-all whitespace-nowrap flex-shrink-0", !selectedFolderId ? "bg-primary text-primary-foreground" : "bg-card hover:bg-muted")}>
                 <FolderIcon className="h-4 w-4" />{t('smartLists.allTasks')}
               </button>
-              {/* Favorite folders first, then the rest */}
-              {[...folders].sort((a, b) => (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0)).map((folder) => {
-                const isSelected = selectedFolderId === folder.id;
-                return (
-                  <button 
-                    key={folder.id} 
-                    onClick={() => setSelectedFolderId(folder.id)}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      handleToggleFolderFavorite(folder.id);
-                    }}
-                    className={cn(
-                      "flex items-center gap-2 px-4 py-2 rounded-full transition-all whitespace-nowrap",
-                      isSelected 
-                        ? "text-primary-foreground" 
-                        : "hover:opacity-80 text-foreground",
-                      !isSelected && "bg-[#f1f4f9] dark:bg-muted"
-                    )}
-                    style={isSelected ? { 
-                      backgroundColor: folder.color
-                    } : undefined}
-                  >
-                    {folder.isFavorite && <Star className="h-3.5 w-3.5 fill-current" />}
-                    <FolderIcon className="h-4 w-4" />
-                    {folder.name}
-                  </button>
-                );
-              })}
+              <DragDropContext onDragEnd={(result: DropResult) => {
+                if (!result.destination) return;
+                const sorted = [...folders].sort((a, b) => (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0));
+                const reordered = Array.from(sorted);
+                const [moved] = reordered.splice(result.source.index, 1);
+                reordered.splice(result.destination.index, 0, moved);
+                handleReorderFolders(reordered);
+              }}>
+                <Droppable droppableId="folder-chips" direction="horizontal">
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps} className="flex gap-2">
+                      {[...folders].sort((a, b) => (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0)).map((folder, index) => {
+                        const isSelected = selectedFolderId === folder.id;
+                        return (
+                          <Draggable key={folder.id} draggableId={`folder-chip-${folder.id}`} index={index}>
+                            {(dragProvided, snapshot) => (
+                              <button
+                                ref={dragProvided.innerRef}
+                                {...dragProvided.draggableProps}
+                                {...dragProvided.dragHandleProps}
+                                onClick={() => setSelectedFolderId(folder.id)}
+                                onContextMenu={(e) => {
+                                  e.preventDefault();
+                                  handleToggleFolderFavorite(folder.id);
+                                }}
+                                className={cn(
+                                  "flex items-center gap-2 px-4 py-2 rounded-full transition-all whitespace-nowrap flex-shrink-0",
+                                  isSelected 
+                                    ? "text-primary-foreground" 
+                                    : "hover:opacity-80 text-foreground",
+                                  !isSelected && "bg-[#f1f4f9] dark:bg-muted",
+                                  snapshot.isDragging && "shadow-lg opacity-90 ring-2 ring-primary/30"
+                                )}
+                                style={{
+                                  ...(isSelected ? { backgroundColor: folder.color } : undefined),
+                                  ...dragProvided.draggableProps.style,
+                                }}
+                              >
+                                {folder.isFavorite && <Star className="h-3.5 w-3.5 fill-current" />}
+                                <FolderIcon className="h-4 w-4" />
+                                {folder.name}
+                              </button>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </div>
             
           </div>
