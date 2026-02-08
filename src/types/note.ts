@@ -94,6 +94,13 @@ export interface TaskAttachment {
   ref: string; // idb:file:id reference
 }
 
+export interface TaskComment {
+  id: string;
+  text: string;
+  imageUrl?: string; // base64 or idb ref
+  createdAt: Date;
+}
+
 export interface TodoItem {
   id: string;
   text: string;
@@ -121,6 +128,7 @@ export interface TodoItem {
   notificationIds?: number[];
   voiceRecording?: VoiceRecording;
   attachments?: TaskAttachment[]; // File attachments
+  comments?: TaskComment[]; // Comments/activity thread
   dependsOn?: string[]; // IDs of tasks that must be completed first
   timeTracking?: TimeTracking;
   // Timestamp fields
