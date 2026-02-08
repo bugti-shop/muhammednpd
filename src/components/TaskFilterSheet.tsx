@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Folder, Priority, ColoredTag, TaskStatus } from '@/types/note';
-import { X, Tag, Circle, Clock, Loader2, CheckCircle } from 'lucide-react';
+import { X, Tag, Circle, Clock, Loader2, CheckCircle, Bookmark } from 'lucide-react';
 import { useHardwareBackButton } from '@/hooks/useHardwareBackButton';
 import { getSetting } from '@/utils/settingsStorage';
 import { logActivity } from '@/utils/activityLogger';
@@ -31,6 +31,7 @@ interface TaskFilterSheetProps {
   selectedTags: string[];
   onTagsChange: (tags: string[]) => void;
   onClearAll: () => void;
+  onSaveAsSmartView?: () => void;
 }
 
 export const TaskFilterSheet = ({
@@ -48,6 +49,7 @@ export const TaskFilterSheet = ({
   selectedTags,
   onTagsChange,
   onClearAll,
+  onSaveAsSmartView,
 }: TaskFilterSheetProps) => {
   const { t } = useTranslation();
   const [savedTags, setSavedTags] = useState<ColoredTag[]>([]);
@@ -252,6 +254,24 @@ export const TaskFilterSheet = ({
               </div>
             </RadioGroup>
           </div>
+
+          {/* Save as Smart View */}
+          {hasActiveFilters && onSaveAsSmartView && (
+            <>
+              <Separator />
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  onSaveAsSmartView();
+                  onClose();
+                }}
+              >
+                <Bookmark className="h-4 w-4 mr-2" />
+                Save as Smart View
+              </Button>
+            </>
+          )}
         </div>
       </SheetContent>
     </Sheet>
