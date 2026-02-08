@@ -60,51 +60,51 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
         title: 'Weekly Team Standup',
         type: 'regular',
         content: `<h2>Weekly Team Standup</h2>
-<p><strong>Date:</strong> [Enter date]</p>
-<p><strong>Attendees:</strong> [Team members]</p>
+<p><strong>Date:</strong> February 10, 2025</p>
+<p><strong>Attendees:</strong> Sarah Chen, Mark Rivera, Priya Patel, James Okoro</p>
 <hr/>
-<h3>📋 Agenda</h3>
+<h3>Agenda</h3>
 <ul><li>Progress updates from each team member</li><li>Blockers and challenges</li><li>Upcoming priorities</li></ul>
-<h3>🗒️ Discussion Notes</h3>
-<table><thead><tr><th>Person</th><th>Update</th><th>Blockers</th></tr></thead><tbody><tr><td>Member 1</td><td></td><td></td></tr><tr><td>Member 2</td><td></td><td></td></tr><tr><td>Member 3</td><td></td><td></td></tr></tbody></table>
-<h3>✅ Action Items</h3>
-<ul><li><strong>[Person]</strong> — Task description — <em>Due: [date]</em></li><li><strong>[Person]</strong> — Task description — <em>Due: [date]</em></li></ul>
-<h3>📅 Next Meeting</h3>
-<p>Date: [Next meeting date] | Time: [Time]</p>`,
+<h3>Discussion Notes</h3>
+<table><thead><tr><th>Person</th><th>Update</th><th>Blockers</th></tr></thead><tbody><tr><td>Sarah Chen</td><td>Completed API integration for payments module</td><td>Waiting on design approval for checkout flow</td></tr><tr><td>Mark Rivera</td><td>Deployed staging environment, running QA tests</td><td>None</td></tr><tr><td>Priya Patel</td><td>Finalized onboarding wireframes</td><td>Need copy from marketing team</td></tr></tbody></table>
+<h3>Action Items</h3>
+<ul><li><strong>Sarah Chen</strong> — Follow up with design team on checkout mockups — <em>Due: Feb 12</em></li><li><strong>James Okoro</strong> — Schedule stakeholder demo for Friday — <em>Due: Feb 14</em></li></ul>
+<h3>Next Meeting</h3>
+<p>Date: February 17, 2025 | Time: 10:00 AM</p>`,
       },
       {
         title: 'Client Meeting Notes',
         type: 'regular',
         content: `<h2>Client Meeting Notes</h2>
-<p><strong>Client:</strong> [Client Name]</p>
-<p><strong>Date:</strong> [Enter date] | <strong>Duration:</strong> [Duration]</p>
+<p><strong>Client:</strong> Meridian Solutions</p>
+<p><strong>Date:</strong> February 8, 2025 | <strong>Duration:</strong> 45 minutes</p>
 <hr/>
-<h3>🎯 Objectives</h3>
+<h3>Objectives</h3>
 <ol><li>Discuss project progress</li><li>Review deliverables</li><li>Address client feedback</li></ol>
-<h3>📝 Key Discussions</h3>
-<p>[Summarize key points discussed during the meeting]</p>
-<h3>💡 Client Feedback</h3>
-<blockquote><p>"[Insert client feedback or quotes here]"</p></blockquote>
-<h3>📊 Deliverables Status</h3>
-<table><thead><tr><th>Deliverable</th><th>Status</th><th>ETA</th><th>Notes</th></tr></thead><tbody><tr><td>Design mockups</td><td>✅ Complete</td><td>-</td><td></td></tr><tr><td>Development</td><td>🔄 In Progress</td><td>[Date]</td><td></td></tr><tr><td>Testing</td><td>⏳ Pending</td><td>[Date]</td><td></td></tr></tbody></table>
-<h3>🔜 Next Steps</h3>
-<ul><li>Follow up on feedback by [date]</li><li>Send updated proposal</li><li>Schedule next check-in</li></ul>`,
+<h3>Key Discussions</h3>
+<p>Reviewed the updated dashboard designs. Client expressed interest in adding a real-time analytics widget. Discussed timeline implications and agreed to a phased rollout approach.</p>
+<h3>Client Feedback</h3>
+<blockquote><p>"The new navigation feels much more intuitive. We'd love to see the reporting section expanded with export capabilities."</p></blockquote>
+<h3>Deliverables Status</h3>
+<table><thead><tr><th>Deliverable</th><th>Status</th><th>ETA</th><th>Notes</th></tr></thead><tbody><tr><td>Design mockups</td><td>Complete</td><td>-</td><td>Approved with minor revisions</td></tr><tr><td>Development</td><td>In Progress</td><td>March 1</td><td>Backend API 80% done</td></tr><tr><td>Testing</td><td>Pending</td><td>March 10</td><td>QA plan drafted</td></tr></tbody></table>
+<h3>Next Steps</h3>
+<ul><li>Follow up on feedback by Feb 15</li><li>Send updated proposal with analytics widget scope</li><li>Schedule next check-in for Feb 22</li></ul>`,
       },
       {
         title: 'Meeting Follow-Up Email Draft',
         type: 'regular',
         content: `<h2>Meeting Follow-Up Email</h2>
-<p><strong>To:</strong> [Recipients]</p>
-<p><strong>Subject:</strong> Follow-up: [Meeting Topic] - [Date]</p>
+<p><strong>To:</strong> Laura Kim, David Nguyen</p>
+<p><strong>Subject:</strong> Follow-up: Q1 Product Roadmap Review - Feb 8</p>
 <hr/>
-<p>Hi [Name],</p>
+<p>Hi Laura,</p>
 <p>Thank you for taking the time to meet today. Here's a summary of what we discussed:</p>
 <h3>Key Takeaways</h3>
-<ol><li>[Point 1]</li><li>[Point 2]</li><li>[Point 3]</li></ol>
+<ol><li>Prioritize mobile responsiveness for the March release</li><li>Postpone the advanced filtering feature to Q2</li><li>Allocate additional budget for user research in February</li></ol>
 <h3>Action Items</h3>
-<table><thead><tr><th>Owner</th><th>Action</th><th>Deadline</th></tr></thead><tbody><tr><td>[Name]</td><td>[Task]</td><td>[Date]</td></tr><tr><td>[Name]</td><td>[Task]</td><td>[Date]</td></tr></tbody></table>
-<p>Please let me know if I've missed anything. Looking forward to our next meeting on [date].</p>
-<p>Best regards,<br/>[Your Name]</p>`,
+<table><thead><tr><th>Owner</th><th>Action</th><th>Deadline</th></tr></thead><tbody><tr><td>Laura Kim</td><td>Share updated wireframes for mobile views</td><td>Feb 14</td></tr><tr><td>David Nguyen</td><td>Finalize API documentation for v2 endpoints</td><td>Feb 18</td></tr></tbody></table>
+<p>Please let me know if I've missed anything. Looking forward to our next meeting on February 22.</p>
+<p>Best regards,<br/>Alex Thompson</p>`,
       },
     ],
   },
@@ -119,55 +119,55 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
       {
         title: 'Cornell Notes Template',
         type: 'regular',
-        content: `<h2>📖 Cornell Notes</h2>
-<p><strong>Subject:</strong> [Subject Name] | <strong>Date:</strong> [Date] | <strong>Topic:</strong> [Topic]</p>
+        content: `<h2>Cornell Notes</h2>
+<p><strong>Subject:</strong> Biology 101 | <strong>Date:</strong> Feb 10, 2025 | <strong>Topic:</strong> Cell Division and Mitosis</p>
 <hr/>
 <table><thead><tr><th style="width:30%">Cue / Questions</th><th style="width:70%">Notes</th></tr></thead><tbody>
-<tr><td><strong>Key concept 1?</strong></td><td>Detailed notes about this concept go here. Include examples, definitions, and important details.</td></tr>
-<tr><td><strong>Key concept 2?</strong></td><td>More detailed notes. Use bullet points for clarity:<br/>• Point A<br/>• Point B<br/>• Point C</td></tr>
-<tr><td><strong>Key concept 3?</strong></td><td>Additional notes with supporting evidence and examples.</td></tr>
+<tr><td><strong>What is mitosis?</strong></td><td>Mitosis is the process of cell division where a single cell divides to produce two identical daughter cells. It consists of four main phases: prophase, metaphase, anaphase, and telophase.</td></tr>
+<tr><td><strong>What are the phases?</strong></td><td>The four phases in order:<br/>- Prophase: chromosomes condense, nuclear envelope breaks down<br/>- Metaphase: chromosomes align at the cell equator<br/>- Anaphase: sister chromatids separate and move to poles<br/>- Telophase: nuclear envelopes reform, chromosomes decondense</td></tr>
+<tr><td><strong>Why is mitosis important?</strong></td><td>Essential for growth, tissue repair, and asexual reproduction. Errors in mitosis can lead to cancer or genetic disorders.</td></tr>
 </tbody></table>
 <hr/>
-<h3>📝 Summary</h3>
-<p>[Write a 3-5 sentence summary of the main ideas from this lecture/reading in your own words]</p>
-<h3>❓ Questions for Review</h3>
-<ul><li>What are the main differences between [concept A] and [concept B]?</li><li>How does [concept] apply to [real-world scenario]?</li></ul>`,
+<h3>Summary</h3>
+<p>Mitosis is a four-phase process of cell division that produces genetically identical daughter cells. It is critical for organism growth and tissue repair, and errors in the process can have serious consequences including uncontrolled cell growth.</p>
+<h3>Questions for Review</h3>
+<ul><li>What are the main differences between mitosis and meiosis?</li><li>How does mitosis contribute to wound healing in humans?</li></ul>`,
       },
       {
         title: 'Study Planner',
         type: 'regular',
-        content: `<h2>📅 Study Planner</h2>
-<p><strong>Exam/Goal:</strong> [Exam name] | <strong>Date:</strong> [Exam date]</p>
+        content: `<h2>Study Planner</h2>
+<p><strong>Exam:</strong> Organic Chemistry Midterm | <strong>Date:</strong> March 5, 2025</p>
 <hr/>
-<h3>📚 Subjects & Topics</h3>
+<h3>Subjects and Topics</h3>
 <table><thead><tr><th>Subject</th><th>Topics to Cover</th><th>Priority</th><th>Status</th></tr></thead><tbody>
-<tr><td>Subject 1</td><td>Topic A, Topic B</td><td>🔴 High</td><td>⏳ Not Started</td></tr>
-<tr><td>Subject 2</td><td>Topic C, Topic D</td><td>🟡 Medium</td><td>🔄 In Progress</td></tr>
-<tr><td>Subject 3</td><td>Topic E</td><td>🟢 Low</td><td>✅ Done</td></tr>
+<tr><td>Alkanes & Cycloalkanes</td><td>Nomenclature, Conformations, Newman Projections</td><td>High</td><td>Not Started</td></tr>
+<tr><td>Stereochemistry</td><td>R/S Configuration, Optical Activity, Fischer Projections</td><td>High</td><td>In Progress</td></tr>
+<tr><td>Substitution Reactions</td><td>SN1 vs SN2 Mechanisms, Nucleophilicity</td><td>Medium</td><td>Done</td></tr>
 </tbody></table>
-<h3>📆 Weekly Schedule</h3>
+<h3>Weekly Schedule</h3>
 <table><thead><tr><th>Day</th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead><tbody>
-<tr><td><strong>Monday</strong></td><td>Subject 1</td><td>Subject 2</td><td>Review</td></tr>
-<tr><td><strong>Tuesday</strong></td><td>Subject 3</td><td>Practice</td><td>Subject 1</td></tr>
-<tr><td><strong>Wednesday</strong></td><td>Subject 2</td><td>Subject 3</td><td>Review</td></tr>
+<tr><td><strong>Monday</strong></td><td>Alkanes chapter review</td><td>Practice problems set 4</td><td>Review flashcards</td></tr>
+<tr><td><strong>Tuesday</strong></td><td>Stereochemistry lecture notes</td><td>Lab report writing</td><td>Alkanes practice</td></tr>
+<tr><td><strong>Wednesday</strong></td><td>Substitution reactions drill</td><td>Study group session</td><td>Weak areas review</td></tr>
 </tbody></table>
-<h3>🏆 Study Goals</h3>
-<ul><li>Complete all practice problems by [date]</li><li>Review weak areas daily</li><li>Do at least 2 mock tests</li></ul>`,
+<h3>Study Goals</h3>
+<ul><li>Complete all practice problems by Feb 28</li><li>Review weak areas daily for 30 minutes</li><li>Do at least 2 full-length mock exams</li></ul>`,
       },
       {
         title: 'Flashcard List',
         type: 'regular',
-        content: `<h2>🃏 Flashcard Review List</h2>
-<p><strong>Subject:</strong> [Subject] | <strong>Chapter:</strong> [Chapter]</p>
+        content: `<h2>Flashcard Review List</h2>
+<p><strong>Subject:</strong> World History | <strong>Chapter:</strong> The Renaissance</p>
 <hr/>
 <table><thead><tr><th style="width:40%">Term / Question</th><th style="width:40%">Answer / Definition</th><th style="width:20%">Confidence</th></tr></thead><tbody>
-<tr><td><strong>Term 1</strong></td><td>Definition or answer for term 1</td><td>⭐⭐⭐</td></tr>
-<tr><td><strong>Term 2</strong></td><td>Definition or answer for term 2</td><td>⭐⭐</td></tr>
-<tr><td><strong>Term 3</strong></td><td>Definition or answer for term 3</td><td>⭐</td></tr>
-<tr><td><strong>Term 4</strong></td><td>Definition or answer for term 4</td><td>⭐⭐⭐</td></tr>
+<tr><td><strong>Renaissance</strong></td><td>A cultural movement spanning the 14th to 17th century, originating in Italy, marking a renewed interest in classical art, science, and philosophy</td><td>High</td></tr>
+<tr><td><strong>Humanism</strong></td><td>An intellectual movement emphasizing human potential and achievements, focusing on secular concerns rather than religious doctrine</td><td>Medium</td></tr>
+<tr><td><strong>Gutenberg's Press</strong></td><td>Invented around 1440 by Johannes Gutenberg, the movable-type printing press revolutionized the spread of knowledge across Europe</td><td>Low</td></tr>
+<tr><td><strong>Machiavelli</strong></td><td>Italian diplomat and author of "The Prince," a political treatise on power and statecraft that separated politics from morality</td><td>High</td></tr>
 </tbody></table>
-<h3>📊 Review Progress</h3>
-<p>⭐ = Need more practice | ⭐⭐ = Getting there | ⭐⭐⭐ = Confident</p>`,
+<h3>Review Progress</h3>
+<p>Low = Need more practice | Medium = Getting there | High = Confident</p>`,
       },
     ],
   },
@@ -182,69 +182,69 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
       {
         title: 'Project Brief',
         type: 'regular',
-        content: `<h2>📋 Project Brief</h2>
-<p><strong>Project Name:</strong> [Project Name]</p>
-<p><strong>Owner:</strong> [Your Name] | <strong>Start Date:</strong> [Date] | <strong>Target Completion:</strong> [Date]</p>
+        content: `<h2>Project Brief</h2>
+<p><strong>Project Name:</strong> Customer Portal Redesign</p>
+<p><strong>Owner:</strong> Rachel Martinez | <strong>Start Date:</strong> Jan 15, 2025 | <strong>Target Completion:</strong> April 30, 2025</p>
 <hr/>
-<h3>🎯 Objective</h3>
-<p>[Clearly state what this project aims to achieve in 2-3 sentences]</p>
-<h3>📊 Scope</h3>
+<h3>Objective</h3>
+<p>Redesign the customer self-service portal to improve usability, reduce support ticket volume by 30%, and enable mobile-first access for 60% of users who access via smartphones.</p>
+<h3>Scope</h3>
 <table><thead><tr><th>In Scope</th><th>Out of Scope</th></tr></thead><tbody>
-<tr><td>Feature/task 1</td><td>Feature not included</td></tr>
-<tr><td>Feature/task 2</td><td>Future enhancement</td></tr>
-<tr><td>Feature/task 3</td><td>Different project</td></tr>
+<tr><td>Dashboard redesign with new metrics</td><td>Internal admin panel changes</td></tr>
+<tr><td>Mobile-responsive layouts</td><td>Native mobile app development</td></tr>
+<tr><td>Self-service knowledge base integration</td><td>AI chatbot implementation</td></tr>
 </tbody></table>
-<h3>👥 Stakeholders</h3>
+<h3>Stakeholders</h3>
 <table><thead><tr><th>Name</th><th>Role</th><th>Responsibility</th></tr></thead><tbody>
-<tr><td>[Name]</td><td>Project Lead</td><td>Overall direction</td></tr>
-<tr><td>[Name]</td><td>Designer</td><td>UI/UX design</td></tr>
-<tr><td>[Name]</td><td>Developer</td><td>Implementation</td></tr>
+<tr><td>Rachel Martinez</td><td>Project Lead</td><td>Overall direction and timeline</td></tr>
+<tr><td>Kevin Zhao</td><td>Lead Designer</td><td>UI/UX design and prototyping</td></tr>
+<tr><td>Amara Johnson</td><td>Senior Developer</td><td>Frontend and API implementation</td></tr>
 </tbody></table>
-<h3>📅 Key Milestones</h3>
-<ol><li><strong>[Date]</strong> — Milestone 1 description</li><li><strong>[Date]</strong> — Milestone 2 description</li><li><strong>[Date]</strong> — Launch / delivery</li></ol>
-<h3>⚠️ Risks & Mitigations</h3>
-<ul><li><strong>Risk:</strong> [Description] → <strong>Mitigation:</strong> [Plan]</li></ul>`,
+<h3>Key Milestones</h3>
+<ol><li><strong>Feb 1</strong> — Design review and approval</li><li><strong>Mar 15</strong> — Beta release to internal testers</li><li><strong>Apr 30</strong> — Full launch and rollout</li></ol>
+<h3>Risks and Mitigations</h3>
+<ul><li><strong>Risk:</strong> Third-party API rate limits during peak hours — <strong>Mitigation:</strong> Implement caching layer and request throttling</li></ul>`,
       },
       {
         title: 'Product Requirements Document',
         type: 'regular',
-        content: `<h2>📄 Product Requirements Document (PRD)</h2>
-<p><strong>Feature:</strong> [Feature Name] | <strong>Version:</strong> 1.0 | <strong>Author:</strong> [Name]</p>
+        content: `<h2>Product Requirements Document (PRD)</h2>
+<p><strong>Feature:</strong> Multi-Currency Support | <strong>Version:</strong> 1.0 | <strong>Author:</strong> Tanya Reeves</p>
 <hr/>
 <h3>Problem Statement</h3>
-<p>[Describe the problem this feature solves. Who experiences it? How often?]</p>
+<p>International customers (35% of our user base) are forced to convert prices manually, leading to cart abandonment rates 2x higher than domestic users. Supporting multiple currencies will reduce friction and increase conversion.</p>
 <h3>Proposed Solution</h3>
-<p>[High-level description of the solution]</p>
+<p>Add automatic currency detection based on user locale, with manual override. Display prices in the user's preferred currency using real-time exchange rates from the Open Exchange Rates API.</p>
 <h3>User Stories</h3>
 <table><thead><tr><th>As a...</th><th>I want to...</th><th>So that...</th><th>Priority</th></tr></thead><tbody>
-<tr><td>User</td><td>[action]</td><td>[benefit]</td><td>P0</td></tr>
-<tr><td>Admin</td><td>[action]</td><td>[benefit]</td><td>P1</td></tr>
+<tr><td>International customer</td><td>see prices in my local currency</td><td>I can make purchase decisions without manual conversion</td><td>P0</td></tr>
+<tr><td>Admin</td><td>set supported currencies</td><td>we control which markets we actively serve</td><td>P1</td></tr>
 </tbody></table>
 <h3>Success Metrics</h3>
-<ul><li>Metric 1: [Target]</li><li>Metric 2: [Target]</li></ul>
+<ul><li>Reduce international cart abandonment by 25%</li><li>Increase international revenue by 15% within 3 months</li></ul>
 <h3>Technical Considerations</h3>
-<p>[Any technical constraints, dependencies, or architecture notes]</p>`,
+<p>Exchange rates should be cached for 1 hour to minimize API calls. All prices stored in USD internally; conversion happens at display time only.</p>`,
       },
       {
         title: 'Project Retrospective',
         type: 'regular',
-        content: `<h2>🔄 Project Retrospective</h2>
-<p><strong>Project:</strong> [Name] | <strong>Date:</strong> [Date] | <strong>Duration:</strong> [Timeline]</p>
+        content: `<h2>Project Retrospective</h2>
+<p><strong>Project:</strong> Mobile App v3.0 Launch | <strong>Date:</strong> Feb 5, 2025 | <strong>Duration:</strong> 12 weeks</p>
 <hr/>
-<h3>✅ What Went Well</h3>
-<ul><li>[Success point 1]</li><li>[Success point 2]</li><li>[Success point 3]</li></ul>
-<h3>❌ What Could Be Improved</h3>
-<ul><li>[Improvement area 1]</li><li>[Improvement area 2]</li></ul>
-<h3>📊 Key Metrics</h3>
+<h3>What Went Well</h3>
+<ul><li>Shipped 2 days ahead of schedule due to parallel workstreams</li><li>Zero critical bugs reported in the first week post-launch</li><li>Cross-team collaboration between design and engineering was seamless</li></ul>
+<h3>What Could Be Improved</h3>
+<ul><li>QA was bottlenecked in week 8 due to insufficient test device coverage</li><li>Stakeholder feedback loop was too slow in the early design phase</li></ul>
+<h3>Key Metrics</h3>
 <table><thead><tr><th>Metric</th><th>Target</th><th>Actual</th><th>Status</th></tr></thead><tbody>
-<tr><td>Delivery Date</td><td>[Date]</td><td>[Date]</td><td>✅ On Time</td></tr>
-<tr><td>Budget</td><td>[Amount]</td><td>[Amount]</td><td>🟡 Over</td></tr>
-<tr><td>Quality Score</td><td>[Score]</td><td>[Score]</td><td>✅ Met</td></tr>
+<tr><td>Delivery Date</td><td>Feb 7</td><td>Feb 5</td><td>On Time</td></tr>
+<tr><td>Budget</td><td>$85,000</td><td>$91,200</td><td>Over by 7%</td></tr>
+<tr><td>App Store Rating</td><td>4.5</td><td>4.7</td><td>Exceeded</td></tr>
 </tbody></table>
-<h3>💡 Lessons Learned</h3>
-<ol><li>[Key lesson 1]</li><li>[Key lesson 2]</li></ol>
-<h3>🔜 Action Items for Next Project</h3>
-<ul><li>[Action 1]</li><li>[Action 2]</li></ul>`,
+<h3>Lessons Learned</h3>
+<ol><li>Invest in a broader test device lab before the next mobile release</li><li>Schedule weekly stakeholder syncs from day one to keep feedback loops tight</li></ol>
+<h3>Action Items for Next Project</h3>
+<ul><li>Procure 5 additional test devices across iOS and Android</li><li>Create a stakeholder review calendar at project kickoff</li></ul>`,
       },
     ],
   },
@@ -257,54 +257,54 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
     folderColor: '#f59e0b',
     notes: [
       {
-        title: 'Classic Pasta Recipe',
+        title: 'Classic Garlic Butter Pasta',
         type: 'regular',
-        content: `<h2>🍝 Classic Garlic Butter Pasta</h2>
+        content: `<h2>Classic Garlic Butter Pasta</h2>
 <p><strong>Prep Time:</strong> 10 min | <strong>Cook Time:</strong> 15 min | <strong>Servings:</strong> 4</p>
-<p><strong>Difficulty:</strong> ⭐ Easy</p>
+<p><strong>Difficulty:</strong> Easy</p>
 <hr/>
-<h3>📋 Ingredients</h3>
+<h3>Ingredients</h3>
 <table><thead><tr><th>Ingredient</th><th>Amount</th><th>Notes</th></tr></thead><tbody>
 <tr><td>Spaghetti</td><td>400g</td><td>Or any pasta shape</td></tr>
 <tr><td>Butter</td><td>4 tbsp</td><td>Unsalted</td></tr>
 <tr><td>Garlic cloves</td><td>6</td><td>Minced</td></tr>
 <tr><td>Olive oil</td><td>2 tbsp</td><td>Extra virgin</td></tr>
 <tr><td>Parmesan</td><td>1 cup</td><td>Freshly grated</td></tr>
-<tr><td>Red pepper flakes</td><td>½ tsp</td><td>Optional</td></tr>
-<tr><td>Fresh parsley</td><td>¼ cup</td><td>Chopped</td></tr>
+<tr><td>Red pepper flakes</td><td>1/2 tsp</td><td>Optional</td></tr>
+<tr><td>Fresh parsley</td><td>1/4 cup</td><td>Chopped</td></tr>
 </tbody></table>
-<h3>👨‍🍳 Instructions</h3>
+<h3>Instructions</h3>
 <ol>
 <li>Bring a large pot of salted water to boil. Cook pasta according to package directions. Reserve 1 cup pasta water before draining.</li>
 <li>In a large skillet, melt butter with olive oil over medium heat.</li>
 <li>Add minced garlic and red pepper flakes. Cook for 1-2 minutes until fragrant (don't burn!).</li>
 <li>Add drained pasta to the skillet. Toss to coat.</li>
-<li>Add Parmesan and ½ cup pasta water. Toss until creamy, adding more water as needed.</li>
+<li>Add Parmesan and 1/2 cup pasta water. Toss until creamy, adding more water as needed.</li>
 <li>Garnish with fresh parsley and extra Parmesan. Serve immediately.</li>
 </ol>
-<h3>💡 Tips</h3>
+<h3>Tips</h3>
 <ul><li>Don't overcook the garlic — it goes bitter quickly</li><li>Pasta water is the secret to a silky sauce</li><li>Add grilled chicken or shrimp for protein</li></ul>`,
       },
       {
-        title: 'Meal Prep Planner',
+        title: 'Weekly Meal Prep Planner',
         type: 'regular',
-        content: `<h2>🥗 Weekly Meal Prep Planner</h2>
-<p><strong>Week of:</strong> [Date]</p>
+        content: `<h2>Weekly Meal Prep Planner</h2>
+<p><strong>Week of:</strong> February 10, 2025</p>
 <hr/>
-<h3>📆 Meal Plan</h3>
+<h3>Meal Plan</h3>
 <table><thead><tr><th>Day</th><th>Breakfast</th><th>Lunch</th><th>Dinner</th><th>Snacks</th></tr></thead><tbody>
-<tr><td><strong>Mon</strong></td><td>Oatmeal</td><td>Chicken salad</td><td>Pasta</td><td>Fruits</td></tr>
-<tr><td><strong>Tue</strong></td><td>Smoothie</td><td>Wrap</td><td>Stir fry</td><td>Nuts</td></tr>
-<tr><td><strong>Wed</strong></td><td>Eggs</td><td>Soup</td><td>Grilled fish</td><td>Yogurt</td></tr>
-<tr><td><strong>Thu</strong></td><td>Pancakes</td><td>Bowl</td><td>Tacos</td><td>Veggies</td></tr>
-<tr><td><strong>Fri</strong></td><td>Toast</td><td>Leftovers</td><td>Pizza night</td><td>Popcorn</td></tr>
+<tr><td><strong>Mon</strong></td><td>Oatmeal with berries</td><td>Grilled chicken salad</td><td>Garlic butter pasta</td><td>Apple slices with almond butter</td></tr>
+<tr><td><strong>Tue</strong></td><td>Green smoothie</td><td>Turkey avocado wrap</td><td>Teriyaki stir fry</td><td>Mixed nuts</td></tr>
+<tr><td><strong>Wed</strong></td><td>Scrambled eggs with toast</td><td>Lentil soup</td><td>Grilled salmon with vegetables</td><td>Greek yogurt</td></tr>
+<tr><td><strong>Thu</strong></td><td>Banana pancakes</td><td>Quinoa Buddha bowl</td><td>Chicken tacos</td><td>Carrot sticks with hummus</td></tr>
+<tr><td><strong>Fri</strong></td><td>Avocado toast</td><td>Leftover tacos</td><td>Homemade pizza</td><td>Popcorn</td></tr>
 </tbody></table>
-<h3>🛒 Shopping List</h3>
-<table><thead><tr><th>Category</th><th>Items</th><th>✓</th></tr></thead><tbody>
-<tr><td>Produce</td><td>Spinach, tomatoes, onions, garlic</td><td>☐</td></tr>
-<tr><td>Protein</td><td>Chicken breast, eggs, fish</td><td>☐</td></tr>
-<tr><td>Dairy</td><td>Milk, yogurt, cheese</td><td>☐</td></tr>
-<tr><td>Pantry</td><td>Rice, pasta, olive oil, spices</td><td>☐</td></tr>
+<h3>Shopping List</h3>
+<table><thead><tr><th>Category</th><th>Items</th><th>Got It</th></tr></thead><tbody>
+<tr><td>Produce</td><td>Spinach, tomatoes, onions, garlic, avocados, berries, bananas</td><td></td></tr>
+<tr><td>Protein</td><td>Chicken breast, eggs, salmon fillets, ground turkey, lentils</td><td></td></tr>
+<tr><td>Dairy</td><td>Milk, Greek yogurt, mozzarella, Parmesan</td><td></td></tr>
+<tr><td>Pantry</td><td>Rice, pasta, olive oil, soy sauce, quinoa, spices</td><td></td></tr>
 </tbody></table>`,
       },
     ],
@@ -320,139 +320,138 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
       {
         title: 'Trip Planner',
         type: 'regular',
-        content: `<h2>✈️ Trip Planner</h2>
-<p><strong>Destination:</strong> [City, Country]</p>
-<p><strong>Dates:</strong> [Start] → [End] | <strong>Budget:</strong> $[Amount]</p>
+        content: `<h2>Trip Planner</h2>
+<p><strong>Destination:</strong> Kyoto, Japan</p>
+<p><strong>Dates:</strong> April 5 - April 12, 2025 | <strong>Budget:</strong> $3,500</p>
 <hr/>
-<h3>🏨 Accommodation</h3>
+<h3>Accommodation</h3>
 <table><thead><tr><th>Dates</th><th>Hotel/Airbnb</th><th>Address</th><th>Confirmation #</th><th>Cost</th></tr></thead><tbody>
-<tr><td>[Date range]</td><td>[Name]</td><td>[Address]</td><td>[#]</td><td>$[Cost]</td></tr>
+<tr><td>Apr 5-9</td><td>Sakura Ryokan</td><td>123 Gion District, Kyoto</td><td>BK-449821</td><td>$720</td></tr>
+<tr><td>Apr 9-12</td><td>Hotel Granvia Kyoto</td><td>Karasuma-dori, Shiokoji</td><td>HG-331067</td><td>$540</td></tr>
 </tbody></table>
-<h3>🚗 Transportation</h3>
+<h3>Transportation</h3>
 <table><thead><tr><th>Type</th><th>Details</th><th>Time</th><th>Booking Ref</th></tr></thead><tbody>
-<tr><td>✈️ Flight</td><td>[Airline] [Flight #]</td><td>[Time]</td><td>[Ref]</td></tr>
-<tr><td>🚗 Car Rental</td><td>[Company]</td><td>[Pickup time]</td><td>[Ref]</td></tr>
+<tr><td>Flight</td><td>JAL 402 - SFO to KIX</td><td>Apr 5, 11:30 AM</td><td>JAL-88201</td></tr>
+<tr><td>Train</td><td>JR Pass - 7 Day</td><td>Apr 5 onwards</td><td>JRP-55419</td></tr>
 </tbody></table>
-<h3>📍 Itinerary</h3>
+<h3>Itinerary</h3>
 <table><thead><tr><th>Day</th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead><tbody>
-<tr><td>Day 1</td><td>Arrival, check-in</td><td>City tour</td><td>Welcome dinner</td></tr>
-<tr><td>Day 2</td><td>Museum visit</td><td>Local market</td><td>Beach sunset</td></tr>
-<tr><td>Day 3</td><td>Day trip</td><td>Shopping</td><td>Local cuisine</td></tr>
+<tr><td>Day 1</td><td>Arrival, check-in at ryokan</td><td>Fushimi Inari Shrine</td><td>Pontocho Alley dinner</td></tr>
+<tr><td>Day 2</td><td>Arashiyama Bamboo Grove</td><td>Monkey Park and Togetsukyo Bridge</td><td>Kaiseki dinner</td></tr>
+<tr><td>Day 3</td><td>Kinkaku-ji Golden Pavilion</td><td>Nishiki Market food tour</td><td>Gion geisha district walk</td></tr>
 </tbody></table>
-<h3>📞 Important Contacts</h3>
-<ul><li>Emergency: [Number]</li><li>Hotel: [Number]</li><li>Embassy: [Number]</li></ul>`,
+<h3>Important Contacts</h3>
+<ul><li>Emergency: 110 (Police) / 119 (Ambulance)</li><li>Hotel: +81-75-344-8888</li><li>US Embassy Tokyo: +81-3-3224-5000</li></ul>`,
       },
       {
         title: 'Packing Checklist',
         type: 'regular',
-        content: `<h2>🧳 Packing Checklist</h2>
-<p><strong>Trip:</strong> [Destination] | <strong>Duration:</strong> [X] days | <strong>Weather:</strong> [Expected conditions]</p>
+        content: `<h2>Packing Checklist</h2>
+<p><strong>Trip:</strong> Kyoto, Japan | <strong>Duration:</strong> 7 days | <strong>Weather:</strong> Mild spring, 12-20C with occasional rain</p>
 <hr/>
-<h3>👔 Clothing</h3>
-<table><thead><tr><th>Item</th><th>Qty</th><th>Packed ✓</th></tr></thead><tbody>
-<tr><td>T-shirts</td><td>5</td><td>☐</td></tr>
-<tr><td>Pants/shorts</td><td>3</td><td>☐</td></tr>
-<tr><td>Underwear</td><td>7</td><td>☐</td></tr>
-<tr><td>Socks</td><td>5</td><td>☐</td></tr>
-<tr><td>Jacket</td><td>1</td><td>☐</td></tr>
-<tr><td>Sleepwear</td><td>2</td><td>☐</td></tr>
+<h3>Clothing</h3>
+<table><thead><tr><th>Item</th><th>Qty</th><th>Packed</th></tr></thead><tbody>
+<tr><td>T-shirts</td><td>5</td><td></td></tr>
+<tr><td>Pants/shorts</td><td>3</td><td></td></tr>
+<tr><td>Underwear</td><td>7</td><td></td></tr>
+<tr><td>Socks</td><td>5</td><td></td></tr>
+<tr><td>Light rain jacket</td><td>1</td><td></td></tr>
+<tr><td>Sleepwear</td><td>2</td><td></td></tr>
 </tbody></table>
-<h3>🧴 Toiletries</h3>
-<table><thead><tr><th>Item</th><th>Packed ✓</th></tr></thead><tbody>
-<tr><td>Toothbrush & toothpaste</td><td>☐</td></tr>
-<tr><td>Shampoo & conditioner</td><td>☐</td></tr>
-<tr><td>Sunscreen</td><td>☐</td></tr>
-<tr><td>Deodorant</td><td>☐</td></tr>
-<tr><td>Medications</td><td>☐</td></tr>
+<h3>Toiletries</h3>
+<table><thead><tr><th>Item</th><th>Packed</th></tr></thead><tbody>
+<tr><td>Toothbrush and toothpaste</td><td></td></tr>
+<tr><td>Shampoo and conditioner</td><td></td></tr>
+<tr><td>Sunscreen SPF 50</td><td></td></tr>
+<tr><td>Deodorant</td><td></td></tr>
+<tr><td>Allergy medication</td><td></td></tr>
 </tbody></table>
-<h3>📱 Electronics</h3>
-<table><thead><tr><th>Item</th><th>Packed ✓</th></tr></thead><tbody>
-<tr><td>Phone & charger</td><td>☐</td></tr>
-<tr><td>Power bank</td><td>☐</td></tr>
-<tr><td>Camera</td><td>☐</td></tr>
-<tr><td>Travel adapter</td><td>☐</td></tr>
+<h3>Electronics</h3>
+<table><thead><tr><th>Item</th><th>Packed</th></tr></thead><tbody>
+<tr><td>Phone and charger</td><td></td></tr>
+<tr><td>Power bank</td><td></td></tr>
+<tr><td>Camera with extra SD card</td><td></td></tr>
+<tr><td>Japan-compatible travel adapter</td><td></td></tr>
 </tbody></table>
-<h3>📄 Documents</h3>
-<table><thead><tr><th>Item</th><th>Packed ✓</th></tr></thead><tbody>
-<tr><td>Passport / ID</td><td>☐</td></tr>
-<tr><td>Boarding passes</td><td>☐</td></tr>
-<tr><td>Travel insurance</td><td>☐</td></tr>
-<tr><td>Hotel confirmations</td><td>☐</td></tr>
+<h3>Documents</h3>
+<table><thead><tr><th>Item</th><th>Packed</th></tr></thead><tbody>
+<tr><td>Passport (valid through Oct 2027)</td><td></td></tr>
+<tr><td>Boarding passes (printed)</td><td></td></tr>
+<tr><td>Travel insurance card</td><td></td></tr>
+<tr><td>Hotel confirmation printouts</td><td></td></tr>
 </tbody></table>`,
       },
       {
         title: 'Daily Travel Journal',
         type: 'regular',
-        content: `<h2>📔 Travel Journal — Day [#]</h2>
-<p><strong>Date:</strong> [Date] | <strong>Location:</strong> [City, Country]</p>
-<p><strong>Weather:</strong> [☀️/🌧️/⛅] | <strong>Mood:</strong> [😊/🤩/😌]</p>
+        content: `<h2>Travel Journal — Day 1</h2>
+<p><strong>Date:</strong> April 5, 2025 | <strong>Location:</strong> Kyoto, Japan</p>
+<p><strong>Weather:</strong> Clear skies, 18C | <strong>Mood:</strong> Excited</p>
 <hr/>
-<h3>🌅 Morning</h3>
-<p>[What did you do? Where did you go? How did it feel?]</p>
-<h3>☀️ Afternoon</h3>
-<p>[Activities, sightseeing, discoveries...]</p>
-<h3>🌙 Evening</h3>
-<p>[Dinner, nightlife, relaxation...]</p>
-<h3>🍽️ Food Highlights</h3>
+<h3>Morning</h3>
+<p>Landed at Kansai International Airport after a smooth 11-hour flight. Picked up the JR Pass and took the Haruka Express to Kyoto Station. The countryside views were beautiful — endless rice paddies and distant mountains.</p>
+<h3>Afternoon</h3>
+<p>Checked into the ryokan in Gion. The tatami room is stunning. Walked to Fushimi Inari Shrine and hiked halfway up the mountain through thousands of vermillion torii gates. The higher you go, the fewer tourists.</p>
+<h3>Evening</h3>
+<p>Dinner at a small izakaya on Pontocho Alley. Had yakitori, edamame, and the best miso soup I've ever tasted. Walked along the Kamo River at sunset — the reflections on the water were magical.</p>
+<h3>Food Highlights</h3>
 <table><thead><tr><th>Meal</th><th>Restaurant</th><th>Dish</th><th>Rating</th></tr></thead><tbody>
-<tr><td>Breakfast</td><td>[Name]</td><td>[Dish]</td><td>⭐⭐⭐⭐</td></tr>
-<tr><td>Lunch</td><td>[Name]</td><td>[Dish]</td><td>⭐⭐⭐</td></tr>
-<tr><td>Dinner</td><td>[Name]</td><td>[Dish]</td><td>⭐⭐⭐⭐⭐</td></tr>
+<tr><td>Breakfast</td><td>Airport lounge</td><td>Onigiri and green tea</td><td>Good</td></tr>
+<tr><td>Lunch</td><td>Station bento</td><td>Salmon bento box</td><td>Very Good</td></tr>
+<tr><td>Dinner</td><td>Yakitori Ippon</td><td>Assorted yakitori platter</td><td>Excellent</td></tr>
 </tbody></table>
-<h3>📸 Photo Moments</h3>
-<p>[Describe your favorite photo moments or add images later]</p>
-<h3>💡 Reflections</h3>
-<p>[What surprised you today? What would you do differently?]</p>`,
+<h3>Reflections</h3>
+<p>The pace of life here feels intentionally slower. Everything from the train announcements to the way food is presented feels considered and deliberate. Already dreading having to leave.</p>`,
       },
     ],
   },
   {
     id: 'health-wellness',
-    name: 'Health & Wellness',
+    name: 'Health and Wellness',
     icon: 'Heart',
-    description: 'Workout log, wellness tracker, and gratitude journal for a balanced life',
+    description: 'Workout log, wellness tracker, and daily check-in for a balanced life',
     category: 'Health',
     folderColor: '#ef4444',
     notes: [
       {
         title: 'Workout Log',
         type: 'regular',
-        content: `<h2>💪 Workout Log</h2>
-<p><strong>Date:</strong> [Date] | <strong>Duration:</strong> [Time] | <strong>Type:</strong> [Strength/Cardio/HIIT]</p>
+        content: `<h2>Workout Log</h2>
+<p><strong>Date:</strong> February 8, 2025 | <strong>Duration:</strong> 55 minutes | <strong>Type:</strong> Upper Body Strength</p>
 <hr/>
-<h3>🏋️ Exercises</h3>
+<h3>Exercises</h3>
 <table><thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Weight</th><th>Notes</th></tr></thead><tbody>
-<tr><td>Bench Press</td><td>4</td><td>10</td><td>60kg</td><td>Good form</td></tr>
-<tr><td>Squats</td><td>4</td><td>12</td><td>80kg</td><td>Increase next time</td></tr>
-<tr><td>Deadlift</td><td>3</td><td>8</td><td>100kg</td><td>PR!</td></tr>
-<tr><td>Pull-ups</td><td>3</td><td>10</td><td>BW</td><td></td></tr>
-<tr><td>Plank</td><td>3</td><td>60s</td><td>-</td><td>Hold steady</td></tr>
+<tr><td>Bench Press</td><td>4</td><td>10</td><td>60kg</td><td>Good form, controlled tempo</td></tr>
+<tr><td>Barbell Squats</td><td>4</td><td>12</td><td>80kg</td><td>Increase to 85kg next session</td></tr>
+<tr><td>Deadlift</td><td>3</td><td>8</td><td>100kg</td><td>New personal record</td></tr>
+<tr><td>Pull-ups</td><td>3</td><td>10</td><td>Bodyweight</td><td>Strict form, no kipping</td></tr>
+<tr><td>Plank</td><td>3</td><td>60s</td><td>-</td><td>Held steady without dropping</td></tr>
 </tbody></table>
-<h3>📊 Session Summary</h3>
-<ul><li><strong>Energy Level:</strong> ⚡⚡⚡⚡ (4/5)</li><li><strong>Difficulty:</strong> 🔥🔥🔥 (3/5)</li><li><strong>Satisfaction:</strong> ⭐⭐⭐⭐⭐ (5/5)</li></ul>
-<h3>📝 Notes</h3>
-<p>[How did the workout feel? Any adjustments for next time?]</p>`,
+<h3>Session Summary</h3>
+<ul><li><strong>Energy Level:</strong> 4/5</li><li><strong>Difficulty:</strong> 3/5</li><li><strong>Satisfaction:</strong> 5/5</li></ul>
+<h3>Notes</h3>
+<p>Felt strong today after a full night of sleep. The deadlift PR was a nice surprise. Need to focus on shoulder mobility before next push day.</p>`,
       },
       {
         title: 'Daily Wellness Tracker',
         type: 'regular',
-        content: `<h2>🌿 Daily Wellness Tracker</h2>
-<p><strong>Date:</strong> [Date]</p>
+        content: `<h2>Daily Wellness Tracker</h2>
+<p><strong>Date:</strong> February 8, 2025</p>
 <hr/>
-<h3>😊 Mood Check</h3>
-<p>Morning: [😊/😐/😢] | Afternoon: [😊/😐/😢] | Evening: [😊/😐/😢]</p>
-<h3>📊 Daily Metrics</h3>
+<h3>Mood Check</h3>
+<p>Morning: Energized | Afternoon: Focused | Evening: Relaxed</p>
+<h3>Daily Metrics</h3>
 <table><thead><tr><th>Metric</th><th>Goal</th><th>Actual</th><th>Status</th></tr></thead><tbody>
-<tr><td>💧 Water</td><td>8 glasses</td><td>[X]</td><td>[✅/❌]</td></tr>
-<tr><td>😴 Sleep</td><td>8 hours</td><td>[X]</td><td>[✅/❌]</td></tr>
-<tr><td>🚶 Steps</td><td>10,000</td><td>[X]</td><td>[✅/❌]</td></tr>
-<tr><td>🧘 Meditation</td><td>10 min</td><td>[X]</td><td>[✅/❌]</td></tr>
-<tr><td>📖 Reading</td><td>30 min</td><td>[X]</td><td>[✅/❌]</td></tr>
+<tr><td>Water</td><td>8 glasses</td><td>7 glasses</td><td>Almost</td></tr>
+<tr><td>Sleep</td><td>8 hours</td><td>7.5 hours</td><td>Close</td></tr>
+<tr><td>Steps</td><td>10,000</td><td>11,240</td><td>Done</td></tr>
+<tr><td>Meditation</td><td>10 min</td><td>15 min</td><td>Done</td></tr>
+<tr><td>Reading</td><td>30 min</td><td>20 min</td><td>Partial</td></tr>
 </tbody></table>
-<h3>🙏 Gratitude</h3>
-<ol><li>[Something you're grateful for today]</li><li>[Something you're grateful for today]</li><li>[Something you're grateful for today]</li></ol>
-<h3>✍️ Journal</h3>
-<p>[How was your day? Any wins? Any challenges?]</p>`,
+<h3>Gratitude</h3>
+<ol><li>A productive morning with no interruptions</li><li>A good conversation with an old friend over lunch</li><li>The warm sunshine during my afternoon walk</li></ol>
+<h3>Journal</h3>
+<p>Today was steady and productive. Managed to finish the presentation ahead of schedule. Skipped the last glass of water — need to keep a bottle at my desk as a reminder. Overall a solid day.</p>`,
       },
     ],
   },
@@ -467,70 +466,70 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
       {
         title: 'Story Outline',
         type: 'regular',
-        content: `<h2>📖 Story Outline</h2>
-<p><strong>Title:</strong> [Working Title] | <strong>Genre:</strong> [Genre] | <strong>Word Count Goal:</strong> [Target]</p>
+        content: `<h2>Story Outline</h2>
+<p><strong>Title:</strong> The Last Cartographer | <strong>Genre:</strong> Science Fiction | <strong>Word Count Goal:</strong> 80,000</p>
 <hr/>
-<h3>🎭 Premise</h3>
-<p>[One-sentence summary of your story: A [character] must [goal] before [stakes]]</p>
-<h3>📐 Three-Act Structure</h3>
+<h3>Premise</h3>
+<p>A reclusive mapmaker discovers that the uncharted territories on her grandfather's ancient maps correspond to real places that are vanishing from reality, and she must complete his final map before the world unravels.</p>
+<h3>Three-Act Structure</h3>
 <table><thead><tr><th>Act</th><th>Section</th><th>Events</th></tr></thead><tbody>
-<tr><td rowspan="3"><strong>Act 1</strong><br/>Setup</td><td>Opening</td><td>[How the story begins, introducing the world]</td></tr>
-<tr><td>Inciting Incident</td><td>[What disrupts the character's normal life]</td></tr>
-<tr><td>First Plot Point</td><td>[Character commits to the journey]</td></tr>
-<tr><td rowspan="3"><strong>Act 2</strong><br/>Confrontation</td><td>Rising Action</td><td>[Challenges and obstacles]</td></tr>
-<tr><td>Midpoint</td><td>[Major revelation or shift]</td></tr>
-<tr><td>Crisis</td><td>[Darkest moment, all seems lost]</td></tr>
-<tr><td rowspan="2"><strong>Act 3</strong><br/>Resolution</td><td>Climax</td><td>[Final confrontation]</td></tr>
-<tr><td>Resolution</td><td>[How things settle, new normal]</td></tr>
+<tr><td rowspan="3"><strong>Act 1</strong><br/>Setup</td><td>Opening</td><td>Elena inherits her grandfather's map shop in a coastal town. She finds an unfinished map hidden in the floorboards.</td></tr>
+<tr><td>Inciting Incident</td><td>A town from the map disappears from all records overnight. Elena is the only one who remembers it.</td></tr>
+<tr><td>First Plot Point</td><td>She meets Kai, a historian who has been tracking similar disappearances. They decide to follow the map's trail.</td></tr>
+<tr><td rowspan="3"><strong>Act 2</strong><br/>Confrontation</td><td>Rising Action</td><td>Each location they visit reveals a piece of the puzzle. The map is a key to stabilizing a fracturing dimension.</td></tr>
+<tr><td>Midpoint</td><td>Elena discovers she has the same gift as her grandfather — she can see the fractures in reality.</td></tr>
+<tr><td>Crisis</td><td>Kai is erased from existence. Elena must continue alone with the map half-complete.</td></tr>
+<tr><td rowspan="2"><strong>Act 3</strong><br/>Resolution</td><td>Climax</td><td>Elena reaches the final location and must choose: complete the map and restore everything, or keep the new reality where she finally belongs.</td></tr>
+<tr><td>Resolution</td><td>She completes the map. The world resets. Kai returns, but Elena's memory of the journey fades like a dream.</td></tr>
 </tbody></table>
-<h3>🎨 Themes</h3>
-<ul><li>[Primary theme]</li><li>[Secondary theme]</li></ul>`,
+<h3>Themes</h3>
+<ul><li>Memory and identity — what makes us who we are</li><li>The cost of legacy — carrying the burdens of those who came before</li></ul>`,
       },
       {
         title: 'Character Profile Sheet',
         type: 'regular',
-        content: `<h2>👤 Character Profile</h2>
+        content: `<h2>Character Profile</h2>
 <hr/>
 <h3>Basic Info</h3>
 <table><thead><tr><th>Attribute</th><th>Details</th></tr></thead><tbody>
-<tr><td><strong>Full Name</strong></td><td>[Character name]</td></tr>
-<tr><td><strong>Age</strong></td><td>[Age]</td></tr>
-<tr><td><strong>Occupation</strong></td><td>[Job/role]</td></tr>
-<tr><td><strong>Appearance</strong></td><td>[Physical description]</td></tr>
-<tr><td><strong>Personality</strong></td><td>[Key traits]</td></tr>
+<tr><td><strong>Full Name</strong></td><td>Elena Vasquez-Moore</td></tr>
+<tr><td><strong>Age</strong></td><td>34</td></tr>
+<tr><td><strong>Occupation</strong></td><td>Freelance cartographer and antique map restorer</td></tr>
+<tr><td><strong>Appearance</strong></td><td>Dark curly hair, olive skin, always wears her grandfather's compass pendant</td></tr>
+<tr><td><strong>Personality</strong></td><td>Meticulous, quietly stubborn, deeply curious but socially guarded</td></tr>
 </tbody></table>
-<h3>🧠 Psychology</h3>
+<h3>Psychology</h3>
 <table><thead><tr><th>Aspect</th><th>Details</th></tr></thead><tbody>
-<tr><td><strong>Greatest Fear</strong></td><td>[What terrifies them]</td></tr>
-<tr><td><strong>Deepest Desire</strong></td><td>[What they truly want]</td></tr>
-<tr><td><strong>Fatal Flaw</strong></td><td>[Their weakness]</td></tr>
-<tr><td><strong>Strength</strong></td><td>[What makes them special]</td></tr>
-<tr><td><strong>Secret</strong></td><td>[What they hide from others]</td></tr>
+<tr><td><strong>Greatest Fear</strong></td><td>Being forgotten — that her work and existence will leave no mark</td></tr>
+<tr><td><strong>Deepest Desire</strong></td><td>To understand why her grandfather devoted his life to maps no one else could read</td></tr>
+<tr><td><strong>Fatal Flaw</strong></td><td>She refuses to ask for help, believing she must carry every burden alone</td></tr>
+<tr><td><strong>Strength</strong></td><td>Extraordinary spatial memory — she can recall any place she's visited in perfect detail</td></tr>
+<tr><td><strong>Secret</strong></td><td>She has been seeing the "fractures" since childhood but told no one, fearing she was losing her mind</td></tr>
 </tbody></table>
-<h3>📖 Backstory</h3>
-<p>[Brief history that shaped who they are today]</p>
-<h3>🔄 Character Arc</h3>
-<p><strong>Starts as:</strong> [Who they are at the beginning]</p>
-<p><strong>Ends as:</strong> [Who they become by the end]</p>`,
+<h3>Backstory</h3>
+<p>Raised by her grandfather after her parents died in a research expedition. He taught her cartography as a way to understand the world, but she always sensed he was mapping something beyond geography. When he died, he left only one instruction: "Finish the map."</p>
+<h3>Character Arc</h3>
+<p><strong>Starts as:</strong> A solitary perfectionist who trusts maps more than people</p>
+<p><strong>Ends as:</strong> Someone who understands that the most important maps are the connections between people, not places</p>`,
       },
       {
-        title: 'Brainstorm & Ideas',
+        title: 'Brainstorm and Ideas',
         type: 'regular',
-        content: `<h2>💡 Brainstorm Session</h2>
-<p><strong>Topic:</strong> [What are you brainstorming?] | <strong>Date:</strong> [Date]</p>
+        content: `<h2>Brainstorm Session</h2>
+<p><strong>Topic:</strong> Mobile app for local artisan marketplace | <strong>Date:</strong> Feb 8, 2025</p>
 <hr/>
-<h3>🌊 Brain Dump</h3>
-<p>[Write everything that comes to mind without filtering. Quantity over quality!]</p>
-<h3>⭐ Top Ideas</h3>
+<h3>Brain Dump</h3>
+<p>What if local artisans could list products with AR previews? Buyers see how a handmade vase looks on their shelf before ordering. Include a "maker story" video for each seller. Subscription box model for curated monthly artisan goods. Partner with local coffee shops as pickup points. Seasonal collections tied to local festivals.</p>
+<h3>Top Ideas</h3>
 <table><thead><tr><th>#</th><th>Idea</th><th>Potential</th><th>Effort</th></tr></thead><tbody>
-<tr><td>1</td><td>[Best idea]</td><td>🔥🔥🔥</td><td>Low</td></tr>
-<tr><td>2</td><td>[Second idea]</td><td>🔥🔥</td><td>Medium</td></tr>
-<tr><td>3</td><td>[Third idea]</td><td>🔥🔥🔥</td><td>High</td></tr>
+<tr><td>1</td><td>AR product previews in your space</td><td>Very High</td><td>High</td></tr>
+<tr><td>2</td><td>Monthly curated artisan subscription box</td><td>High</td><td>Medium</td></tr>
+<tr><td>3</td><td>Maker story video profiles</td><td>High</td><td>Low</td></tr>
 </tbody></table>
-<h3>🔗 Connections & Patterns</h3>
-<p>[Do any of these ideas connect? Can they be combined?]</p>
-<h3>🚀 Next Steps</h3>
-<ol><li>[Action to explore idea #1]</li><li>[Action to validate idea #2]</li><li>[Research needed for idea #3]</li></ol>`,
+<h3>Connections and Patterns</h3>
+<p>The AR preview and maker stories both serve the same goal: building trust and emotional connection between buyer and artisan. The subscription box could feature the month's top-rated makers, creating a virtuous cycle.</p>
+<h3>Next Steps</h3>
+<ol><li>Research AR SDK options for React Native (ARKit, ARCore)</li><li>Survey 20 local artisans on interest and pricing expectations</li><li>Mock up the subscription box landing page for user testing</li></ol>`,
       },
     ],
   },
@@ -538,96 +537,96 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
     id: 'finance-toolkit',
     name: 'Finance Toolkit',
     icon: 'Receipt',
-    description: 'Budget tracker, invoice template, and expense report for personal & business finance',
+    description: 'Budget tracker, invoice template, and expense report for personal and business finance',
     category: 'Finance',
     folderColor: '#10b981',
     notes: [
       {
         title: 'Monthly Budget Tracker',
         type: 'regular',
-        content: `<h2>💰 Monthly Budget Tracker</h2>
-<p><strong>Month:</strong> [Month Year] | <strong>Total Budget:</strong> $[Amount]</p>
+        content: `<h2>Monthly Budget Tracker</h2>
+<p><strong>Month:</strong> February 2025 | <strong>Total Budget:</strong> $5,200</p>
 <hr/>
-<h3>📊 Income</h3>
+<h3>Income</h3>
 <table><thead><tr><th>Source</th><th>Expected</th><th>Actual</th><th>Difference</th></tr></thead><tbody>
-<tr><td>Salary</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>Freelance</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>Other</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td><strong>Total</strong></td><td><strong>$[Total]</strong></td><td><strong>$[Total]</strong></td><td><strong>$0</strong></td></tr>
+<tr><td>Salary</td><td>$4,200</td><td>$4,200</td><td>$0</td></tr>
+<tr><td>Freelance</td><td>$800</td><td>$650</td><td>-$150</td></tr>
+<tr><td>Interest</td><td>$45</td><td>$48</td><td>+$3</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>$5,045</strong></td><td><strong>$4,898</strong></td><td><strong>-$147</strong></td></tr>
 </tbody></table>
-<h3>💸 Expenses</h3>
+<h3>Expenses</h3>
 <table><thead><tr><th>Category</th><th>Budgeted</th><th>Spent</th><th>Remaining</th></tr></thead><tbody>
-<tr><td>🏠 Rent/Mortgage</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>🛒 Groceries</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>🚗 Transportation</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>💡 Utilities</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>📱 Subscriptions</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>🍽️ Dining Out</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>🎉 Entertainment</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>💊 Health</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td>📦 Other</td><td>$[Amount]</td><td>$[Amount]</td><td>$0</td></tr>
-<tr><td><strong>Total</strong></td><td><strong>$[Total]</strong></td><td><strong>$[Total]</strong></td><td><strong>$0</strong></td></tr>
+<tr><td>Rent</td><td>$1,400</td><td>$1,400</td><td>$0</td></tr>
+<tr><td>Groceries</td><td>$450</td><td>$382</td><td>$68</td></tr>
+<tr><td>Transportation</td><td>$200</td><td>$175</td><td>$25</td></tr>
+<tr><td>Utilities</td><td>$180</td><td>$192</td><td>-$12</td></tr>
+<tr><td>Subscriptions</td><td>$65</td><td>$65</td><td>$0</td></tr>
+<tr><td>Dining Out</td><td>$200</td><td>$245</td><td>-$45</td></tr>
+<tr><td>Entertainment</td><td>$100</td><td>$80</td><td>$20</td></tr>
+<tr><td>Health</td><td>$120</td><td>$120</td><td>$0</td></tr>
+<tr><td>Miscellaneous</td><td>$150</td><td>$95</td><td>$55</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>$2,865</strong></td><td><strong>$2,754</strong></td><td><strong>$111</strong></td></tr>
 </tbody></table>
-<h3>🏦 Savings Goals</h3>
+<h3>Savings Goals</h3>
 <table><thead><tr><th>Goal</th><th>Target</th><th>Saved This Month</th><th>Total Progress</th></tr></thead><tbody>
-<tr><td>Emergency Fund</td><td>$[Target]</td><td>$[Amount]</td><td>$[Total] / $[Target]</td></tr>
-<tr><td>Vacation</td><td>$[Target]</td><td>$[Amount]</td><td>$[Total] / $[Target]</td></tr>
+<tr><td>Emergency Fund</td><td>$10,000</td><td>$500</td><td>$7,200 / $10,000</td></tr>
+<tr><td>Vacation</td><td>$3,000</td><td>$300</td><td>$1,800 / $3,000</td></tr>
 </tbody></table>
-<h3>📝 Notes</h3>
-<p>[Any observations, adjustments needed, or financial goals for next month]</p>`,
+<h3>Notes</h3>
+<p>Dining out exceeded budget again — consider meal prepping on Sundays. Freelance income was lower due to one project delay; payment expected in March. Overall on track with savings targets.</p>`,
       },
       {
         title: 'Invoice Template',
         type: 'regular',
-        content: `<h2>🧾 Invoice</h2>
-<p><strong>Invoice #:</strong> INV-[Number] | <strong>Date:</strong> [Date] | <strong>Due Date:</strong> [Date]</p>
+        content: `<h2>Invoice</h2>
+<p><strong>Invoice #:</strong> INV-2025-0042 | <strong>Date:</strong> February 8, 2025 | <strong>Due Date:</strong> March 8, 2025</p>
 <hr/>
 <h3>From</h3>
-<p><strong>[Your Name / Business Name]</strong><br/>[Address Line 1]<br/>[City, State ZIP]<br/>Email: [email] | Phone: [phone]</p>
+<p><strong>Thompson Design Studio</strong><br/>742 Evergreen Terrace, Suite 200<br/>Portland, OR 97201<br/>Email: billing@thompsondesign.co | Phone: (503) 555-0147</p>
 <h3>Bill To</h3>
-<p><strong>[Client Name / Company]</strong><br/>[Address Line 1]<br/>[City, State ZIP]<br/>Email: [client email]</p>
+<p><strong>Meridian Solutions Inc.</strong><br/>1200 NW Marshall St<br/>Portland, OR 97209<br/>Email: accounts@meridiansolutions.com</p>
 <hr/>
-<h3>📋 Services / Items</h3>
+<h3>Services / Items</h3>
 <table><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>
-<tr><td>[Service/Item 1]</td><td>1</td><td>$[Rate]</td><td>$[Amount]</td></tr>
-<tr><td>[Service/Item 2]</td><td>2</td><td>$[Rate]</td><td>$[Amount]</td></tr>
-<tr><td>[Service/Item 3]</td><td>1</td><td>$[Rate]</td><td>$[Amount]</td></tr>
+<tr><td>Brand identity design package</td><td>1</td><td>$2,500</td><td>$2,500</td></tr>
+<tr><td>Website UI/UX design (5 pages)</td><td>5</td><td>$400</td><td>$2,000</td></tr>
+<tr><td>Social media asset kit</td><td>1</td><td>$750</td><td>$750</td></tr>
 </tbody></table>
 <table><tbody>
-<tr><td style="text-align:right"><strong>Subtotal</strong></td><td style="width:120px">$[Subtotal]</td></tr>
-<tr><td style="text-align:right"><strong>Tax (X%)</strong></td><td>$[Tax]</td></tr>
-<tr><td style="text-align:right"><strong>Discount</strong></td><td>-$[Discount]</td></tr>
-<tr><td style="text-align:right"><strong>Total Due</strong></td><td><strong>$[Total]</strong></td></tr>
+<tr><td style="text-align:right"><strong>Subtotal</strong></td><td style="width:120px">$5,250</td></tr>
+<tr><td style="text-align:right"><strong>Tax (8%)</strong></td><td>$420</td></tr>
+<tr><td style="text-align:right"><strong>Discount (Returning Client)</strong></td><td>-$250</td></tr>
+<tr><td style="text-align:right"><strong>Total Due</strong></td><td><strong>$5,420</strong></td></tr>
 </tbody></table>
-<h3>💳 Payment Methods</h3>
-<ul><li>Bank Transfer: [Account details]</li><li>PayPal: [email]</li><li>Other: [details]</li></ul>
-<h3>📌 Terms & Notes</h3>
-<p>Payment due within [X] days. Late payments may incur a [X]% fee.<br/>[Additional notes or thank you message]</p>`,
+<h3>Payment Methods</h3>
+<ul><li>Bank Transfer: Chase Bank, Acct 4821-7739, Routing 325070760</li><li>PayPal: payments@thompsondesign.co</li><li>Venmo: @thompson-design</li></ul>
+<h3>Terms and Notes</h3>
+<p>Payment due within 30 days. Late payments may incur a 1.5% monthly fee.<br/>Thank you for your business — it's a pleasure working with the Meridian team!</p>`,
       },
       {
         title: 'Expense Report',
         type: 'regular',
-        content: `<h2>📊 Expense Report</h2>
-<p><strong>Employee:</strong> [Name] | <strong>Department:</strong> [Dept] | <strong>Period:</strong> [Date Range]</p>
+        content: `<h2>Expense Report</h2>
+<p><strong>Employee:</strong> Jordan Lee | <strong>Department:</strong> Marketing | <strong>Period:</strong> Jan 27 - Feb 7, 2025</p>
 <hr/>
-<h3>💳 Expenses</h3>
+<h3>Expenses</h3>
 <table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Payment Method</th><th>Amount</th><th>Receipt</th></tr></thead><tbody>
-<tr><td>[Date]</td><td>Travel</td><td>[Description]</td><td>Card</td><td>$[Amount]</td><td>✅</td></tr>
-<tr><td>[Date]</td><td>Meals</td><td>[Description]</td><td>Cash</td><td>$[Amount]</td><td>✅</td></tr>
-<tr><td>[Date]</td><td>Supplies</td><td>[Description]</td><td>Card</td><td>$[Amount]</td><td>☐</td></tr>
-<tr><td>[Date]</td><td>Software</td><td>[Description]</td><td>Card</td><td>$[Amount]</td><td>✅</td></tr>
-<tr><td>[Date]</td><td>Other</td><td>[Description]</td><td>[Method]</td><td>$[Amount]</td><td>☐</td></tr>
+<tr><td>Jan 28</td><td>Travel</td><td>Round-trip train to NYC for client meeting</td><td>Corporate Card</td><td>$186</td><td>Yes</td></tr>
+<tr><td>Jan 28</td><td>Meals</td><td>Client lunch at Gramercy Tavern</td><td>Corporate Card</td><td>$124</td><td>Yes</td></tr>
+<tr><td>Feb 1</td><td>Supplies</td><td>Presentation easel and markers</td><td>Personal Card</td><td>$47</td><td>Yes</td></tr>
+<tr><td>Feb 3</td><td>Software</td><td>Figma annual team license renewal</td><td>Corporate Card</td><td>$540</td><td>Yes</td></tr>
+<tr><td>Feb 5</td><td>Meals</td><td>Team lunch for project kickoff</td><td>Personal Card</td><td>$89</td><td>No</td></tr>
 </tbody></table>
-<h3>📈 Summary by Category</h3>
+<h3>Summary by Category</h3>
 <table><thead><tr><th>Category</th><th>Total</th></tr></thead><tbody>
-<tr><td>Travel</td><td>$[Amount]</td></tr>
-<tr><td>Meals</td><td>$[Amount]</td></tr>
-<tr><td>Supplies</td><td>$[Amount]</td></tr>
-<tr><td>Software</td><td>$[Amount]</td></tr>
-<tr><td><strong>Grand Total</strong></td><td><strong>$[Total]</strong></td></tr>
+<tr><td>Travel</td><td>$186</td></tr>
+<tr><td>Meals</td><td>$213</td></tr>
+<tr><td>Supplies</td><td>$47</td></tr>
+<tr><td>Software</td><td>$540</td></tr>
+<tr><td><strong>Grand Total</strong></td><td><strong>$986</strong></td></tr>
 </tbody></table>
-<h3>✍️ Approval</h3>
-<p>Submitted by: [Name] — Date: [Date]<br/>Approved by: _________________ — Date: _________</p>`,
+<h3>Approval</h3>
+<p>Submitted by: Jordan Lee — Date: Feb 7, 2025<br/>Approved by: _________________ — Date: _________</p>`,
       },
     ],
   },
@@ -642,76 +641,76 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
       {
         title: 'Morning Pages',
         type: 'regular',
-        content: `<h2>🌅 Morning Pages</h2>
-<p><strong>Date:</strong> [Date] | <strong>Woke up at:</strong> [Time] | <strong>Sleep quality:</strong> [⭐⭐⭐⭐⭐]</p>
+        content: `<h2>Morning Pages</h2>
+<p><strong>Date:</strong> February 8, 2025 | <strong>Woke up at:</strong> 6:45 AM | <strong>Sleep quality:</strong> Very good</p>
 <hr/>
-<h3>🧘 Morning Check-In</h3>
+<h3>Morning Check-In</h3>
 <table><thead><tr><th>Question</th><th>Answer</th></tr></thead><tbody>
-<tr><td>How do I feel right now?</td><td>[Physically, mentally, emotionally]</td></tr>
-<tr><td>What did I dream about?</td><td>[Dream notes or "none recalled"]</td></tr>
-<tr><td>What am I looking forward to?</td><td>[Today's highlight]</td></tr>
-<tr><td>What might be challenging?</td><td>[Anticipated challenge]</td></tr>
+<tr><td>How do I feel right now?</td><td>Physically rested, mentally clear, slightly anxious about the presentation today</td></tr>
+<tr><td>What did I dream about?</td><td>Vivid dream about traveling through a forest with an old school friend</td></tr>
+<tr><td>What am I looking forward to?</td><td>Coffee with Maya after work</td></tr>
+<tr><td>What might be challenging?</td><td>Staying focused during the afternoon budget review meeting</td></tr>
 </tbody></table>
-<h3>🎯 Today's Intentions</h3>
-<ol><li><strong>Top Priority:</strong> [The ONE thing I must do today]</li><li>[Second priority]</li><li>[Third priority]</li></ol>
-<h3>✍️ Free Writing</h3>
-<p>[Stream of consciousness — write whatever comes to mind for 10 minutes without stopping or editing. Let your thoughts flow freely...]</p>
-<h3>💡 Ideas That Came Up</h3>
-<ul><li>[Capture any ideas, insights, or creative sparks from your writing]</li></ul>
-<h3>🙏 Affirmation</h3>
-<blockquote><p>"[Write a positive affirmation for today]"</p></blockquote>`,
+<h3>Today's Intentions</h3>
+<ol><li><strong>Top Priority:</strong> Finalize and rehearse the Q1 results presentation</li><li>Reply to the three pending client emails from yesterday</li><li>Go for a 20-minute walk during lunch break</li></ol>
+<h3>Free Writing</h3>
+<p>The morning light is coming through the window and it feels like the kind of day where things click into place. I've been putting off that presentation but honestly the data tells a good story. I just need to trust it and stop over-editing. Maybe that's a theme for me lately — trusting that things are good enough without endless polishing...</p>
+<h3>Ideas That Came Up</h3>
+<ul><li>Start a weekend photography project — just capturing small details around the neighborhood</li></ul>
+<h3>Affirmation</h3>
+<blockquote><p>"I am prepared, I am capable, and I trust myself to handle whatever today brings."</p></blockquote>`,
       },
       {
         title: 'Gratitude Journal',
         type: 'regular',
-        content: `<h2>🙏 Gratitude Journal</h2>
-<p><strong>Date:</strong> [Date] | <strong>Overall Mood:</strong> [😊 Great / 🙂 Good / 😐 Okay / 😢 Low]</p>
+        content: `<h2>Gratitude Journal</h2>
+<p><strong>Date:</strong> February 8, 2025 | <strong>Overall Mood:</strong> Good</p>
 <hr/>
-<h3>✨ Three Things I'm Grateful For</h3>
+<h3>Three Things I'm Grateful For</h3>
 <table><thead><tr><th>#</th><th>I'm Grateful For...</th><th>Why It Matters</th></tr></thead><tbody>
-<tr><td>1</td><td>[Something big or small]</td><td>[How it made you feel / why it's important]</td></tr>
-<tr><td>2</td><td>[A person, experience, or thing]</td><td>[The impact it had on your day]</td></tr>
-<tr><td>3</td><td>[An often overlooked blessing]</td><td>[Why you're noticing it today]</td></tr>
+<tr><td>1</td><td>A quiet morning with no meetings before 10 AM</td><td>It gave me space to think clearly and plan my day without rushing</td></tr>
+<tr><td>2</td><td>My colleague Raj who helped debug an issue I'd been stuck on</td><td>Reminded me that asking for help isn't weakness — it's collaboration</td></tr>
+<tr><td>3</td><td>The homemade soup I had for dinner</td><td>Simple, warm, and made me appreciate the comfort of home-cooked food</td></tr>
 </tbody></table>
-<h3>🌟 Today's Wins</h3>
-<ul><li><strong>Big win:</strong> [Something you accomplished or experienced]</li><li><strong>Small win:</strong> [A tiny moment of joy or progress]</li></ul>
-<h3>❤️ Acts of Kindness</h3>
-<p><strong>Kindness I received:</strong> [Someone's gesture toward you]</p>
-<p><strong>Kindness I gave:</strong> [How you helped or brightened someone's day]</p>
-<h3>📸 Moment I Want to Remember</h3>
-<p>[Describe a specific moment from today in vivid detail — sights, sounds, feelings]</p>
-<h3>🌙 Evening Reflection</h3>
-<p>If I could relive one moment from today, it would be: [Moment]</p>
-<p>Tomorrow, I'm looking forward to: [Something positive]</p>`,
+<h3>Today's Wins</h3>
+<ul><li><strong>Big win:</strong> Delivered the quarterly presentation and received positive feedback from the VP</li><li><strong>Small win:</strong> Remembered to drink water throughout the day — hit 7 glasses</li></ul>
+<h3>Acts of Kindness</h3>
+<p><strong>Kindness I received:</strong> A stranger held the elevator door when I was running late</p>
+<p><strong>Kindness I gave:</strong> Left an encouraging comment on a junior developer's first pull request</p>
+<h3>Moment I Want to Remember</h3>
+<p>Sitting in the park during lunch, watching two dogs play while their owners chatted. The sun was warm on my face and for a few minutes, nothing felt urgent.</p>
+<h3>Evening Reflection</h3>
+<p>If I could relive one moment from today, it would be: That quiet park bench at noon</p>
+<p>Tomorrow, I'm looking forward to: Saturday morning — sleeping in and making pancakes</p>`,
       },
       {
         title: 'Weekly Reflection',
         type: 'regular',
-        content: `<h2>📝 Weekly Reflection</h2>
-<p><strong>Week of:</strong> [Start Date] — [End Date]</p>
+        content: `<h2>Weekly Reflection</h2>
+<p><strong>Week of:</strong> February 3 — February 9, 2025</p>
 <hr/>
-<h3>🏆 This Week's Highlights</h3>
+<h3>This Week's Highlights</h3>
 <table><thead><tr><th>Day</th><th>Highlight</th><th>How I Felt</th></tr></thead><tbody>
-<tr><td>Monday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
-<tr><td>Tuesday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
-<tr><td>Wednesday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
-<tr><td>Thursday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
-<tr><td>Friday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
-<tr><td>Saturday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
-<tr><td>Sunday</td><td>[Best moment]</td><td>[Emoji/mood]</td></tr>
+<tr><td>Monday</td><td>Kicked off the new project with the team</td><td>Motivated</td></tr>
+<tr><td>Tuesday</td><td>Had a great gym session — new deadlift PR</td><td>Proud</td></tr>
+<tr><td>Wednesday</td><td>Resolved a tricky production bug before lunch</td><td>Relieved</td></tr>
+<tr><td>Thursday</td><td>Dinner with college friends I hadn't seen in months</td><td>Happy</td></tr>
+<tr><td>Friday</td><td>Delivered the Q1 presentation successfully</td><td>Accomplished</td></tr>
+<tr><td>Saturday</td><td>Explored a new hiking trail at Blue Ridge</td><td>Peaceful</td></tr>
+<tr><td>Sunday</td><td>Meal prepped for the week and read two chapters</td><td>Content</td></tr>
 </tbody></table>
-<h3>✅ Goals Review</h3>
+<h3>Goals Review</h3>
 <table><thead><tr><th>Goal</th><th>Progress</th><th>Status</th></tr></thead><tbody>
-<tr><td>[Goal 1]</td><td>[What I did]</td><td>[✅ Done / 🔄 In Progress / ❌ Missed]</td></tr>
-<tr><td>[Goal 2]</td><td>[What I did]</td><td>[✅ / 🔄 / ❌]</td></tr>
-<tr><td>[Goal 3]</td><td>[What I did]</td><td>[✅ / 🔄 / ❌]</td></tr>
+<tr><td>Complete Q1 presentation</td><td>Finished and delivered on Friday</td><td>Done</td></tr>
+<tr><td>Exercise 4 times</td><td>Gym Mon, Wed, Fri + hike Saturday</td><td>Done</td></tr>
+<tr><td>Read 50 pages</td><td>Read 38 pages</td><td>In Progress</td></tr>
 </tbody></table>
-<h3>💡 Lessons Learned</h3>
-<ol><li>[Key insight from this week]</li><li>[Something I'd do differently]</li><li>[A pattern I noticed about myself]</li></ol>
-<h3>🎯 Next Week's Focus</h3>
-<ul><li><strong>Priority 1:</strong> [Most important goal]</li><li><strong>Priority 2:</strong> [Secondary goal]</li><li><strong>Habit to build:</strong> [One habit to focus on]</li></ul>
-<h3>💭 One Word to Describe This Week</h3>
-<p style="font-size:1.5em;text-align:center"><strong>[Word]</strong></p>`,
+<h3>Lessons Learned</h3>
+<ol><li>Preparing presentations early removes 90% of the stress</li><li>Scheduling social time mid-week breaks up the monotony</li><li>I'm more productive when I start the day without checking email</li></ol>
+<h3>Next Week's Focus</h3>
+<ul><li><strong>Priority 1:</strong> Draft the product spec for the new dashboard feature</li><li><strong>Priority 2:</strong> Finish the remaining 12 pages of the book</li><li><strong>Habit to build:</strong> No phone for the first 30 minutes after waking</li></ul>
+<h3>One Word to Describe This Week</h3>
+<p style="font-size:1.5em;text-align:center"><strong>Momentum</strong></p>`,
       },
     ],
   },
@@ -726,115 +725,112 @@ const DEFAULT_NOTE_TEMPLATES: NoteTemplate[] = [
       {
         title: 'STAR Method Responses',
         type: 'regular',
-        content: `<h2>⭐ STAR Method Interview Responses</h2>
-<p><strong>Position:</strong> [Job Title] | <strong>Company:</strong> [Company Name]</p>
+        content: `<h2>STAR Method Response Bank</h2>
+<p>Prepare 4-5 stories that cover leadership, problem-solving, conflict, and failure. Each story can answer multiple question types.</p>
 <hr/>
-<h3>📋 How to Use STAR</h3>
-<p><strong>S</strong>ituation → <strong>T</strong>ask → <strong>A</strong>ction → <strong>R</strong>esult</p>
-<hr/>
-<h3>Story 1: [Theme — e.g., Leadership]</h3>
+<h3>Story 1: Leadership Under Pressure</h3>
 <table><thead><tr><th>Component</th><th>Your Response</th></tr></thead><tbody>
-<tr><td><strong>Situation</strong></td><td>[Set the scene. Where were you working? What was happening?]</td></tr>
-<tr><td><strong>Task</strong></td><td>[What was your responsibility? What needed to be done?]</td></tr>
-<tr><td><strong>Action</strong></td><td>[What specific steps did YOU take? Use "I" not "we"]</td></tr>
-<tr><td><strong>Result</strong></td><td>[What was the outcome? Use numbers/metrics if possible]</td></tr>
+<tr><td><strong>Situation</strong></td><td>Our lead engineer left two weeks before a major product launch at Nexus Tech. The team of six was demoralized and behind schedule.</td></tr>
+<tr><td><strong>Task</strong></td><td>As the senior developer, I stepped up to coordinate the remaining work and keep the team aligned on the launch deadline.</td></tr>
+<tr><td><strong>Action</strong></td><td>I reorganized the sprint into daily micro-goals, redistributed tasks based on individual strengths, and held brief 15-minute standups each morning. I also personally took on the most complex integration work.</td></tr>
+<tr><td><strong>Result</strong></td><td>We launched on time with zero critical bugs. Post-launch user engagement was 40% above projections, and two team members later said it was their best project experience.</td></tr>
 </tbody></table>
-<p><strong>Best for questions like:</strong> "Tell me about a time you led a team..." / "Describe a leadership challenge..."</p>
+<p><strong>Best for questions like:</strong> "Tell me about a time you led a team..." / "Describe a high-pressure situation..."</p>
 <hr/>
-<h3>Story 2: [Theme — e.g., Problem Solving]</h3>
+<h3>Story 2: Creative Problem Solving</h3>
 <table><thead><tr><th>Component</th><th>Your Response</th></tr></thead><tbody>
-<tr><td><strong>Situation</strong></td><td>[Context]</td></tr>
-<tr><td><strong>Task</strong></td><td>[Your role]</td></tr>
-<tr><td><strong>Action</strong></td><td>[Your steps]</td></tr>
-<tr><td><strong>Result</strong></td><td>[Outcome with metrics]</td></tr>
+<tr><td><strong>Situation</strong></td><td>Our API response times had degraded to 3+ seconds, causing a 15% increase in user drop-off on the checkout page.</td></tr>
+<tr><td><strong>Task</strong></td><td>I was asked to diagnose and fix the performance issue within one sprint cycle (2 weeks).</td></tr>
+<tr><td><strong>Action</strong></td><td>Profiled the database queries and discovered N+1 query patterns in three endpoints. Implemented query batching, added Redis caching for frequently accessed data, and set up performance monitoring dashboards.</td></tr>
+<tr><td><strong>Result</strong></td><td>Response times dropped from 3.2s to 180ms. Checkout completion rates improved by 22% in the following month.</td></tr>
 </tbody></table>
 <p><strong>Best for questions like:</strong> "Describe a difficult problem you solved..." / "When did you think outside the box?"</p>
 <hr/>
-<h3>Story 3: [Theme — e.g., Conflict Resolution]</h3>
+<h3>Story 3: Conflict Resolution</h3>
 <table><thead><tr><th>Component</th><th>Your Response</th></tr></thead><tbody>
-<tr><td><strong>Situation</strong></td><td>[Context]</td></tr>
-<tr><td><strong>Task</strong></td><td>[Your role]</td></tr>
-<tr><td><strong>Action</strong></td><td>[Your steps]</td></tr>
-<tr><td><strong>Result</strong></td><td>[Outcome]</td></tr>
+<tr><td><strong>Situation</strong></td><td>The design team and engineering team had a fundamental disagreement about the navigation redesign. Tensions were rising and blocking progress for two weeks.</td></tr>
+<tr><td><strong>Task</strong></td><td>As the product owner, I needed to find a resolution that satisfied both teams and unblocked the project.</td></tr>
+<tr><td><strong>Action</strong></td><td>Organized a collaborative workshop where both sides presented their rationale with data. Facilitated a compromise using A/B testing — we'd ship both approaches to 50% of users and let metrics decide.</td></tr>
+<tr><td><strong>Result</strong></td><td>The A/B test revealed a hybrid approach worked best. Both teams felt heard, and the final design outperformed both original proposals by 18% in engagement.</td></tr>
 </tbody></table>
 <p><strong>Best for questions like:</strong> "Tell me about a disagreement with a colleague..." / "How do you handle conflict?"</p>
 <hr/>
-<h3>Story 4: [Theme — e.g., Failure & Learning]</h3>
+<h3>Story 4: Failure and Learning</h3>
 <table><thead><tr><th>Component</th><th>Your Response</th></tr></thead><tbody>
-<tr><td><strong>Situation</strong></td><td>[Context]</td></tr>
-<tr><td><strong>Task</strong></td><td>[Your role]</td></tr>
-<tr><td><strong>Action</strong></td><td>[Your steps]</td></tr>
-<tr><td><strong>Result</strong></td><td>[What you learned]</td></tr>
+<tr><td><strong>Situation</strong></td><td>I championed a new feature that I was confident users wanted, but skipped proper user research to meet an aggressive timeline.</td></tr>
+<tr><td><strong>Task</strong></td><td>I was responsible for the feature strategy, design approval, and launch metrics.</td></tr>
+<tr><td><strong>Action</strong></td><td>After launch, adoption was only 3% after two weeks. I initiated a post-mortem, conducted user interviews, and discovered the feature solved a problem users had already worked around. I recommended sunsetting it and reallocating resources.</td></tr>
+<tr><td><strong>Result</strong></td><td>We saved $40K in ongoing maintenance. I established a mandatory user research phase for all new features, which became team policy and prevented similar missteps on three subsequent projects.</td></tr>
 </tbody></table>
 <p><strong>Best for questions like:</strong> "Tell me about a time you failed..." / "What's your biggest mistake?"</p>`,
       },
       {
         title: 'Company Research Notes',
         type: 'regular',
-        content: `<h2>🏢 Company Research</h2>
-<p><strong>Company:</strong> [Company Name] | <strong>Position:</strong> [Job Title] | <strong>Interview Date:</strong> [Date]</p>
+        content: `<h2>Company Research</h2>
+<p><strong>Company:</strong> Stripe | <strong>Position:</strong> Senior Product Manager | <strong>Interview Date:</strong> February 20, 2025</p>
 <hr/>
-<h3>📊 Company Overview</h3>
+<h3>Company Overview</h3>
 <table><thead><tr><th>Detail</th><th>Info</th></tr></thead><tbody>
-<tr><td>Founded</td><td>[Year]</td></tr>
-<tr><td>Headquarters</td><td>[Location]</td></tr>
-<tr><td>Industry</td><td>[Industry]</td></tr>
-<tr><td>Size</td><td>[# employees]</td></tr>
-<tr><td>Revenue</td><td>[If public]</td></tr>
-<tr><td>CEO/Founder</td><td>[Name]</td></tr>
-<tr><td>Mission</td><td>[Company mission statement]</td></tr>
+<tr><td>Founded</td><td>2010</td></tr>
+<tr><td>Headquarters</td><td>San Francisco, CA / Dublin, Ireland</td></tr>
+<tr><td>Industry</td><td>Financial Technology / Payments Infrastructure</td></tr>
+<tr><td>Size</td><td>~8,000 employees</td></tr>
+<tr><td>Valuation</td><td>$65B (as of 2024)</td></tr>
+<tr><td>Founders</td><td>Patrick and John Collison</td></tr>
+<tr><td>Mission</td><td>Increase the GDP of the internet</td></tr>
 </tbody></table>
-<h3>🎯 What They Do</h3>
-<p>[Describe their main products/services in your own words]</p>
-<h3>📰 Recent News</h3>
-<ul><li>[Recent announcement, launch, or milestone]</li><li>[Press coverage or industry mentions]</li><li>[Any challenges or pivots]</li></ul>
-<h3>🏆 Why I Want to Work Here</h3>
-<ol><li>[Genuine reason #1 — culture, mission, product]</li><li>[Genuine reason #2 — growth, technology, impact]</li><li>[Genuine reason #3 — personal connection to their work]</li></ol>
-<h3>👥 Interviewers</h3>
+<h3>What They Do</h3>
+<p>Stripe builds payment processing infrastructure for internet businesses. Their suite includes Stripe Payments, Billing, Connect (marketplace payments), Atlas (company incorporation), and Radar (fraud prevention). They serve millions of businesses from startups to Fortune 500 companies.</p>
+<h3>Recent News</h3>
+<ul><li>Launched Stripe Tax for automated global tax compliance (Q4 2024)</li><li>Expanded into embedded finance with Banking-as-a-Service products</li><li>Partnered with OpenAI to power their subscription billing</li></ul>
+<h3>Why I Want to Work Here</h3>
+<ol><li>Their developer-first philosophy aligns with how I think about product design — start with the best API, then build UI on top</li><li>Massive scale challenges — processing hundreds of billions in volume annually</li><li>Personal connection: I used Stripe for my first side project in 2018 and it shaped how I think about clean product experiences</li></ol>
+<h3>Interviewers</h3>
 <table><thead><tr><th>Name</th><th>Title</th><th>LinkedIn Notes</th></tr></thead><tbody>
-<tr><td>[Interviewer 1]</td><td>[Title]</td><td>[Background, shared interests]</td></tr>
-<tr><td>[Interviewer 2]</td><td>[Title]</td><td>[Background, shared interests]</td></tr>
+<tr><td>Sarah Aldridge</td><td>Director of Product</td><td>Previously at Google Cloud, focuses on platform products</td></tr>
+<tr><td>Marcus Chen</td><td>Staff Engineer</td><td>Core payments team, published talks on distributed systems</td></tr>
 </tbody></table>
-<h3>❓ My Questions for Them</h3>
-<ol><li>[Thoughtful question about the role]</li><li>[Question about team culture]</li><li>[Question about growth/direction]</li><li>[Question about day-to-day work]</li></ol>`,
+<h3>My Questions for Them</h3>
+<ol><li>How does the PM team balance innovation on new products vs. reliability of core payments?</li><li>What does cross-functional collaboration look like day-to-day on your team?</li><li>How is Stripe thinking about the competitive landscape with Adyen and emerging players?</li><li>What's the most impactful project your team shipped in the last year?</li></ol>`,
       },
       {
         title: 'Interview Question Bank',
         type: 'regular',
-        content: `<h2>❓ Interview Question Bank</h2>
-<p><strong>Role:</strong> [Job Title] | <strong>Company:</strong> [Company Name]</p>
+        content: `<h2>Interview Question Bank</h2>
+<p><strong>Role:</strong> Senior Product Manager | <strong>Company:</strong> Stripe</p>
 <hr/>
-<h3>🔵 Common Behavioral Questions</h3>
+<h3>Common Behavioral Questions</h3>
 <table><thead><tr><th>Question</th><th>My Key Points</th><th>STAR Story #</th></tr></thead><tbody>
-<tr><td>Tell me about yourself</td><td>[2-min pitch: past → present → future]</td><td>-</td></tr>
-<tr><td>Why do you want this role?</td><td>[Connect skills + passion + company]</td><td>-</td></tr>
-<tr><td>What's your greatest strength?</td><td>[Strength + example]</td><td>Story #[X]</td></tr>
-<tr><td>What's your biggest weakness?</td><td>[Real weakness + improvement steps]</td><td>-</td></tr>
-<tr><td>Where do you see yourself in 5 years?</td><td>[Growth aligned with company]</td><td>-</td></tr>
-<tr><td>Why are you leaving your current role?</td><td>[Positive framing — seeking growth]</td><td>-</td></tr>
+<tr><td>Tell me about yourself</td><td>5 years in product at fintech companies, led 3 major launches, passion for developer tools</td><td>-</td></tr>
+<tr><td>Why do you want this role?</td><td>Stripe's mission aligns with my belief that great infrastructure unlocks innovation</td><td>-</td></tr>
+<tr><td>What's your greatest strength?</td><td>Translating ambiguous user problems into clear, shippable product specs</td><td>Story #2</td></tr>
+<tr><td>What's your biggest weakness?</td><td>Tendency to over-scope v1 features; I've learned to ruthlessly cut scope and iterate</td><td>-</td></tr>
+<tr><td>Where do you see yourself in 5 years?</td><td>Leading a product area that shapes how businesses interact with financial infrastructure</td><td>-</td></tr>
+<tr><td>Why are you leaving your current role?</td><td>Looking for larger scale impact and a world-class engineering culture to collaborate with</td><td>-</td></tr>
 </tbody></table>
-<h3>🟡 Situational Questions</h3>
+<h3>Situational Questions</h3>
 <table><thead><tr><th>Question</th><th>My Approach</th></tr></thead><tbody>
-<tr><td>How do you handle tight deadlines?</td><td>[Prioritization strategy + example]</td></tr>
-<tr><td>Describe a time you disagreed with your manager</td><td>[Respectful approach + outcome]</td></tr>
-<tr><td>How do you handle multiple priorities?</td><td>[Framework you use]</td></tr>
-<tr><td>Tell me about a time you failed</td><td>[Failure + lesson + improvement]</td></tr>
+<tr><td>How do you handle tight deadlines?</td><td>Triage ruthlessly: what's essential for launch vs. fast-follow. Communicate tradeoffs early.</td></tr>
+<tr><td>Describe a time you disagreed with your manager</td><td>Used data to present my case, listened to their perspective, proposed a compromise (Story #3)</td></tr>
+<tr><td>How do you handle multiple priorities?</td><td>Impact vs. effort matrix, weekly priority reviews, saying no to medium-impact work</td></tr>
+<tr><td>Tell me about a time you failed</td><td>Skipped user research, feature flopped, built a research-first policy afterward (Story #4)</td></tr>
 </tbody></table>
-<h3>🟢 Role-Specific Questions</h3>
+<h3>Role-Specific Questions</h3>
 <table><thead><tr><th>Question</th><th>My Answer Notes</th></tr></thead><tbody>
-<tr><td>[Technical/role-specific Q1]</td><td>[Key points]</td></tr>
-<tr><td>[Technical/role-specific Q2]</td><td>[Key points]</td></tr>
-<tr><td>[Technical/role-specific Q3]</td><td>[Key points]</td></tr>
+<tr><td>How would you prioritize features for Stripe Billing?</td><td>Segment by customer size, analyze churn drivers, focus on reducing involuntary churn first</td></tr>
+<tr><td>Design a payment flow for a marketplace</td><td>Consider split payments, escrow, refund flows, seller onboarding KYC</td></tr>
+<tr><td>How do you measure success for a payments product?</td><td>Authorization rates, processing time, failed payment recovery rate, developer NPS</td></tr>
 </tbody></table>
-<h3>🔴 Salary & Logistics</h3>
+<h3>Salary and Logistics</h3>
 <table><thead><tr><th>Topic</th><th>My Position</th></tr></thead><tbody>
-<tr><td>Salary expectation</td><td>$[Range] based on [research source]</td></tr>
-<tr><td>Start date</td><td>[Earliest available date]</td></tr>
-<tr><td>Remote/hybrid preference</td><td>[Your preference]</td></tr>
-<tr><td>Notice period</td><td>[Current notice period]</td></tr>
+<tr><td>Salary expectation</td><td>$185K-$210K base, based on Levels.fyi data for L6 PM at Stripe</td></tr>
+<tr><td>Start date</td><td>March 15, 2025 (2 weeks notice)</td></tr>
+<tr><td>Remote/hybrid preference</td><td>Hybrid — prefer 2-3 days in office</td></tr>
+<tr><td>Notice period</td><td>2 weeks at current employer</td></tr>
 </tbody></table>
-<h3>✅ Pre-Interview Checklist</h3>
-<ul><li>☐ Researched the company thoroughly</li><li>☐ Practiced STAR stories out loud</li><li>☐ Prepared questions to ask them</li><li>☐ Tested tech setup (if virtual)</li><li>☐ Outfit ready</li><li>☐ Copies of resume printed/accessible</li><li>☐ Know the interviewer names & roles</li></ul>`,
+<h3>Pre-Interview Checklist</h3>
+<ul><li>Researched Stripe's products, mission, and recent launches</li><li>Practiced STAR stories out loud (recorded and reviewed)</li><li>Prepared 4 thoughtful questions for interviewers</li><li>Tested webcam, microphone, and internet for video call</li><li>Professional outfit selected and ready</li><li>Resume printed and accessible on tablet</li><li>Know interviewer names, titles, and backgrounds</li></ul>`,
       },
     ],
   },
