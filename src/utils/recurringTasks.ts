@@ -1,5 +1,6 @@
 import { TodoItem, RepeatType, AdvancedRepeatPattern } from '@/types/note';
 import { addDays, addWeeks, addMonths, addYears, addHours, startOfDay, getDay, setDay, getDate, setDate, differenceInDays, getHours, getMinutes, setHours, setMinutes } from 'date-fns';
+import { recordRecurringCompletion } from './recurringTaskIntelligence';
 
 export const getNextOccurrence = (
   currentDate: Date,
@@ -178,12 +179,16 @@ export const createNextRecurringTask = (completedTask: TodoItem): TodoItem | nul
     newReminderTime = new Date(nextDate.getTime() + reminderOffset);
   }
 
+  // Record completion in recurring stats
+  const updatedStats = recordRecurringCompletion(completedTask);
+
   return {
     ...completedTask,
     id: `${Date.now()}-recurring`,
     completed: false,
     dueDate: nextDate,
     reminderTime: newReminderTime,
+    recurringStats: updatedStats,
     // Reset time tracking for new occurrence
     timeTracking: completedTask.timeTracking ? {
       totalSeconds: 0,

@@ -103,6 +103,27 @@ export interface EscalationRule {
   lastTriggeredAt?: Date;
 }
 
+// Recurring task intelligence
+export interface RecurringCompletionEntry {
+  date: string; // ISO date string
+  completed: boolean;
+  skipped?: boolean;
+  deferred?: boolean;
+  deferredTo?: string; // ISO date
+}
+
+export interface RecurringStats {
+  completionHistory: RecurringCompletionEntry[];
+  currentStreak: number;
+  bestStreak: number;
+  totalCompleted: number;
+  totalSkipped: number;
+  totalDeferred: number;
+  averageCompletionHour?: number; // avg hour of day task gets done
+  lastCompletedAt?: Date;
+  suggestedTimeAdjustment?: string; // e.g. "Move to mornings - you complete 80% before noon"
+}
+
 export interface TaskAttachment {
   id: string;
   name: string;
@@ -150,6 +171,8 @@ export interface TodoItem {
   timeTracking?: TimeTracking;
   estimatedHours?: number; // Effort estimation in hours
   escalationRule?: EscalationRule; // Deadline escalation alerts
+  // Recurring task intelligence
+  recurringStats?: RecurringStats;
   // Timestamp fields
   createdAt?: Date;
   modifiedAt?: Date;
