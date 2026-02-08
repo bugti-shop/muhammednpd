@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { useHardwareBackButton } from '@/hooks/useHardwareBackButton';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { DEFAULT_TODO_NAV_ITEMS, TodoNavItem } from './TodoBottomNavigation';
-import { Home, Calendar, Settings, BarChart3, User, Dumbbell, LayoutDashboard } from 'lucide-react';
+import { Home, Calendar, Settings, BarChart3, User, Dumbbell, LayoutDashboard, ClipboardList, History, CalendarDays, CalendarRange } from 'lucide-react';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Home: <Home className="h-5 w-5" />,
@@ -23,6 +23,10 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   Settings: <Settings className="h-5 w-5" />,
   Dumbbell: <Dumbbell className="h-5 w-5" />,
   LayoutDashboard: <LayoutDashboard className="h-5 w-5" />,
+  ClipboardList: <ClipboardList className="h-5 w-5" />,
+  History: <History className="h-5 w-5" />,
+  CalendarDays: <CalendarDays className="h-5 w-5" />,
+  CalendarRange: <CalendarRange className="h-5 w-5" />,
 };
 
 const MAX_VISIBLE = 5;
