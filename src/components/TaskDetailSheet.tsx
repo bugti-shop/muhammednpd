@@ -9,6 +9,8 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { useHardwareBackButton } from '@/hooks/useHardwareBackButton';
 import { usePriorities } from '@/hooks/usePriorities';
 import { escalationTimingLabel } from '@/utils/deadlineEscalation';
+import { skipRecurringOccurrence, deferRecurringOccurrence } from '@/utils/recurringTaskIntelligence';
+import { RecurringTaskStats } from './RecurringTaskStats';
 import {
   X,
   Flag,
@@ -30,9 +32,12 @@ import {
   ExternalLink,
   Hourglass,
   AlertTriangle,
+  SkipForward,
+  CalendarClock,
+  Flame,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import { TaskInputSheet } from './TaskInputSheet';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { useToast } from '@/hooks/use-toast';
@@ -55,6 +60,7 @@ export const TaskDetailSheet = ({ isOpen, task, onClose, onUpdate, onDelete, onD
   const [isSubtaskInputOpen, setIsSubtaskInputOpen] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [showLocationReminder, setShowLocationReminder] = useState(false);
+  const [showDeferPicker, setShowDeferPicker] = useState(false);
   const [recurringType, setRecurringType] = useState<'none' | 'daily' | 'weekly' | 'monthly'>('none');
   const { toast } = useToast();
   const { getPriorityColor, getPriorityName } = usePriorities();
@@ -225,6 +231,36 @@ export const TaskDetailSheet = ({ isOpen, task, onClose, onUpdate, onDelete, onD
       title: t('tasks.location.reminderRemoved'),
       description: t('tasks.location.notificationRemoved'),
     });
+  };
+
+  // Skip current occurrence
+  const handleSkipOccurrence = async () => {
+    if (!task.repeatType || task.repeatType === 'none') return;
+    try { await Haptics.impact({ style: ImpactStyle.Light }); } catch {}
+    
+    const skipped = skipRecurringOccurrence(task);
+    if (skipped) {
+      onUpdate(skipped);
+      toast({
+        title: 'Occurrence skipped',
+        description: `Moved to next: ${skipped.dueDate ? format(new Date(skipped.dueDate), 'MMM d, yyyy') : 'N/A'}`,
+      });
+    }
+  };
+
+  // Defer to a specific date
+  const handleDeferOccurrence = async (deferDate: Date) => {
+    try { await Haptics.impact({ style: ImpactStyle.Light }); } catch {}
+    
+    const deferred = deferRecurringOccurrence(task, deferDate);
+    if (deferred) {
+      onUpdate(deferred);
+      setShowDeferPicker(false);
+      toast({
+        title: 'Task deferred',
+        description: `Moved to ${format(deferDate, 'MMM d, yyyy')}`,
+      });
+    }
   };
 
   // File attachment handlers
@@ -499,6 +535,78 @@ export const TaskDetailSheet = ({ isOpen, task, onClose, onUpdate, onDelete, onD
                 </div>
               )}
             </div>
+
+            {/* Recurring Task Intelligence */}
+            {task.repeatType && task.repeatType !== 'none' && (
+              <div className="bg-muted/30 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Flame className="h-4 w-4 text-orange-500" />
+                  <h3 className="text-sm font-medium">Recurring Intelligence</h3>
+                </div>
+
+                {/* Skip / Defer Actions */}
+                <div className="flex gap-2 mb-4">
+                  <Button
+                    onClick={handleSkipOccurrence}
+                    size="sm"
+                    variant="outline"
+                    className="flex-1 h-9 gap-1.5"
+                  >
+                    <SkipForward className="h-3.5 w-3.5" />
+                    Skip This
+                  </Button>
+                  <Button
+                    onClick={() => setShowDeferPicker(true)}
+                    size="sm"
+                    variant="outline"
+                    className="flex-1 h-9 gap-1.5"
+                  >
+                    <CalendarClock className="h-3.5 w-3.5" />
+                    Defer
+                  </Button>
+                </div>
+
+                {/* Quick Defer Options */}
+                {showDeferPicker && (
+                  <div className="mb-4 p-3 rounded-lg border border-border bg-card space-y-2">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">Defer to:</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { label: 'Tomorrow', days: 1 },
+                        { label: 'In 3 days', days: 3 },
+                        { label: 'Next week', days: 7 },
+                      ].map(opt => (
+                        <Button
+                          key={opt.days}
+                          size="sm"
+                          variant="outline"
+                          className="text-xs h-8"
+                          onClick={() => handleDeferOccurrence(addDays(new Date(), opt.days))}
+                        >
+                          {opt.label}
+                        </Button>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <input
+                        type="date"
+                        className="flex-1 px-2 py-1.5 text-xs rounded-lg border border-border bg-background"
+                        min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
+                        onChange={(e) => {
+                          if (e.target.value) handleDeferOccurrence(new Date(e.target.value + 'T12:00:00'));
+                        }}
+                      />
+                      <Button size="sm" variant="ghost" className="h-8" onClick={() => setShowDeferPicker(false)}>
+                        <X className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stats */}
+                <RecurringTaskStats task={task} />
+              </div>
+            )}
 
             {/* Deadline Escalation Rules */}
             {task.dueDate && (
