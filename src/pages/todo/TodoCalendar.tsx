@@ -20,7 +20,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea
 import { isSameDay, format, addDays, addWeeks, addMonths } from 'date-fns';
 import { createNextRecurringTask } from '@/utils/recurringTasks';
 import { playCompletionSound } from '@/utils/taskSounds';
-import { cleanupCompletedTasks } from '@/utils/taskCleanup';
+import { archiveCompletedTasks } from '@/utils/taskCleanup';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TodoBottomNavigation } from '@/components/TodoBottomNavigation';
 import appLogo from '@/assets/app-logo.png';
@@ -76,12 +76,12 @@ const TodoCalendar = () => {
   const loadTasks = useCallback(async () => {
     let tasks = await loadTodoItems();
     
-    // Auto-cleanup completed tasks older than 3 days
-    const { cleanedTasks, deletedCount } = cleanupCompletedTasks(tasks, 3);
-    if (deletedCount > 0) {
-      await saveTodoItems(cleanedTasks);
-      tasks = cleanedTasks;
-      toast.info(`Auto-deleted ${deletedCount} completed task(s) older than 3 days`, { icon: '🧹' });
+    // Auto-archive completed tasks older than 3 days
+    const { activeTasks, archivedCount } = await archiveCompletedTasks(tasks, 3);
+    if (archivedCount > 0) {
+      await saveTodoItems(activeTasks);
+      tasks = activeTasks;
+      toast.info(`Archived ${archivedCount} completed task(s)`, { icon: '📦' });
     }
     
     setItems(tasks);

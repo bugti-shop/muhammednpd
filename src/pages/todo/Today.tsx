@@ -36,7 +36,7 @@ import { SmartListType, getSmartListFilter, useSmartLists } from '@/components/S
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { notificationManager } from '@/utils/notifications';
 import { createNextRecurringTask } from '@/utils/recurringTasks';
-import { cleanupCompletedTasks } from '@/utils/taskCleanup';
+import { archiveCompletedTasks } from '@/utils/taskCleanup';
 import { startGeofenceWatching, hasLocationReminders } from '@/utils/geofencing';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -157,12 +157,12 @@ const Today = () => {
         toast.info(`Auto-updated ${rolledOverCount} recurring task(s) to next date`, { icon: '🔄' });
       }
       
-      // Auto-cleanup completed tasks older than 3 days
-      const { cleanedTasks, deletedCount } = cleanupCompletedTasks(loadedItems, 3);
-      if (deletedCount > 0) {
-        await saveTodoItems(cleanedTasks);
-        loadedItems = cleanedTasks;
-        toast.info(`Auto-deleted ${deletedCount} completed task(s) older than 3 days`, { icon: '🧹' });
+      // Auto-archive completed tasks older than 3 days
+      const { activeTasks, archivedCount } = await archiveCompletedTasks(loadedItems, 3);
+      if (archivedCount > 0) {
+        await saveTodoItems(activeTasks);
+        loadedItems = activeTasks;
+        toast.info(`Archived ${archivedCount} completed task(s)`, { icon: '📦' });
       }
       
       setItems(loadedItems);
