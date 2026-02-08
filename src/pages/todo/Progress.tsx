@@ -1,25 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { TodoLayout } from './TodoLayout';
 import { useStreak } from '@/hooks/useStreak';
 import { cn } from '@/lib/utils';
-import { Flame, Check, Snowflake, Trophy, Zap, TrendingUp, Calendar, Gift, Clock, Target, ListChecks, Heart, Hourglass } from 'lucide-react';
+import { Flame, Check, Snowflake, Trophy, Zap, TrendingUp, Calendar, Gift, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { loadTodoItems } from '@/utils/todoItemsStorage';
-import { startOfWeek, endOfWeek, startOfDay, endOfDay } from 'date-fns';
+import { startOfWeek, endOfWeek } from 'date-fns';
 import Confetti from 'react-confetti';
-import { EffortComparisonWidget } from '@/components/EffortComparisonWidget';
 
 
 const Progress = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { data, isLoading, completedToday, atRisk, status, weekData, gracePeriodRemaining } = useStreak();
   const [showConfetti, setShowConfetti] = useState(false);
   const [celebratingMilestone, setCelebratingMilestone] = useState<number | null>(null);
   const [weekStats, setWeekStats] = useState({ completed: 0, total: 0 });
-  const [todayStats, setTodayStats] = useState({ completed: 0, remaining: 0, total: 0 });
   const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
 
   // Handle window resize for confetti
@@ -51,23 +47,8 @@ const Progress = () => {
       try {
         const tasks = await loadTodoItems();
         const now = new Date();
-        const dayStart = startOfDay(now);
-        const dayEnd = endOfDay(now);
         const weekStart = startOfWeek(now, { weekStartsOn: 0 });
         const weekEnd = endOfWeek(now, { weekStartsOn: 0 });
-        
-        // Today stats
-        const completedTodayTasks = tasks.filter(task => {
-          if (!task.completedAt) return false;
-          const d = new Date(task.completedAt);
-          return d >= dayStart && d <= dayEnd;
-        });
-        const remainingToday = tasks.filter(t => !t.completed && t.dueDate && new Date(t.dueDate) >= dayStart && new Date(t.dueDate) <= dayEnd);
-        setTodayStats({
-          completed: completedTodayTasks.length,
-          remaining: remainingToday.length,
-          total: completedTodayTasks.length + remainingToday.length,
-        });
 
         // Week stats
         const thisWeekTasks = tasks.filter(task => {
@@ -180,70 +161,7 @@ const Progress = () => {
 
       <div className="container mx-auto px-4 py-6 space-y-6">
         
-        {/* Today's Productivity Widget */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-card rounded-2xl p-5 border shadow-sm"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <Target className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-sm">{t('progress.todayProductivity', "Today's Productivity")}</h3>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex-1">
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl font-bold text-primary">{todayStats.completed}</span>
-                <span className="text-sm text-muted-foreground">{t('progress.completed', 'completed')}</span>
-              </div>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                {todayStats.remaining > 0 
-                  ? `${todayStats.remaining} ${t('progress.remaining', 'remaining today')}`
-                  : todayStats.completed > 0 
-                    ? t('progress.allDone', 'All done for today! 🎉')
-                    : t('progress.getStarted', 'Start completing tasks!')}
-              </p>
-            </div>
-            {todayStats.total > 0 && (
-              <div className="relative w-14 h-14 flex-shrink-0">
-                <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
-                  <circle cx="18" cy="18" r="15.5" fill="none" className="stroke-muted" strokeWidth="3" />
-                  <circle
-                    cx="18" cy="18" r="15.5" fill="none"
-                    className="stroke-primary"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeDasharray={`${(todayStats.completed / todayStats.total) * 97.4} 97.4`}
-                  />
-                </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-foreground">
-                  {Math.round((todayStats.completed / todayStats.total) * 100)}%
-                </span>
-              </div>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Habits Quick Link */}
-        <motion.button
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          onClick={() => navigate('/todo/habits')}
-          className="w-full bg-card rounded-2xl p-4 border shadow-sm flex items-center gap-3 text-left hover:bg-accent/50 transition-colors"
-        >
-          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-            <Heart className="h-5 w-5 text-primary" />
-          </div>
-          <div className="flex-1">
-            <p className="font-semibold text-sm text-foreground">Habit Tracker</p>
-            <p className="text-xs text-muted-foreground">Build daily & weekly habits with streak tracking</p>
-          </div>
-          <span className="text-muted-foreground text-lg">→</span>
-        </motion.button>
-
-        {/* Effort Estimation vs Actual Widget */}
-        <EffortComparisonWidget />
+        {/* Streak Card */}
 
         {/* Streak Card */}
         <div className="bg-card rounded-2xl p-6 border shadow-sm">

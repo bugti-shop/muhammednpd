@@ -1,5 +1,5 @@
 import { startTransition, useCallback, useState, useEffect } from 'react';
-import { Home, Calendar, Settings, BarChart3, User, Dumbbell, LayoutDashboard, ClipboardList, History, CalendarDays, CalendarRange } from 'lucide-react';
+import { Home, Calendar, Settings, BarChart3, User, ClipboardList, History, CalendarDays, CalendarRange } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { triggerHaptic } from '@/utils/haptics';
@@ -26,8 +26,6 @@ const ICON_COMPONENTS: Record<string, React.ComponentType<{ className?: string }
   User,
   Calendar,
   Settings,
-  Dumbbell,
-  LayoutDashboard,
   ClipboardList,
   History,
   CalendarDays,
@@ -40,8 +38,6 @@ export const DEFAULT_TODO_NAV_ITEMS: TodoNavItem[] = [
   { id: 'profile', label: 'Profile', icon: 'User', path: '/profile', visible: true },
   { id: 'calendar', label: 'Calendar', icon: 'Calendar', path: '/todo/calendar', visible: true },
   { id: 'settings', label: 'Settings', icon: 'Settings', path: '/todo/settings', visible: true },
-  { id: 'habits', label: 'Habits', icon: 'Dumbbell', path: '/todo/habits', visible: false },
-  { id: 'widgets', label: 'Widgets', icon: 'LayoutDashboard', path: '/todo/widgets-dashboard', visible: false },
   { id: 'weeklyReview', label: 'Weekly Review', icon: 'ClipboardList', path: '/todo/weekly-review', visible: false },
   { id: 'taskHistory', label: 'History', icon: 'History', path: '/todo/task-history', visible: false },
   { id: 'today', label: 'Today', icon: 'CalendarDays', path: '/todo/today-view', visible: false },
