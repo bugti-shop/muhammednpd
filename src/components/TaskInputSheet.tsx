@@ -129,6 +129,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
   const [savedTags, setSavedTags] = useState<ColoredTag[]>([]);
   const [tasksSettings, setTasksSettings] = useState<TasksSettings | null>(null);
   const [attachments, setAttachments] = useState<TaskAttachment[]>([]);
+  const [estimatedHours, setEstimatedHours] = useState<number | undefined>();
   
   // Load saved actions, tags, and task settings from IndexedDB
   useEffect(() => {
@@ -343,6 +344,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
       locationReminder: locationReminder,
       subtasks: subtasks,
       attachments: attachments.length > 0 ? attachments : undefined,
+      estimatedHours: estimatedHours,
     };
 
     // If deadline is set, store it in dueDate
@@ -373,6 +375,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
       setShowDescriptionInput(false);
       setShowLocationInput(false);
       setAttachments([]);
+      setEstimatedHours(undefined);
       setVoiceRecording(undefined);
       inputRef.current?.focus();
     }, 0);
@@ -1505,6 +1508,58 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
                         <Button size="sm" className="w-full" onClick={() => setShowDescriptionInput(false)}>
                           {t('common.done')}
                         </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                );
+              }
+
+              if (action.id === 'effort') {
+                return (
+                  <Popover key="effort">
+                    <PopoverTrigger asChild>
+                      <button
+                        className={cn(
+                          "relative flex items-center gap-1.5 px-3 py-2 rounded-md border transition-all whitespace-nowrap",
+                          estimatedHours ? "border-primary bg-primary/10" : "border-border bg-card hover:bg-muted"
+                        )}
+                      >
+                        {estimatedHours && <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full" />}
+                        <Timer className={cn("h-4 w-4 flex-shrink-0", estimatedHours ? "text-primary" : "text-muted-foreground")} />
+                        <span className={cn("text-sm whitespace-nowrap", estimatedHours ? "text-primary" : "text-muted-foreground")}>
+                          {estimatedHours ? `${estimatedHours}h est.` : 'Estimate'}
+                        </span>
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-56 p-3 bg-popover z-[100]" align="start">
+                      <div className="space-y-3">
+                        <p className="text-sm font-medium">Effort Estimation (hours)</p>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            min="0.25"
+                            max="999"
+                            step="0.25"
+                            value={estimatedHours || ''}
+                            onChange={(e) => setEstimatedHours(e.target.value ? Number(e.target.value) : undefined)}
+                            placeholder="e.g. 2.5"
+                            className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                          />
+                        </div>
+                        <div className="flex gap-1.5 flex-wrap">
+                          {[0.5, 1, 2, 4, 8].map(h => (
+                            <button
+                              key={h}
+                              onClick={() => setEstimatedHours(h)}
+                              className={cn(
+                                "px-2.5 py-1 rounded-md text-xs font-medium border transition-all",
+                                estimatedHours === h ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:bg-muted"
+                              )}
+                            >
+                              {h}h
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     </PopoverContent>
                   </Popover>

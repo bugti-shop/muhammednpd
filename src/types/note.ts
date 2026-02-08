@@ -131,6 +131,7 @@ export interface TodoItem {
   comments?: TaskComment[]; // Comments/activity thread
   dependsOn?: string[]; // IDs of tasks that must be completed first
   timeTracking?: TimeTracking;
+  estimatedHours?: number; // Effort estimation in hours
   // Timestamp fields
   createdAt?: Date;
   modifiedAt?: Date;

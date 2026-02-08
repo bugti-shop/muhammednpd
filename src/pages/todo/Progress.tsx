@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { TodoLayout } from './TodoLayout';
 import { useStreak } from '@/hooks/useStreak';
 import { cn } from '@/lib/utils';
-import { Flame, Check, Snowflake, Trophy, Zap, TrendingUp, Calendar, Gift, Clock, Target, ListChecks, Heart } from 'lucide-react';
+import { Flame, Check, Snowflake, Trophy, Zap, TrendingUp, Calendar, Gift, Clock, Target, ListChecks, Heart, Hourglass } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { loadTodoItems } from '@/utils/todoItemsStorage';
 import { startOfWeek, endOfWeek, startOfDay, endOfDay } from 'date-fns';
 import Confetti from 'react-confetti';
+import { EffortComparisonWidget } from '@/components/EffortComparisonWidget';
 
 
 const Progress = () => {
@@ -240,6 +241,9 @@ const Progress = () => {
           </div>
           <span className="text-muted-foreground text-lg">→</span>
         </motion.button>
+
+        {/* Effort Estimation vs Actual Widget */}
+        <EffortComparisonWidget />
 
         {/* Streak Card */}
         <div className="bg-card rounded-2xl p-6 border shadow-sm">

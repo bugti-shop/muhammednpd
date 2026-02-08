@@ -26,6 +26,7 @@ import {
   File,
   Download,
   ExternalLink,
+  Hourglass,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -435,6 +436,65 @@ export const TaskDetailSheet = ({ isOpen, task, onClose, onUpdate, onDelete, onD
                 onBlur={handleUpdateDescription}
                 className="min-h-[100px] resize-none border-0 bg-transparent p-0 focus-visible:ring-0 placeholder:text-muted-foreground/50"
               />
+            </div>
+
+            {/* Effort Estimation */}
+            <div className="bg-muted/30 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Hourglass className="h-4 w-4 text-muted-foreground" />
+                <h3 className="text-sm font-medium">Effort Estimation</h3>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex gap-1.5 flex-wrap">
+                  {[0.5, 1, 2, 4, 8].map(h => (
+                    <button
+                      key={h}
+                      onClick={() => onUpdate({ ...task, estimatedHours: task.estimatedHours === h ? undefined : h })}
+                      className={cn(
+                        "px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all",
+                        task.estimatedHours === h
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "border-border text-muted-foreground hover:bg-muted"
+                      )}
+                    >
+                      {h}h
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="number"
+                  min="0.25"
+                  step="0.25"
+                  max="999"
+                  value={task.estimatedHours || ''}
+                  onChange={(e) => onUpdate({ ...task, estimatedHours: e.target.value ? Number(e.target.value) : undefined })}
+                  placeholder="Custom"
+                  className="w-20 px-2 py-1.5 text-xs rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+              {task.estimatedHours && task.timeTracking && task.timeTracking.totalSeconds > 0 && (
+                <div className="mt-3 pt-3 border-t border-border">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">Estimated: {task.estimatedHours}h</span>
+                    <span className="text-muted-foreground">
+                      Actual: {(task.timeTracking.totalSeconds / 3600).toFixed(1)}h
+                    </span>
+                  </div>
+                  <div className="mt-1.5 h-2 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className={cn(
+                        "h-full rounded-full transition-all",
+                        (task.timeTracking.totalSeconds / 3600) > task.estimatedHours
+                          ? "bg-destructive"
+                          : "bg-success"
+                      )}
+                      style={{
+                        width: `${Math.min(100, ((task.timeTracking.totalSeconds / 3600) / task.estimatedHours) * 100)}%`
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Location Reminder Preview */}
