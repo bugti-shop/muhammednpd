@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Folder as FolderType } from '@/types/note';
-import { Trash2, Edit2, Check, X, FolderPlus, GripVertical } from 'lucide-react';
+import { Trash2, Edit2, Check, X, FolderPlus, GripVertical, Star } from 'lucide-react';
 import { useHardwareBackButton } from '@/hooks/useHardwareBackButton';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
@@ -30,6 +30,7 @@ interface FolderManageSheetProps {
   onEditFolder: (folderId: string, name: string, color: string) => void;
   onDeleteFolder: (folderId: string) => void;
   onReorderFolders?: (folders: FolderType[]) => void;
+  onToggleFavorite?: (folderId: string) => void;
 }
 
 export const FolderManageSheet = ({
@@ -39,7 +40,8 @@ export const FolderManageSheet = ({
   onCreateFolder,
   onEditFolder,
   onDeleteFolder,
-  onReorderFolders
+  onReorderFolders,
+  onToggleFavorite,
 }: FolderManageSheetProps) => {
   const { t } = useTranslation();
   const [isCreating, setIsCreating] = useState(false);
@@ -216,6 +218,11 @@ export const FolderManageSheet = ({
                                   <span className="font-medium">{folder.name}</span>
                                 </div>
                                 <div className="flex gap-1">
+                                  {onToggleFavorite && (
+                                    <Button size="icon" variant="ghost" onClick={() => onToggleFavorite(folder.id)}>
+                                      <Star className={cn("h-4 w-4", folder.isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground")} />
+                                    </Button>
+                                  )}
                                   <Button size="icon" variant="ghost" onClick={() => startEdit(folder)}>
                                     <Edit2 className="h-4 w-4" />
                                   </Button>
