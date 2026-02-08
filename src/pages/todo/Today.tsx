@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { TodoItem, Folder, Priority, Note, TaskSection, TaskStatus } from '@/types/note';
 import { WaveformProgressBar } from '@/components/WaveformProgressBar';
 import { Play, Pause, Repeat, Check, Trash2 as TrashIcon, Edit, Plus as PlusIcon, ArrowUpCircle, ArrowDownCircle, Move, History, TrendingUp, Flag, MapPin, ChevronsUpDown, Circle, Loader2, Clock as ClockIcon, Pin } from 'lucide-react';
-import { Plus, FolderIcon, ChevronRight, ChevronDown, MoreVertical, Eye, EyeOff, Filter, Copy, MousePointer2, FolderPlus, Settings, LayoutList, LayoutGrid, Trash2, ListPlus, Tag, ArrowDownAZ, ArrowUpDown, Sun, Columns3, GitBranch, X, Search, ListChecks } from 'lucide-react';
+import { Plus, FolderIcon, ChevronRight, ChevronDown, MoreVertical, Eye, EyeOff, Filter, Copy, MousePointer2, FolderPlus, Settings, LayoutList, LayoutGrid, Trash2, ListPlus, Tag, ArrowDownAZ, ArrowUpDown, Sun, Columns3, GitBranch, X, Search, ListChecks, Star } from 'lucide-react';
 import { LocationRemindersMap } from '@/components/LocationRemindersMap';
 import { TaskWidgets } from '@/components/TaskWidgets';
 import { cn } from '@/lib/utils';
@@ -322,6 +322,12 @@ const Today = () => {
   const handleReorderFolders = (reorderedFolders: Folder[]) => {
     setFolders(reorderedFolders);
     toast.success('Folders reordered');
+  };
+
+  const handleToggleFolderFavorite = (folderId: string) => {
+    setFolders(folders.map(f => f.id === folderId ? { ...f, isFavorite: !f.isFavorite } : f));
+    const folder = folders.find(f => f.id === folderId);
+    toast.success(folder?.isFavorite ? 'Removed from favorites' : 'Added to favorites', { icon: '⭐' });
   };
 
   const handleSectionDragEnd = async (result: DropResult) => {
@@ -2035,12 +2041,17 @@ const Today = () => {
               <button onClick={() => setSelectedFolderId(null)} className={cn("flex items-center gap-2 px-4 py-2 rounded-full transition-all whitespace-nowrap", !selectedFolderId ? "bg-primary text-primary-foreground" : "bg-card hover:bg-muted")}>
                 <FolderIcon className="h-4 w-4" />{t('smartLists.allTasks')}
               </button>
-              {folders.map((folder) => {
+              {/* Favorite folders first, then the rest */}
+              {[...folders].sort((a, b) => (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0)).map((folder) => {
                 const isSelected = selectedFolderId === folder.id;
                 return (
                   <button 
                     key={folder.id} 
-                    onClick={() => setSelectedFolderId(folder.id)} 
+                    onClick={() => setSelectedFolderId(folder.id)}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      handleToggleFolderFavorite(folder.id);
+                    }}
                     className={cn(
                       "flex items-center gap-2 px-4 py-2 rounded-full transition-all whitespace-nowrap",
                       isSelected 
@@ -2052,6 +2063,7 @@ const Today = () => {
                       backgroundColor: folder.color
                     } : undefined}
                   >
+                    {folder.isFavorite && <Star className="h-3.5 w-3.5 fill-current" />}
                     <FolderIcon className="h-4 w-4" />
                     {folder.name}
                   </button>
@@ -3181,7 +3193,7 @@ const Today = () => {
         onSaved={() => loadCustomSmartViews().then(setCustomSmartViews)}
       />
       <DuplicateOptionsSheet isOpen={isDuplicateSheetOpen} onClose={() => setIsDuplicateSheetOpen(false)} onSelect={handleDuplicate} />
-      <FolderManageSheet isOpen={isFolderManageOpen} onClose={() => setIsFolderManageOpen(false)} folders={folders} onCreateFolder={handleCreateFolder} onEditFolder={handleEditFolder} onDeleteFolder={handleDeleteFolder} onReorderFolders={handleReorderFolders} />
+      <FolderManageSheet isOpen={isFolderManageOpen} onClose={() => setIsFolderManageOpen(false)} folders={folders} onCreateFolder={handleCreateFolder} onEditFolder={handleEditFolder} onDeleteFolder={handleDeleteFolder} onReorderFolders={handleReorderFolders} onToggleFavorite={handleToggleFolderFavorite} />
       <MoveToFolderSheet isOpen={isMoveToFolderOpen} onClose={() => setIsMoveToFolderOpen(false)} folders={folders} onSelect={handleMoveToFolder} />
       <SelectActionsSheet isOpen={isSelectActionsOpen} onClose={() => setIsSelectActionsOpen(false)} selectedCount={selectedTaskIds.size} onAction={handleSelectAction} totalCount={uncompletedItems.length} />
       <PrioritySelectSheet isOpen={isPrioritySheetOpen} onClose={() => setIsPrioritySheetOpen(false)} onSelect={handleSetPriority} />

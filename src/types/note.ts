@@ -252,6 +252,7 @@ export interface Folder {
   name: string;
   noteType?: NoteType;
   isDefault: boolean;
+  isFavorite?: boolean;
   createdAt: Date;
   color?: string;
 }
